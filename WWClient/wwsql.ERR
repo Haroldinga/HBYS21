@@ -1,0 +1,12 @@
+Error in global include file: Include file 'c:\vfe\wconnect.h' is not found.Error in global include file: Include file 'c:\vfe\wconnect.h' is not found.#IF wwVFPVersion > 7    
+Error in line 26 of wwsql.execute (record 4): Preprocessor expression is invalid.
+#IF wwVFPVERSION > 8
+Error in line 53 of wwsql.execute (record 4): Preprocessor expression is invalid.
+#IF wwVFPVERSION > 8
+Error in line 68 of wwsql.execute (record 4): Preprocessor expression is invalid.
+#IF wwVFPVERSION > 8
+Error in line 78 of wwsql.execute (record 4): Preprocessor expression is invalid.
+#IF wwVFPVERSION > 8
+Error in line 92 of wwsql.execute (record 4): Preprocessor expression is invalid.
+#IF SHAREWARE
+Error in line 826 of wwsql.Init (record 4): Preprocessor expression is invalid.

@@ -1,0 +1,480 @@
+***************** Begin View Definition DEPARTMANTAHSILATIVIEW ***************
+
+
+LOCAL LAOPENEDDBCS[1,1], lcSet_Exact
+PRIVATE lWriteDBCXProps
+
+lWriteDBCXProps=.T.
+
+lcSet_Exact=SET('EXACT')
+IF lcSet_Exact='OFF'
+	SET EXACT ON
+ENDIF
+
+
+***Make sure the current database is correct
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREPORT")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSREPORT"
+ELSE
+	SET DATABASE TO "HBYSREPORT"
+ENDIF
+
+
+IF lcSet_Exact='OFF'
+	SET EXACT OFF
+ENDIF
+
+
+
+CREATE SQL VIEW "DEPARTMANTAHSILATIVIEW" ; 
+ REMOTE CONNECT "HBYSDataConnect" ; 
+	AS SELECT Personel.Departman_Adi,;
+		Icradosya.Muvekkil_Adi,;
+		Icradosya.Borc_Tipi,;
+		Tahsilathedefi.Tahsilat_Hedefi,;
+		Tahsilat.Tahsilat_Miktari AS aylik_tahsilat,;
+		Tahsilat.Tahsilat_Miktari AS gunluk_tahsilat;
+	FROM {oj{oj dbo.Tahsilat Tahsilat;
+		INNER JOIN dbo.IcraDosya Icradosya;
+			ON Tahsilat.Tahsilat_Fk = Icradosya.IcraDosya_Id;
+		LEFT OUTER JOIN dbo.Personel Personel;
+			ON Tahsilat.Personel_Id = Personel.Personel_Id};
+		LEFT OUTER JOIN dbo.TahsilatHedefi Tahsilathedefi;
+			ON Personel.Departman_Adi = Tahsilathedefi.Departman_Adi}
+
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'UpdateType', 1)
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'WhereType', 3)
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'FetchMemo', .T.)
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'SendUpdates', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'UseMemoSize', 255)
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'MaxRecords', -1)
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'Tables', 'dbo.Personel,dbo.IcraDosya')
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'Prepared', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'CompareMemo', .T.)
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'FetchAsNeeded', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'FetchSize', -1)
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'ParameterList', "vp_Tahsilat_Tarihi,'D';vp_Departman_Adi,'V';vp_Muvekkil_Id,'C';vp_Borc_Tipi,'V'")
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'Comment', "")
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'BatchUpdateCount', 1)
+DBSetProp('DEPARTMANTAHSILATIVIEW', 'View', 'ShareConnection', .T.)
+IF lWriteDBCXProps
+ 
+	*** DBCX View Properties for DEPARTMANTAHSILATIVIEW
+	GoExplorer.odbcx.Validate("DEPARTMANTAHSILATIVIEW","View")
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW","VIEW",;
+		"VFECDESCRIPT","Departmantahsilatiview Remote View") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW","VIEW",;
+		"VFECCLASS","iCursor") &&Default Cursor Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW","VIEW",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Default Cursor Class Library
+ 
+	*** DBCX View Parameter Properties for vp_Tahsilat_Tarihi
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFECDESCRIPT","Vp Tahsilat Tarihi View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFECFRMCAPTN","Tahsilat Tarihi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFECDLGCAPTN","Tahsilat Tarihi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFECVPTYPE","D") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFENVPSIZE",10) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFEMTOOLTIP","Tahsilat Tarihi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFEMSTATUSTXT","Tahsilat Tarihi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFECOBJTYPE","idatecontainer") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\IDATETIMECONTROLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFEMDEFAULT","Date()") &&Default Expression
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFEMCOMPARETO","Tahsilat.Tahsilat_Tarihi") &&Compare to Field/Expression
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFECOPERATOR","=") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Tahsilat_Tarihi","PARAMETER",;
+		"VFEMOPERLIST","=, >, <, >=, <=") &&Available Operators
+ 
+	*** DBCX View Parameter Properties for vp_Departman_Adi
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFECDESCRIPT","Vp Departman Adi View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFECFRMCAPTN","Departman Adý") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFECDLGCAPTN","Departman Adý") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFECVPTYPE","V") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFENVPSIZE",25) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFEMTOOLTIP","Departman Adý                                        ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFEMSTATUSTXT","Departman Adý                                        ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFEMCOMPARETO","Personel.departman_Adi") &&Compare to Field/Expression
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFECOPERATOR","=") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Departman_Adi","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+ 
+	*** DBCX View Parameter Properties for vp_Muvekkil_Id
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFECDESCRIPT","Vp Muvekkil Id View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFECFRMCAPTN","Muvekkil Adý") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFECDLGCAPTN","Muvekkil Adý") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFECVPTYPE","C") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFENVPSIZE",10) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFEMTOOLTIP","Muvekkil Adý                                         ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFEMSTATUSTXT","Muvekkil Adý                                         ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFEMCOMPARETO","IcraDosya.Muvekkil_Id") &&Compare to Field/Expression
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFECOPERATOR","Begins With") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Muvekkil_Id","PARAMETER",;
+		"VFEMOPERLIST","Equals, Contains, Begins With, Ends With") &&Available Operators
+ 
+	*** DBCX View Parameter Properties for vp_Borc_Tipi
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFECDESCRIPT","Vp Borc Tipi View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFECFRMCAPTN","Borç Tipi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFECDLGCAPTN","Borç Tipi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFECVPTYPE","V") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFENVPSIZE",25) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFEMTOOLTIP","Borç Tipi                                            ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFEMSTATUSTXT","Borç Tipi                                            ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFEMCOMPARETO","IcraDosya.Borc_Tipi") &&Compare to Field/Expression
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFECOPERATOR","=") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.vp_Borc_Tipi","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+ENDIF
+
+*!* Field Level Properties for DEPARTMANTAHSILATIVIEW
+*** Props for the DEPARTMANTAHSILATIVIEW.departman_adi field.
+DBSetProp('DEPARTMANTAHSILATIVIEW.departman_adi', 'Field', 'KeyField', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.departman_adi', 'Field', 'Updatable', .T.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.departman_adi', 'Field', 'UpdateName', 'dbo.Personel.Departman_Adi')
+DBSetProp('DEPARTMANTAHSILATIVIEW.departman_adi', 'Field', 'DataType', "C(25)")
+*** DBCX Field Properties for DEPARTMANTAHSILATIVIEW.departman_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFECDESCRIPT","Departman Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFECFRMCAPTN","Departman Adý") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFECDLGCAPTN","Departman Adý") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFECGRDCAPTN","Departman Adý") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFECRPTCAPTN","Departman Adý") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFEMTOOLTIP","Departman Adý                                        ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFEMSTATUSTXT","Departman Adý                                        ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.departman_adi","FIELD",;
+		"VFENDISPORDER",1) &&Display Order
+ENDIF
+ 
+*** Props for the DEPARTMANTAHSILATIVIEW.muvekkil_adi field.
+DBSetProp('DEPARTMANTAHSILATIVIEW.muvekkil_adi', 'Field', 'KeyField', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.muvekkil_adi', 'Field', 'Updatable', .T.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.muvekkil_adi', 'Field', 'UpdateName', 'dbo.IcraDosya.Muvekkil_Adi')
+DBSetProp('DEPARTMANTAHSILATIVIEW.muvekkil_adi', 'Field', 'DataType', "C(50)")
+*** DBCX Field Properties for DEPARTMANTAHSILATIVIEW.muvekkil_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFECDESCRIPT","Muvekkil Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFECFRMCAPTN","Müvekkil Adý") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFECDLGCAPTN","Müvekkil Adý") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFECGRDCAPTN","Müvekkil Adý") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFECRPTCAPTN","Müvekkil Adý") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFEMTOOLTIP","Müvekkil Adý                                         ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFEMSTATUSTXT","Müvekkil Adý                                         ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.muvekkil_adi","FIELD",;
+		"VFENDISPORDER",4) &&Display Order
+ENDIF
+ 
+*** Props for the DEPARTMANTAHSILATIVIEW.borc_tipi field.
+DBSetProp('DEPARTMANTAHSILATIVIEW.borc_tipi', 'Field', 'KeyField', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.borc_tipi', 'Field', 'Updatable', .T.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.borc_tipi', 'Field', 'UpdateName', 'dbo.IcraDosya.Borc_Tipi')
+DBSetProp('DEPARTMANTAHSILATIVIEW.borc_tipi', 'Field', 'DataType', "C(25)")
+*** DBCX Field Properties for DEPARTMANTAHSILATIVIEW.borc_tipi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFECDESCRIPT","Borc Tipi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFECFRMCAPTN","Borç Tipi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFECDLGCAPTN","Borç Tipi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFECGRDCAPTN","Borç Tipi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFECRPTCAPTN","Borç Tipi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFEMTOOLTIP","Borç Tipi                                            ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFEMSTATUSTXT","Borç Tipi                                            ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.borc_tipi","FIELD",;
+		"VFENDISPORDER",3) &&Display Order
+ENDIF
+ 
+*** Props for the DEPARTMANTAHSILATIVIEW.tahsilat_hedefi field.
+DBSetProp('DEPARTMANTAHSILATIVIEW.tahsilat_hedefi', 'Field', 'KeyField', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.tahsilat_hedefi', 'Field', 'Updatable', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.tahsilat_hedefi', 'Field', 'UpdateName', 'dbo.TahsilatHedefi.Tahsilat_Hedefi')
+DBSetProp('DEPARTMANTAHSILATIVIEW.tahsilat_hedefi', 'Field', 'DataType', "Y")
+*** DBCX Field Properties for DEPARTMANTAHSILATIVIEW.tahsilat_hedefi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFECDESCRIPT","Tahsilat Hedefi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFECFRMCAPTN","Tahsilat Hedefi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFECDLGCAPTN","Tahsilat Hedefi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFECGRDCAPTN","Tahsilat Hedefi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFECRPTCAPTN","Tahsilat Hedefi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFEMTOOLTIP","Tahsilat Hedefi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFEMSTATUSTXT","Tahsilat Hedefi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.tahsilat_hedefi","FIELD",;
+		"VFENDISPORDER",7) &&Display Order
+ENDIF
+ 
+*** Props for the DEPARTMANTAHSILATIVIEW.aylik_tahsilat field.
+DBSetProp('DEPARTMANTAHSILATIVIEW.aylik_tahsilat', 'Field', 'KeyField', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.aylik_tahsilat', 'Field', 'Updatable', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.aylik_tahsilat', 'Field', 'UpdateName', 'dbo.Tahsilat.Tahsilat_Miktari')
+DBSetProp('DEPARTMANTAHSILATIVIEW.aylik_tahsilat', 'Field', 'DataType', "Y")
+*** DBCX Field Properties for DEPARTMANTAHSILATIVIEW.aylik_tahsilat
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFECDESCRIPT","Aylik Tahsilat Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFECFRMCAPTN","Aylýk Tahsilat") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFECDLGCAPTN","Aylýk Tahsilat") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFECGRDCAPTN","Aylýk Tahsilat") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFECRPTCAPTN","Aylýk Tahsilat") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFEMTOOLTIP","Aylýk Tahsilat                                       ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFEMSTATUSTXT","Aylýk Tahsilat                                       ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.aylik_tahsilat","FIELD",;
+		"VFENDISPORDER",6) &&Display Order
+ENDIF
+ 
+*** Props for the DEPARTMANTAHSILATIVIEW.gunluk_tahsilat field.
+DBSetProp('DEPARTMANTAHSILATIVIEW.gunluk_tahsilat', 'Field', 'KeyField', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.gunluk_tahsilat', 'Field', 'Updatable', .F.)
+DBSetProp('DEPARTMANTAHSILATIVIEW.gunluk_tahsilat', 'Field', 'UpdateName', 'dbo.Tahsilat.Tahsilat_Miktari')
+DBSetProp('DEPARTMANTAHSILATIVIEW.gunluk_tahsilat', 'Field', 'DataType', "Y")
+*** DBCX Field Properties for DEPARTMANTAHSILATIVIEW.gunluk_tahsilat
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFECDESCRIPT","Gunluk Tahsilat Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFECFRMCAPTN","Günlük Tahsilat") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFECDLGCAPTN","Günlük Tahsilat") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFECGRDCAPTN","Günlük Tahsilat") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFECRPTCAPTN","Günlük Tahsilat") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFEMTOOLTIP","Günlük Tahsilat                                      ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFEMSTATUSTXT","Günlük Tahsilat                                      ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSREPORT!DEPARTMANTAHSILATIVIEW.gunluk_tahsilat","FIELD",;
+		"VFENDISPORDER",5) &&Display Order
+ENDIF
+ 

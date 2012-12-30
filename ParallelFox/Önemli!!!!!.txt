@@ -1,0 +1,1 @@
+WorkerMg.vcx içinde workermgr nin olepublic özelliði kaldýrýldý. Yoksa Compile sýrasýnda elevated yetki istiyor, problem çýkýyor

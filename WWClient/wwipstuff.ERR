@@ -1,0 +1,8 @@
+Error in global include file: Include file 'c:\vfe\wconnect.h' is not found.Error in global include file: Include file 'c:\vfe\wconnect.h' is not found.Error in global include file: Include file 'c:\vfe\wconnect.h' is not found.#IF wwVFPVersion < 7
+Error in line 453 of wwipstuff.sendmail (record 6): Preprocessor expression is invalid.
+#IF wwVFPVersion < 7
+Error in line 555 of wwipstuff.sendmailasync (record 6): Preprocessor expression is invalid.
+#IF wwVFPVERSION > 6
+Error in line 879 of wwipstuff.base64encode (record 6): Preprocessor expression is invalid.
+#IF wwVFPVERSION > 6
+Error in line 926 of wwipstuff.base64decode (record 6): Preprocessor expression is invalid.
