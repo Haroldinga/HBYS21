@@ -14,7 +14,7 @@ ENDIF
 
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -348,8 +348,6 @@ IF lWriteDBCXProps
 		"VFENDFLTTYPE",1) &&Default Type
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZVIEW.haciz_tipi","FIELD",;
 		"VFENDISPORDER",3) &&Display Order
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZVIEW.haciz_tipi","FIELD",;
-		"VFEMLUUPDFLDS","haczedilen_tipi") &&After Lookup Update Field List
 ENDIF
  
 *** Props for the HACIZVIEW.talimat_tarihi field.

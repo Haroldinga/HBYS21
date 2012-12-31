@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,30 +30,29 @@ ENDIF
 
 
 CREATE SQL VIEW "CINSIYETLOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Cinsiyet.Cinsiyeti;
-	FROM dbo.Cinsiyet Cinsiyet
+	AS SELECT Cinsiyet.cinsiyeti;
+	FROM hbysreferans!cinsiyet
 
 DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'UpdateType', 1)
-DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'WhereType', 1)
+DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'WhereType', 3)
 DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'FetchMemo', .T.)
-DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'Tables', 'dbo.Cinsiyet')
+DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'Tables', 'hbysreferans!cinsiyet')
 DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('CINSIYETLOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for CINSIYETLOOKUPVIEW
 	GoExplorer.odbcx.Validate("CINSIYETLOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!CINSIYETLOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Cinsiyetlookupview Remote View") &&Description
+		"VFECDESCRIPT","CINSIYETLOOKUPVIEW Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!CINSIYETLOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!CINSIYETLOOKUPVIEW","VIEW",;
@@ -59,9 +61,9 @@ ENDIF
 
 *!* Field Level Properties for CINSIYETLOOKUPVIEW
 *** Props for the CINSIYETLOOKUPVIEW.cinsiyeti field.
-DBSetProp('CINSIYETLOOKUPVIEW.cinsiyeti', 'Field', 'KeyField', .T.)
+DBSetProp('CINSIYETLOOKUPVIEW.cinsiyeti', 'Field', 'KeyField', .F.)
 DBSetProp('CINSIYETLOOKUPVIEW.cinsiyeti', 'Field', 'Updatable', .T.)
-DBSetProp('CINSIYETLOOKUPVIEW.cinsiyeti', 'Field', 'UpdateName', 'dbo.Cinsiyet.Cinsiyeti')
+DBSetProp('CINSIYETLOOKUPVIEW.cinsiyeti', 'Field', 'UpdateName', 'hbysreferans!cinsiyet.cinsiyeti')
 DBSetProp('CINSIYETLOOKUPVIEW.cinsiyeti', 'Field', 'DataType', "C(10)")
 *** DBCX Field Properties for CINSIYETLOOKUPVIEW.cinsiyeti
 IF lWriteDBCXProps

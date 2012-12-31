@@ -14,7 +14,7 @@ ENDIF
 
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -37,9 +37,14 @@ CREATE SQL VIEW "ICRADOSYAEDITVIEW" ;
 		Icradosya.DosyaTipi_Id,;
 		Icradosya.Dosya_Tipi,;
 		Icradosya.Takip_Tipi,;
+		Icradosya.Takip_Yolu,;
+		Icradosya.TakipSekli_Id,;
 		Icradosya.Borc_Tipi,;
 		Icradosya.Borc_Evragi,;
-		Icradosya.Takip_Yolu,;
+		Icradosya.Talep_Edilen_Hak,;
+		Icradosya.BK84Madde_Uygulansin,;
+		Icradosya.BSMV_Uygulansin,;
+		Icradosya.KKDF_Uygulansin,;
 		Icradosya.IcraMudurlugu_Id,;
 		Icradosya.IcraMudurlugu_Adi,;
 		Icradosya.Adliye_Adi,;
@@ -435,9 +440,9 @@ IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.dosyatipi_id","FIELD",;
 		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.dosyatipi_id","FIELD",;
-		"VFECCLASS","iField") &&Behavior Class
+		"VFECCLASS","afieldnovalidateduringsave") &&Behavior Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.dosyatipi_id","FIELD",;
-		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+		"VFEMCLASSLIB","libs\abhavior.vcx") &&Behavior Class Library
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.dosyatipi_id","FIELD",;
 		"VFECOBJTYPE","itextbox") &&User Interface Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.dosyatipi_id","FIELD",;
@@ -449,7 +454,7 @@ IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.dosyatipi_id","FIELD",;
 		"VFENDISPORDER",6) &&Display Order
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.dosyatipi_id","FIELD",;
-		"VFEMLUUPDFLDS","takip_tipi, borc_tipi, borc_evragi, dosya_tipi") &&After Lookup Update Field List
+		"VFEMLUUPDFLDS","takip_tipi, borc_tipi, borc_evragi, dosya_tipi, takip_yolu, talep_edilen_hak, bk84madde_uygulansin, bsmv_uygulansin, kkdf_uygulansin, takipsekli_id") &&After Lookup Update Field List
 ENDIF
  
 *** Props for the ICRADOSYAEDITVIEW.dosya_tipi field.
@@ -499,7 +504,7 @@ ENDIF
 DBSetProp('ICRADOSYAEDITVIEW.takip_tipi', 'Field', 'KeyField', .F.)
 DBSetProp('ICRADOSYAEDITVIEW.takip_tipi', 'Field', 'Updatable', .T.)
 DBSetProp('ICRADOSYAEDITVIEW.takip_tipi', 'Field', 'UpdateName', 'dbo.IcraDosya.Takip_Tipi')
-DBSetProp('ICRADOSYAEDITVIEW.takip_tipi', 'Field', 'DataType', "C(50)")
+DBSetProp('ICRADOSYAEDITVIEW.takip_tipi', 'Field', 'DataType', "C(15)")
 DBSetProp('ICRADOSYAEDITVIEW.takip_tipi', 'Field', 'DefaultValue', "'Ýlamsýz Takip'")
 *** DBCX Field Properties for ICRADOSYAEDITVIEW.takip_tipi
 IF lWriteDBCXProps
@@ -547,6 +552,113 @@ IF lWriteDBCXProps
 		"VFENDFLTTYPE",2) &&Default Type
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_tipi","FIELD",;
 		"VFENDISPORDER",5) &&Display Order
+ENDIF
+ 
+*** Props for the ICRADOSYAEDITVIEW.takip_yolu field.
+DBSetProp('ICRADOSYAEDITVIEW.takip_yolu', 'Field', 'KeyField', .F.)
+DBSetProp('ICRADOSYAEDITVIEW.takip_yolu', 'Field', 'Updatable', .T.)
+DBSetProp('ICRADOSYAEDITVIEW.takip_yolu', 'Field', 'UpdateName', 'dbo.IcraDosya.Takip_Yolu')
+DBSetProp('ICRADOSYAEDITVIEW.takip_yolu', 'Field', 'DataType', "C(25)")
+DBSetProp('ICRADOSYAEDITVIEW.takip_yolu', 'Field', 'DefaultValue', "'Haciz'")
+*** DBCX Field Properties for ICRADOSYAEDITVIEW.takip_yolu
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFECDESCRIPT","Takip Yolu Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFECFRMCAPTN","Takip Yolu") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFECDLGCAPTN","Takip Yolu") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFECGRDCAPTN","Takip Yolu") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFECRPTCAPTN","Takip Yolu") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFEMTOOLTIP","Takip Yolu") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFEMSTATUSTXT","Takip Yolu") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFENLUTYPE",2) &&Look Up Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFECLUTABLE","hbysdata!takipyolulookupview") &&Look Up Cursor
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFECLUTAG","takip_yolu") &&Look Up Index Tag
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFEMLUFIELDS","takip_yolu") &&Look Up Display Fields
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFEMLUUPDTEXP","Takipyolulookupview.takip_yolu") &&Look Up Update Expression
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFENDFLTTYPE",2) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+		"VFENDISPORDER",9) &&Display Order
+ENDIF
+ 
+*** Props for the ICRADOSYAEDITVIEW.takipsekli_id field.
+DBSetProp('ICRADOSYAEDITVIEW.takipsekli_id', 'Field', 'KeyField', .F.)
+DBSetProp('ICRADOSYAEDITVIEW.takipsekli_id', 'Field', 'Updatable', .T.)
+DBSetProp('ICRADOSYAEDITVIEW.takipsekli_id', 'Field', 'UpdateName', 'dbo.IcraDosya.TakipSekli_Id')
+DBSetProp('ICRADOSYAEDITVIEW.takipsekli_id', 'Field', 'DataType', "I")
+*** DBCX Field Properties for ICRADOSYAEDITVIEW.takipsekli_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFECDESCRIPT","Takipsekli Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFECFRMCAPTN","Takip Þekli") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFECDLGCAPTN","Takip Þekli") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFECGRDCAPTN","Takip Þekli") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFECRPTCAPTN","Takip Þekli") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFEMTOOLTIP","Takip Þekli                                          ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFEMSTATUSTXT","Takip Þekli                                          ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFENLUTYPE",2) &&Look Up Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFECLUTABLE","hbysdata!takipseklilookupview") &&Look Up Cursor
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFECLUTAG","takipsekli_id") &&Look Up Index Tag
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFEMLUFIELDS","takip_sekli") &&Look Up Display Fields
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFEMLUUPDTEXP","Takipseklilookupview.takipsekli_id") &&Look Up Update Expression
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takipsekli_id","FIELD",;
+		"VFENDISPORDER",38) &&Display Order
 ENDIF
  
 *** Props for the ICRADOSYAEDITVIEW.borc_tipi field.
@@ -603,17 +715,17 @@ IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.borc_evragi","FIELD",;
 		"VFECDESCRIPT","Borc Evragi Field") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.borc_evragi","FIELD",;
-		"VFECFRMCAPTN","Borç Evraðý") &&Form Caption
+		"VFECFRMCAPTN","Borca Esas Evrak") &&Form Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.borc_evragi","FIELD",;
-		"VFECDLGCAPTN","Borç Evraðý") &&Dialog Caption
+		"VFECDLGCAPTN","Borca Esas Evrak") &&Dialog Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.borc_evragi","FIELD",;
-		"VFECGRDCAPTN","Borç Evraðý") &&Grid Caption
+		"VFECGRDCAPTN","Borca Esas Evrak") &&Grid Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.borc_evragi","FIELD",;
-		"VFECRPTCAPTN","Borç Evraðý") &&Report Caption
+		"VFECRPTCAPTN","Borca Esas Evrak") &&Report Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.borc_evragi","FIELD",;
-		"VFEMTOOLTIP","Borç Evraðý                                          ") &&Tooltip Text
+		"VFEMTOOLTIP","Borca Esas Evrak                                     ") &&Tooltip Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.borc_evragi","FIELD",;
-		"VFEMSTATUSTXT","Borç Evraðý                                          ") &&Status Bar Text
+		"VFEMSTATUSTXT","Borca Esas Evrak                                     ") &&Status Bar Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.borc_evragi","FIELD",;
 		"VFELSEARCH",.T.) &&Searchable
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.borc_evragi","FIELD",;
@@ -636,50 +748,170 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",10) &&Display Order
 ENDIF
  
-*** Props for the ICRADOSYAEDITVIEW.takip_yolu field.
-DBSetProp('ICRADOSYAEDITVIEW.takip_yolu', 'Field', 'KeyField', .F.)
-DBSetProp('ICRADOSYAEDITVIEW.takip_yolu', 'Field', 'Updatable', .T.)
-DBSetProp('ICRADOSYAEDITVIEW.takip_yolu', 'Field', 'UpdateName', 'dbo.IcraDosya.Takip_Yolu')
-DBSetProp('ICRADOSYAEDITVIEW.takip_yolu', 'Field', 'DataType', "C(25)")
-DBSetProp('ICRADOSYAEDITVIEW.takip_yolu', 'Field', 'DefaultValue', "'Haciz'")
-*** DBCX Field Properties for ICRADOSYAEDITVIEW.takip_yolu
+*** Props for the ICRADOSYAEDITVIEW.talep_edilen_hak field.
+DBSetProp('ICRADOSYAEDITVIEW.talep_edilen_hak', 'Field', 'KeyField', .F.)
+DBSetProp('ICRADOSYAEDITVIEW.talep_edilen_hak', 'Field', 'Updatable', .T.)
+DBSetProp('ICRADOSYAEDITVIEW.talep_edilen_hak', 'Field', 'UpdateName', 'dbo.IcraDosya.Talep_Edilen_Hak')
+DBSetProp('ICRADOSYAEDITVIEW.talep_edilen_hak', 'Field', 'DataType', "M")
+*** DBCX Field Properties for ICRADOSYAEDITVIEW.talep_edilen_hak
 IF lWriteDBCXProps
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFECDESCRIPT","Takip Yolu Field") &&Description
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFECFRMCAPTN","Takip Yolu") &&Form Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFECDLGCAPTN","Takip Yolu") &&Dialog Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFECGRDCAPTN","Takip Yolu") &&Grid Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFECRPTCAPTN","Takip Yolu") &&Report Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFEMTOOLTIP","Takip Yolu") &&Tooltip Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFEMSTATUSTXT","Takip Yolu") &&Status Bar Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFELSEARCH",.T.) &&Searchable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFELFILTER",.T.) &&Filterable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
+		"VFECDESCRIPT","Talep Edilen Hak Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
+		"VFECFRMCAPTN","Talep Edilen Hak") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
+		"VFECDLGCAPTN","Talep Edilen Hak") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
+		"VFECGRDCAPTN","Talep Edilen Hak") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
+		"VFECRPTCAPTN","Talep Edilen Hak") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
+		"VFEMTOOLTIP","Talep Edilen Hak") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
+		"VFEMSTATUSTXT","Talep Edilen Hak") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
 		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
 		"VFECCLASS","iField") &&Behavior Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
 		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFECOBJTYPE","itextbox") &&User Interface Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
+		"VFECOBJTYPE","ieditbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
 		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.talep_edilen_hak","FIELD",;
+		"VFENDISPORDER",33) &&Display Order
+ENDIF
+ 
+*** Props for the ICRADOSYAEDITVIEW.bk84madde_uygulansin field.
+DBSetProp('ICRADOSYAEDITVIEW.bk84madde_uygulansin', 'Field', 'KeyField', .F.)
+DBSetProp('ICRADOSYAEDITVIEW.bk84madde_uygulansin', 'Field', 'Updatable', .T.)
+DBSetProp('ICRADOSYAEDITVIEW.bk84madde_uygulansin', 'Field', 'UpdateName', 'dbo.IcraDosya.BK84Madde_Uygulansin')
+DBSetProp('ICRADOSYAEDITVIEW.bk84madde_uygulansin', 'Field', 'DataType', "L")
+*** DBCX Field Properties for ICRADOSYAEDITVIEW.bk84madde_uygulansin
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFECDESCRIPT","Bk84madde Uygulansin Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFECFRMCAPTN","BK 84. Madde Uygulansýn") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFECDLGCAPTN","BK 84. Madde Uygulansýn") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFECGRDCAPTN","BK 84. Madde Uygulansýn") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFECRPTCAPTN","BK 84. Madde Uygulansýn") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFEMTOOLTIP","BK 84. Madde Uygulansýn                              ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFEMSTATUSTXT","BK 84. Madde Uygulansýn                              ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFECOBJTYPE","icheckbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
 		"VFELQUICKFIND",.T.) &&Allow Quick Find
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFEMINLIST",'"Haciz","Ýflas","Tahliye","Haciz-Tahliye","Haciz-Satýþ","Tahliye-Kal","Ecrimisil"') &&Value Is In List
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFENDFLTTYPE",2) &&Default Type
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.takip_yolu","FIELD",;
-		"VFENDISPORDER",9) &&Display Order
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bk84madde_uygulansin","FIELD",;
+		"VFENDISPORDER",34) &&Display Order
+ENDIF
+ 
+*** Props for the ICRADOSYAEDITVIEW.bsmv_uygulansin field.
+DBSetProp('ICRADOSYAEDITVIEW.bsmv_uygulansin', 'Field', 'KeyField', .F.)
+DBSetProp('ICRADOSYAEDITVIEW.bsmv_uygulansin', 'Field', 'Updatable', .T.)
+DBSetProp('ICRADOSYAEDITVIEW.bsmv_uygulansin', 'Field', 'UpdateName', 'dbo.IcraDosya.BSMV_Uygulansin')
+DBSetProp('ICRADOSYAEDITVIEW.bsmv_uygulansin', 'Field', 'DataType', "L")
+*** DBCX Field Properties for ICRADOSYAEDITVIEW.bsmv_uygulansin
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFECDESCRIPT","Bsmv Uygulansin Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFECFRMCAPTN","BSMV Uygulansýn") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFECDLGCAPTN","BSMV Uygulansýn") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFECGRDCAPTN","BSMV Uygulansýn") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFECRPTCAPTN","BSMV Uygulansýn") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFEMTOOLTIP","BSMV Uygulansýn                                      ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFEMSTATUSTXT","BSMV Uygulansýn                                      ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFECOBJTYPE","icheckbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.bsmv_uygulansin","FIELD",;
+		"VFENDISPORDER",35) &&Display Order
+ENDIF
+ 
+*** Props for the ICRADOSYAEDITVIEW.kkdf_uygulansin field.
+DBSetProp('ICRADOSYAEDITVIEW.kkdf_uygulansin', 'Field', 'KeyField', .F.)
+DBSetProp('ICRADOSYAEDITVIEW.kkdf_uygulansin', 'Field', 'Updatable', .T.)
+DBSetProp('ICRADOSYAEDITVIEW.kkdf_uygulansin', 'Field', 'UpdateName', 'dbo.IcraDosya.KKDF_Uygulansin')
+DBSetProp('ICRADOSYAEDITVIEW.kkdf_uygulansin', 'Field', 'DataType', "L")
+*** DBCX Field Properties for ICRADOSYAEDITVIEW.kkdf_uygulansin
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFECDESCRIPT","Kkdf Uygulansin Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFECFRMCAPTN","KKDF Uygulansýn") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFECDLGCAPTN","KKDF Uygulansýn") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFECGRDCAPTN","KKDF Uygulansýn") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFECRPTCAPTN","KKDF Uygulansýn") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFEMTOOLTIP","KKDF Uygulansýn                                      ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFEMSTATUSTXT","KKDF Uygulansýn                                      ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFECOBJTYPE","icheckbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.kkdf_uygulansin","FIELD",;
+		"VFENDISPORDER",36) &&Display Order
 ENDIF
  
 *** Props for the ICRADOSYAEDITVIEW.icramudurlugu_id field.
@@ -862,8 +1094,6 @@ IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.dosya_statusu","FIELD",;
 		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.dosya_statusu","FIELD",;
-		"VFECADDFORM","DOSYASTATULOOKUPVIEWFORM") &&Look Up Add Form
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.dosya_statusu","FIELD",;
 		"VFECCLASS","iField") &&Behavior Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAEDITVIEW.dosya_statusu","FIELD",;
 		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
@@ -879,6 +1109,10 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",9) &&Display Order
 ENDIF
  
+
+
+***Split to stay below 64K limit***
+FUNCTION _VFEGenView_F1
 *** Props for the ICRADOSYAEDITVIEW.vade_tarihi field.
 DBSetProp('ICRADOSYAEDITVIEW.vade_tarihi', 'Field', 'KeyField', .F.)
 DBSetProp('ICRADOSYAEDITVIEW.vade_tarihi', 'Field', 'Updatable', .T.)
@@ -1096,10 +1330,6 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",21) &&Display Order
 ENDIF
  
-
-
-***Split to stay below 64K limit***
-FUNCTION _VFEGenView_F1
 *** Props for the ICRADOSYAEDITVIEW.kesinlesme_tarihi field.
 DBSetProp('ICRADOSYAEDITVIEW.kesinlesme_tarihi', 'Field', 'KeyField', .F.)
 DBSetProp('ICRADOSYAEDITVIEW.kesinlesme_tarihi', 'Field', 'Updatable', .T.)

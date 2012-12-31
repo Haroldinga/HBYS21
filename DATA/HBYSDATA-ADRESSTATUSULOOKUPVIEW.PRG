@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,9 +30,8 @@ ENDIF
 
 
 CREATE SQL VIEW "ADRESSTATUSULOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Adresstatusu.Adres_Statusu;
-	FROM dbo.AdresStatusu Adresstatusu
+	AS SELECT Adresstatusu.adres_statusu;
+	FROM hbysreferans!adresstatusu
 
 DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'UpdateType', 1)
 DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'WhereType', 3)
@@ -37,20 +39,20 @@ DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'FetchMemo', .T.)
 DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'Tables', 'dbo.AdresStatusu')
+DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'Tables', 'hbysreferans!adresstatusu')
 DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('ADRESSTATUSULOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for ADRESSTATUSULOOKUPVIEW
 	GoExplorer.odbcx.Validate("ADRESSTATUSULOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESSTATUSULOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Adresstatusulookupview Remote View") &&Description
+		"VFECDESCRIPT","ADRESSTATUSULOOKUPVIEW Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESSTATUSULOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESSTATUSULOOKUPVIEW","VIEW",;
@@ -59,9 +61,9 @@ ENDIF
 
 *!* Field Level Properties for ADRESSTATUSULOOKUPVIEW
 *** Props for the ADRESSTATUSULOOKUPVIEW.adres_statusu field.
-DBSetProp('ADRESSTATUSULOOKUPVIEW.adres_statusu', 'Field', 'KeyField', .T.)
-DBSetProp('ADRESSTATUSULOOKUPVIEW.adres_statusu', 'Field', 'Updatable', .F.)
-DBSetProp('ADRESSTATUSULOOKUPVIEW.adres_statusu', 'Field', 'UpdateName', 'dbo.AdresStatusu.Adres_Statusu')
+DBSetProp('ADRESSTATUSULOOKUPVIEW.adres_statusu', 'Field', 'KeyField', .F.)
+DBSetProp('ADRESSTATUSULOOKUPVIEW.adres_statusu', 'Field', 'Updatable', .T.)
+DBSetProp('ADRESSTATUSULOOKUPVIEW.adres_statusu', 'Field', 'UpdateName', 'hbysreferans!adresstatusu.adres_statusu')
 DBSetProp('ADRESSTATUSULOOKUPVIEW.adres_statusu', 'Field', 'DataType', "C(15)")
 *** DBCX Field Properties for ADRESSTATUSULOOKUPVIEW.adres_statusu
 IF lWriteDBCXProps

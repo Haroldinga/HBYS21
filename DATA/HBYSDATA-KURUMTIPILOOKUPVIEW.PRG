@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,17 +30,16 @@ ENDIF
 
 
 CREATE SQL VIEW "KURUMTIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Kurumtipi.Kurum_Tipi;
-	FROM dbo.KurumTipi Kurumtipi
+	AS SELECT Kurumtipi.kurum_tipi;
+	FROM hbysreferans!kurumtipi
 
 DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'UpdateType', 1)
-DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'WhereType', 1)
+DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'WhereType', 3)
 DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
-DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'Tables', 'dbo.KurumTipi')
+DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!kurumtipi')
 DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('KURUMTIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
@@ -50,7 +52,7 @@ IF lWriteDBCXProps
 	*** DBCX View Properties for KURUMTIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("KURUMTIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!KURUMTIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Kurumtipilookupview Remote View") &&Description
+		"VFECDESCRIPT","Kurumtipilookupview Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!KURUMTIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!KURUMTIPILOOKUPVIEW","VIEW",;
@@ -59,10 +61,9 @@ ENDIF
 
 *!* Field Level Properties for KURUMTIPILOOKUPVIEW
 *** Props for the KURUMTIPILOOKUPVIEW.kurum_tipi field.
-DBSetProp('KURUMTIPILOOKUPVIEW.kurum_tipi', 'Field', 'KeyField', .T.)
+DBSetProp('KURUMTIPILOOKUPVIEW.kurum_tipi', 'Field', 'KeyField', .F.)
 DBSetProp('KURUMTIPILOOKUPVIEW.kurum_tipi', 'Field', 'Updatable', .T.)
-DBSetProp('KURUMTIPILOOKUPVIEW.kurum_tipi', 'Field', 'UpdateName', 'dbo.KurumTipi.Kurum_Tipi')
-DBSetProp('KURUMTIPILOOKUPVIEW.kurum_tipi', 'Field', 'Caption', "Kurum Tipi")
+DBSetProp('KURUMTIPILOOKUPVIEW.kurum_tipi', 'Field', 'UpdateName', 'hbysreferans!kurumtipi.kurum_tipi')
 DBSetProp('KURUMTIPILOOKUPVIEW.kurum_tipi', 'Field', 'DataType', "C(25)")
 *** DBCX Field Properties for KURUMTIPILOOKUPVIEW.kurum_tipi
 IF lWriteDBCXProps
@@ -99,6 +100,6 @@ IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!KURUMTIPILOOKUPVIEW.kurum_tipi","FIELD",;
 		"VFENDFLTTYPE",1) &&Default Type
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!KURUMTIPILOOKUPVIEW.kurum_tipi","FIELD",;
-		"VFENDISPORDER",2) &&Display Order
+		"VFENDISPORDER",1) &&Display Order
 ENDIF
  

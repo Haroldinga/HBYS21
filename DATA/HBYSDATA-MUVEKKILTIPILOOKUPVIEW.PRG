@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,30 +30,29 @@ ENDIF
 
 
 CREATE SQL VIEW "MUVEKKILTIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Muvekkiltipi.Muvekkil_Tipi;
-	FROM dbo.MuvekkilTipi Muvekkiltipi
+	AS SELECT Muvekkiltipi.muvekkil_tipi;
+	FROM hbysreferans!muvekkiltipi
 
 DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'UpdateType', 1)
-DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'WhereType', 1)
+DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'WhereType', 3)
 DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
-DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'Tables', 'dbo.MuvekkilTipi')
+DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!muvekkiltipi')
 DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('MUVEKKILTIPILOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for MUVEKKILTIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("MUVEKKILTIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Muvekkiltipilookupview Remote View") &&Description
+		"VFECDESCRIPT","Muvekkiltipilookupview Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW","VIEW",;
@@ -59,26 +61,26 @@ ENDIF
 
 *!* Field Level Properties for MUVEKKILTIPILOOKUPVIEW
 *** Props for the MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi field.
-DBSetProp('MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi', 'Field', 'KeyField', .T.)
+DBSetProp('MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi', 'Field', 'KeyField', .F.)
 DBSetProp('MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi', 'Field', 'Updatable', .T.)
-DBSetProp('MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi', 'Field', 'UpdateName', 'dbo.MuvekkilTipi.Muvekkil_Tipi')
-DBSetProp('MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi', 'Field', 'DataType', "C(10)")
+DBSetProp('MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi', 'Field', 'UpdateName', 'hbysreferans!muvekkiltipi.muvekkil_tipi')
+DBSetProp('MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi', 'Field', 'DataType', "C(6)")
 *** DBCX Field Properties for MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi
 IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi","FIELD",;
 		"VFECDESCRIPT","Muvekkil Tipi Field") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi","FIELD",;
-		"VFECFRMCAPTN","Müvekkil Tipi") &&Form Caption
+		"VFECFRMCAPTN","Müvekkkil Tipi") &&Form Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi","FIELD",;
-		"VFECDLGCAPTN","Müvekkil Tipi") &&Dialog Caption
+		"VFECDLGCAPTN","Müvekkkil Tipi") &&Dialog Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi","FIELD",;
-		"VFECGRDCAPTN","Müvekkil Tipi") &&Grid Caption
+		"VFECGRDCAPTN","Müvekkkil Tipi") &&Grid Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi","FIELD",;
-		"VFECRPTCAPTN","Müvekkil Tipi") &&Report Caption
+		"VFECRPTCAPTN","Müvekkkil Tipi") &&Report Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi","FIELD",;
-		"VFEMTOOLTIP","Müvekkil Tipi                                        ") &&Tooltip Text
+		"VFEMTOOLTIP","Müvekkkil Tipi                                       ") &&Tooltip Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi","FIELD",;
-		"VFEMSTATUSTXT","Müvekkil Tipi                                        ") &&Status Bar Text
+		"VFEMSTATUSTXT","Müvekkkil Tipi                                       ") &&Status Bar Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi","FIELD",;
 		"VFELSEARCH",.T.) &&Searchable
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi","FIELD",;
@@ -98,6 +100,6 @@ IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi","FIELD",;
 		"VFENDFLTTYPE",1) &&Default Type
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUVEKKILTIPILOOKUPVIEW.muvekkil_tipi","FIELD",;
-		"VFENDISPORDER",2) &&Display Order
+		"VFENDISPORDER",1) &&Display Order
 ENDIF
  

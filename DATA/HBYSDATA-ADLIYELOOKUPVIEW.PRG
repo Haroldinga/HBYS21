@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,10 +30,8 @@ ENDIF
 
 
 CREATE SQL VIEW "ADLIYELOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT DISTINCT Adlibolge.Adliye_Adi;
-	FROM dbo.AdliBolge Adlibolge;
-	ORDER BY Adlibolge.Adliye_Adi
+	AS SELECT Adlibolge.adliye_adi;
+	FROM hbysreferans!adlibolge
 
 DBSetProp('ADLIYELOOKUPVIEW', 'View', 'UpdateType', 1)
 DBSetProp('ADLIYELOOKUPVIEW', 'View', 'WhereType', 3)
@@ -38,20 +39,20 @@ DBSetProp('ADLIYELOOKUPVIEW', 'View', 'FetchMemo', .T.)
 DBSetProp('ADLIYELOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('ADLIYELOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('ADLIYELOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('ADLIYELOOKUPVIEW', 'View', 'Tables', 'dbo.AdliBolge')
+DBSetProp('ADLIYELOOKUPVIEW', 'View', 'Tables', 'hbysreferans!adlibolge')
 DBSetProp('ADLIYELOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('ADLIYELOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('ADLIYELOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('ADLIYELOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('ADLIYELOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('ADLIYELOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('ADLIYELOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('ADLIYELOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('ADLIYELOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for ADLIYELOOKUPVIEW
 	GoExplorer.odbcx.Validate("ADLIYELOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADLIYELOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Adliyelookupview Remote View") &&Description
+		"VFECDESCRIPT","ADLIYELOOKUPVIEW Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADLIYELOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADLIYELOOKUPVIEW","VIEW",;
@@ -61,8 +62,8 @@ ENDIF
 *!* Field Level Properties for ADLIYELOOKUPVIEW
 *** Props for the ADLIYELOOKUPVIEW.adliye_adi field.
 DBSetProp('ADLIYELOOKUPVIEW.adliye_adi', 'Field', 'KeyField', .F.)
-DBSetProp('ADLIYELOOKUPVIEW.adliye_adi', 'Field', 'Updatable', .F.)
-DBSetProp('ADLIYELOOKUPVIEW.adliye_adi', 'Field', 'UpdateName', 'dbo.AdliBolge.Adliye_Adi')
+DBSetProp('ADLIYELOOKUPVIEW.adliye_adi', 'Field', 'Updatable', .T.)
+DBSetProp('ADLIYELOOKUPVIEW.adliye_adi', 'Field', 'UpdateName', 'hbysreferans!adlibolge.adliye_adi')
 DBSetProp('ADLIYELOOKUPVIEW.adliye_adi', 'Field', 'DataType', "C(25)")
 *** DBCX Field Properties for ADLIYELOOKUPVIEW.adliye_adi
 IF lWriteDBCXProps

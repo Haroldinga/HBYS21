@@ -14,7 +14,7 @@ ENDIF
 
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -41,6 +41,8 @@ CREATE SQL VIEW "PERSONELEDITVIEW" ;
 		Personel.Vergi_Dairesi,;
 		Personel.Ssk_No,;
 		Personel.Baro_Sicil_No,;
+		Personel.Tbb_No,;
+		Personel.Vekil_Tipi,;
 		Personel.Cinsiyeti,;
 		Personel.Kimlik_No,;
 		Personel.Baba_Adi,;
@@ -61,14 +63,10 @@ CREATE SQL VIEW "PERSONELEDITVIEW" ;
 		Personel.e_Posta,;
 		Personel.e_Posta_Kullanici_Adi,;
 		Personel.e_Posta_Parola,;
-		Personel.Ev_Tel_Ulke_Kodu,;
 		Personel.Ev_Tel_No,;
-		Personel.Is_Tel_Ulke_Kodu,;
 		Personel.Is_Tel_No,;
 		Personel.Is_Tel_Dahili_No,;
-		Personel.Cep_Tel_Ulke_Kodu,;
 		Personel.Cep_Tel_No,;
-		Personel.Cep_Tel_2_Ulke_Kodu,;
 		Personel.Cep_Tel_2_No,;
 		Personel.Ev_Adresi,;
 		Personel.Ev_Adresi_Posta_Kodu,;
@@ -733,6 +731,94 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",11) &&Display Order
 ENDIF
  
+*** Props for the PERSONELEDITVIEW.tbb_no field.
+DBSetProp('PERSONELEDITVIEW.tbb_no', 'Field', 'KeyField', .F.)
+DBSetProp('PERSONELEDITVIEW.tbb_no', 'Field', 'Updatable', .T.)
+DBSetProp('PERSONELEDITVIEW.tbb_no', 'Field', 'UpdateName', 'dbo.Personel.Tbb_No')
+DBSetProp('PERSONELEDITVIEW.tbb_no', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for PERSONELEDITVIEW.tbb_no
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFECDESCRIPT","Tbb No Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFECFRMCAPTN","Tbb No") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFECDLGCAPTN","Tbb No") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFECGRDCAPTN","Tbb No") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFECRPTCAPTN","Tbb No") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFEMTOOLTIP","Tbb No                                               ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFEMSTATUSTXT","Tbb No                                               ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.tbb_no","FIELD",;
+		"VFENDISPORDER",14) &&Display Order
+ENDIF
+ 
+*** Props for the PERSONELEDITVIEW.vekil_tipi field.
+DBSetProp('PERSONELEDITVIEW.vekil_tipi', 'Field', 'KeyField', .F.)
+DBSetProp('PERSONELEDITVIEW.vekil_tipi', 'Field', 'Updatable', .T.)
+DBSetProp('PERSONELEDITVIEW.vekil_tipi', 'Field', 'UpdateName', 'dbo.Personel.Vekil_Tipi')
+DBSetProp('PERSONELEDITVIEW.vekil_tipi', 'Field', 'DataType', "C(7)")
+*** DBCX Field Properties for PERSONELEDITVIEW.vekil_tipi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFECDESCRIPT","Vekil Tipi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFECFRMCAPTN","Vekil Tipi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFECDLGCAPTN","Vekil Tipi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFECGRDCAPTN","Vekil Tipi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFECRPTCAPTN","Vekil Tipi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFEMTOOLTIP","Vekil Tipi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFEMSTATUSTXT","Vekil Tipi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFEMINLIST",'"Serbest","Baro","Kurum"') &&Value Is In List
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.vekil_tipi","FIELD",;
+		"VFENDISPORDER",15) &&Display Order
+ENDIF
+ 
 *** Props for the PERSONELEDITVIEW.cinsiyeti field.
 DBSetProp('PERSONELEDITVIEW.cinsiyeti', 'Field', 'KeyField', .F.)
 DBSetProp('PERSONELEDITVIEW.cinsiyeti', 'Field', 'Updatable', .T.)
@@ -1054,6 +1140,10 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",12) &&Display Order
 ENDIF
  
+
+
+***Split to stay below 64K limit***
+FUNCTION _VFEGenView_F1
 *** Props for the PERSONELEDITVIEW.kan_grubu field.
 DBSetProp('PERSONELEDITVIEW.kan_grubu', 'Field', 'KeyField', .F.)
 DBSetProp('PERSONELEDITVIEW.kan_grubu', 'Field', 'Updatable', .T.)
@@ -1160,10 +1250,6 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",43) &&Display Order
 ENDIF
  
-
-
-***Split to stay below 64K limit***
-FUNCTION _VFEGenView_F1
 *** Props for the PERSONELEDITVIEW.ilce_adi field.
 DBSetProp('PERSONELEDITVIEW.ilce_adi', 'Field', 'KeyField', .F.)
 DBSetProp('PERSONELEDITVIEW.ilce_adi', 'Field', 'Updatable', .T.)
@@ -1647,49 +1733,6 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",33) &&Display Order
 ENDIF
  
-*** Props for the PERSONELEDITVIEW.ev_tel_ulke_kodu field.
-DBSetProp('PERSONELEDITVIEW.ev_tel_ulke_kodu', 'Field', 'KeyField', .F.)
-DBSetProp('PERSONELEDITVIEW.ev_tel_ulke_kodu', 'Field', 'Updatable', .T.)
-DBSetProp('PERSONELEDITVIEW.ev_tel_ulke_kodu', 'Field', 'UpdateName', 'dbo.Personel.Ev_Tel_Ulke_Kodu')
-DBSetProp('PERSONELEDITVIEW.ev_tel_ulke_kodu', 'Field', 'DataType', "C(3)")
-*** DBCX Field Properties for PERSONELEDITVIEW.ev_tel_ulke_kodu
-IF lWriteDBCXProps
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFECDESCRIPT","Ev Tel Ulke Kodu Field") &&Description
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFECFRMCAPTN","Ev Tel Ulke Kodu") &&Form Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFECDLGCAPTN","Ev Tel Ulke Kodu") &&Dialog Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFECGRDCAPTN","Ev Tel Ulke Kodu") &&Grid Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFECRPTCAPTN","Ev Tel Ulke Kodu") &&Report Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFEMTOOLTIP","Ev Tel Ulke Kodu") &&Tooltip Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFEMSTATUSTXT","Ev Tel Ulke Kodu") &&Status Bar Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFELSEARCH",.T.) &&Searchable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFELFILTER",.T.) &&Filterable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFECCLASS","iField") &&Behavior Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFECOBJTYPE","itextbox") &&User Interface Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFELQUICKFIND",.T.) &&Allow Quick Find
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFENDFLTTYPE",1) &&Default Type
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_ulke_kodu","FIELD",;
-		"VFENDISPORDER",28) &&Display Order
-ENDIF
- 
 *** Props for the PERSONELEDITVIEW.ev_tel_no field.
 DBSetProp('PERSONELEDITVIEW.ev_tel_no', 'Field', 'KeyField', .F.)
 DBSetProp('PERSONELEDITVIEW.ev_tel_no', 'Field', 'Updatable', .T.)
@@ -1735,49 +1778,6 @@ IF lWriteDBCXProps
 		"VFEMINPUTMASK","(999) 999 99 99") &&Input Mask
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.ev_tel_no","FIELD",;
 		"VFEMFORMAT","K") &&Format
-ENDIF
- 
-*** Props for the PERSONELEDITVIEW.is_tel_ulke_kodu field.
-DBSetProp('PERSONELEDITVIEW.is_tel_ulke_kodu', 'Field', 'KeyField', .F.)
-DBSetProp('PERSONELEDITVIEW.is_tel_ulke_kodu', 'Field', 'Updatable', .T.)
-DBSetProp('PERSONELEDITVIEW.is_tel_ulke_kodu', 'Field', 'UpdateName', 'dbo.Personel.Is_Tel_Ulke_Kodu')
-DBSetProp('PERSONELEDITVIEW.is_tel_ulke_kodu', 'Field', 'DataType', "C(3)")
-*** DBCX Field Properties for PERSONELEDITVIEW.is_tel_ulke_kodu
-IF lWriteDBCXProps
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFECDESCRIPT","Is Tel Ulke Kodu Field") &&Description
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFECFRMCAPTN","Is Tel Ulke Kodu") &&Form Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFECDLGCAPTN","Is Tel Ulke Kodu") &&Dialog Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFECGRDCAPTN","Is Tel Ulke Kodu") &&Grid Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFECRPTCAPTN","Is Tel Ulke Kodu") &&Report Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFEMTOOLTIP","Is Tel Ulke Kodu") &&Tooltip Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFEMSTATUSTXT","Is Tel Ulke Kodu") &&Status Bar Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFELSEARCH",.T.) &&Searchable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFELFILTER",.T.) &&Filterable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFECCLASS","iField") &&Behavior Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFECOBJTYPE","itextbox") &&User Interface Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFELQUICKFIND",.T.) &&Allow Quick Find
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFENDFLTTYPE",1) &&Default Type
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.is_tel_ulke_kodu","FIELD",;
-		"VFENDISPORDER",31) &&Display Order
 ENDIF
  
 *** Props for the PERSONELEDITVIEW.is_tel_no field.
@@ -1870,49 +1870,6 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",34) &&Display Order
 ENDIF
  
-*** Props for the PERSONELEDITVIEW.cep_tel_ulke_kodu field.
-DBSetProp('PERSONELEDITVIEW.cep_tel_ulke_kodu', 'Field', 'KeyField', .F.)
-DBSetProp('PERSONELEDITVIEW.cep_tel_ulke_kodu', 'Field', 'Updatable', .T.)
-DBSetProp('PERSONELEDITVIEW.cep_tel_ulke_kodu', 'Field', 'UpdateName', 'dbo.Personel.Cep_Tel_Ulke_Kodu')
-DBSetProp('PERSONELEDITVIEW.cep_tel_ulke_kodu', 'Field', 'DataType', "C(3)")
-*** DBCX Field Properties for PERSONELEDITVIEW.cep_tel_ulke_kodu
-IF lWriteDBCXProps
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFECDESCRIPT","Cep Tel Ulke Kodu Field") &&Description
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFECFRMCAPTN","Cep Tel Ulke Kodu") &&Form Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFECDLGCAPTN","Cep Tel Ulke Kodu") &&Dialog Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFECGRDCAPTN","Cep Tel Ulke Kodu") &&Grid Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFECRPTCAPTN","Cep Tel Ulke Kodu") &&Report Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFEMTOOLTIP","Cep Tel Ulke Kodu") &&Tooltip Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFEMSTATUSTXT","Cep Tel Ulke Kodu") &&Status Bar Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFELSEARCH",.T.) &&Searchable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFELFILTER",.T.) &&Filterable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFECCLASS","iField") &&Behavior Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFECOBJTYPE","itextbox") &&User Interface Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFELQUICKFIND",.T.) &&Allow Quick Find
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFENDFLTTYPE",1) &&Default Type
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_ulke_kodu","FIELD",;
-		"VFENDISPORDER",35) &&Display Order
-ENDIF
- 
 *** Props for the PERSONELEDITVIEW.cep_tel_no field.
 DBSetProp('PERSONELEDITVIEW.cep_tel_no', 'Field', 'KeyField', .F.)
 DBSetProp('PERSONELEDITVIEW.cep_tel_no', 'Field', 'Updatable', .T.)
@@ -1958,49 +1915,6 @@ IF lWriteDBCXProps
 		"VFEMINPUTMASK","(999) 999 99 99") &&Input Mask
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_no","FIELD",;
 		"VFEMFORMAT","K") &&Format
-ENDIF
- 
-*** Props for the PERSONELEDITVIEW.cep_tel_2_ulke_kodu field.
-DBSetProp('PERSONELEDITVIEW.cep_tel_2_ulke_kodu', 'Field', 'KeyField', .F.)
-DBSetProp('PERSONELEDITVIEW.cep_tel_2_ulke_kodu', 'Field', 'Updatable', .T.)
-DBSetProp('PERSONELEDITVIEW.cep_tel_2_ulke_kodu', 'Field', 'UpdateName', 'dbo.Personel.Cep_Tel_2_Ulke_Kodu')
-DBSetProp('PERSONELEDITVIEW.cep_tel_2_ulke_kodu', 'Field', 'DataType', "C(3)")
-*** DBCX Field Properties for PERSONELEDITVIEW.cep_tel_2_ulke_kodu
-IF lWriteDBCXProps
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFECDESCRIPT","Cep Tel 2 Ulke Kodu Field") &&Description
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFECFRMCAPTN","Cep Tel 2 Ulke Kodu") &&Form Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFECDLGCAPTN","Cep Tel 2 Ulke Kodu") &&Dialog Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFECGRDCAPTN","Cep Tel 2 Ulke Kodu") &&Grid Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFECRPTCAPTN","Cep Tel 2 Ulke Kodu") &&Report Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFEMTOOLTIP","Cep Tel 2 Ulke Kodu") &&Tooltip Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFEMSTATUSTXT","Cep Tel 2 Ulke Kodu") &&Status Bar Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFELSEARCH",.T.) &&Searchable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFELFILTER",.T.) &&Filterable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFECCLASS","iField") &&Behavior Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFECOBJTYPE","itextbox") &&User Interface Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFELQUICKFIND",.T.) &&Allow Quick Find
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFENDFLTTYPE",1) &&Default Type
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!PERSONELEDITVIEW.cep_tel_2_ulke_kodu","FIELD",;
-		"VFENDISPORDER",38) &&Display Order
 ENDIF
  
 *** Props for the PERSONELEDITVIEW.cep_tel_2_no field.
@@ -2189,13 +2103,6 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",43) &&Display Order
 ENDIF
  
-ENDPROC
-
-
-
-
-***Split to stay below 64K limit***
-FUNCTION _VFEGenView_F2
 *** Props for the PERSONELEDITVIEW.ev_adresi_ilce_adi field.
 DBSetProp('PERSONELEDITVIEW.ev_adresi_ilce_adi', 'Field', 'KeyField', .F.)
 DBSetProp('PERSONELEDITVIEW.ev_adresi_ilce_adi', 'Field', 'Updatable', .T.)
@@ -2249,6 +2156,13 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",44) &&Display Order
 ENDIF
  
+ENDPROC
+
+
+
+
+***Split to stay below 64K limit***
+FUNCTION _VFEGenView_F2
 *** Props for the PERSONELEDITVIEW.ev_adresi_ulke_adi field.
 DBSetProp('PERSONELEDITVIEW.ev_adresi_ulke_adi', 'Field', 'KeyField', .F.)
 DBSetProp('PERSONELEDITVIEW.ev_adresi_ulke_adi', 'Field', 'Updatable', .T.)

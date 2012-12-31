@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,9 +30,8 @@ ENDIF
 
 
 CREATE SQL VIEW "RAPORTIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Raportipi.Rapor_Tipi;
-	FROM dbo.RaporTipi Raportipi
+	AS SELECT Raportipi.rapor_tipi;
+	FROM hbysreferans!raportipi
 
 DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'UpdateType', 1)
 DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'WhereType', 3)
@@ -37,20 +39,20 @@ DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
 DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'Tables', 'dbo.RaporTipi')
+DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!raportipi')
 DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('RAPORTIPILOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for RAPORTIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("RAPORTIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!RAPORTIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Raportipilookupview Remote View") &&Description
+		"VFECDESCRIPT","Raportipilookupview Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!RAPORTIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!RAPORTIPILOOKUPVIEW","VIEW",;
@@ -59,9 +61,9 @@ ENDIF
 
 *!* Field Level Properties for RAPORTIPILOOKUPVIEW
 *** Props for the RAPORTIPILOOKUPVIEW.rapor_tipi field.
-DBSetProp('RAPORTIPILOOKUPVIEW.rapor_tipi', 'Field', 'KeyField', .T.)
-DBSetProp('RAPORTIPILOOKUPVIEW.rapor_tipi', 'Field', 'Updatable', .F.)
-DBSetProp('RAPORTIPILOOKUPVIEW.rapor_tipi', 'Field', 'UpdateName', 'dbo.RaporTipi.Rapor_Tipi')
+DBSetProp('RAPORTIPILOOKUPVIEW.rapor_tipi', 'Field', 'KeyField', .F.)
+DBSetProp('RAPORTIPILOOKUPVIEW.rapor_tipi', 'Field', 'Updatable', .T.)
+DBSetProp('RAPORTIPILOOKUPVIEW.rapor_tipi', 'Field', 'UpdateName', 'hbysreferans!raportipi.rapor_tipi')
 DBSetProp('RAPORTIPILOOKUPVIEW.rapor_tipi', 'Field', 'DataType', "C(15)")
 *** DBCX Field Properties for RAPORTIPILOOKUPVIEW.rapor_tipi
 IF lWriteDBCXProps

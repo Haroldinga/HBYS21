@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,9 +30,8 @@ ENDIF
 
 
 CREATE SQL VIEW "TEBLIGATTIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Tebligattipi.Tebligat_Tipi;
-	FROM dbo.TebligatTipi Tebligattipi
+	AS SELECT Tebligattipi.tebligat_tipi;
+	FROM hbysreferans!tebligattipi
 
 DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'UpdateType', 1)
 DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'WhereType', 3)
@@ -37,20 +39,20 @@ DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
 DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'Tables', 'dbo.TebligatTipi')
+DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!tebligattipi')
 DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('TEBLIGATTIPILOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for TEBLIGATTIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("TEBLIGATTIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TEBLIGATTIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Tebligattipilookupview Remote View") &&Description
+		"VFECDESCRIPT","Tebligattipilookupview Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TEBLIGATTIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TEBLIGATTIPILOOKUPVIEW","VIEW",;
@@ -59,9 +61,9 @@ ENDIF
 
 *!* Field Level Properties for TEBLIGATTIPILOOKUPVIEW
 *** Props for the TEBLIGATTIPILOOKUPVIEW.tebligat_tipi field.
-DBSetProp('TEBLIGATTIPILOOKUPVIEW.tebligat_tipi', 'Field', 'KeyField', .T.)
-DBSetProp('TEBLIGATTIPILOOKUPVIEW.tebligat_tipi', 'Field', 'Updatable', .F.)
-DBSetProp('TEBLIGATTIPILOOKUPVIEW.tebligat_tipi', 'Field', 'UpdateName', 'dbo.TebligatTipi.Tebligat_Tipi')
+DBSetProp('TEBLIGATTIPILOOKUPVIEW.tebligat_tipi', 'Field', 'KeyField', .F.)
+DBSetProp('TEBLIGATTIPILOOKUPVIEW.tebligat_tipi', 'Field', 'Updatable', .T.)
+DBSetProp('TEBLIGATTIPILOOKUPVIEW.tebligat_tipi', 'Field', 'UpdateName', 'hbysreferans!tebligattipi.tebligat_tipi')
 DBSetProp('TEBLIGATTIPILOOKUPVIEW.tebligat_tipi', 'Field', 'DataType', "C(25)")
 *** DBCX Field Properties for TEBLIGATTIPILOOKUPVIEW.tebligat_tipi
 IF lWriteDBCXProps

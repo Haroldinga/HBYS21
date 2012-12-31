@@ -14,7 +14,7 @@ ENDIF
 
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -281,7 +281,7 @@ ENDIF
 DBSetProp('DOSYATIPILISTVIEW.takip_tipi', 'Field', 'KeyField', .F.)
 DBSetProp('DOSYATIPILISTVIEW.takip_tipi', 'Field', 'Updatable', .T.)
 DBSetProp('DOSYATIPILISTVIEW.takip_tipi', 'Field', 'UpdateName', 'dbo.DosyaTipi.Takip_Tipi')
-DBSetProp('DOSYATIPILISTVIEW.takip_tipi', 'Field', 'DataType', "C(50)")
+DBSetProp('DOSYATIPILISTVIEW.takip_tipi', 'Field', 'DataType', "C(15)")
 *** DBCX Field Properties for DOSYATIPILISTVIEW.takip_tipi
 IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!DOSYATIPILISTVIEW.takip_tipi","FIELD",;

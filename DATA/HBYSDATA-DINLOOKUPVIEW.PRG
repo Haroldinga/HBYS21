@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,30 +30,29 @@ ENDIF
 
 
 CREATE SQL VIEW "DINLOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Din.Dini;
-	FROM dbo.Din Din
+	AS SELECT Din.dini;
+	FROM hbysreferans!din
 
 DBSetProp('DINLOOKUPVIEW', 'View', 'UpdateType', 1)
-DBSetProp('DINLOOKUPVIEW', 'View', 'WhereType', 1)
+DBSetProp('DINLOOKUPVIEW', 'View', 'WhereType', 3)
 DBSetProp('DINLOOKUPVIEW', 'View', 'FetchMemo', .T.)
-DBSetProp('DINLOOKUPVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('DINLOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('DINLOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('DINLOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('DINLOOKUPVIEW', 'View', 'Tables', 'dbo.Din')
+DBSetProp('DINLOOKUPVIEW', 'View', 'Tables', 'hbysreferans!din')
 DBSetProp('DINLOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('DINLOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('DINLOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('DINLOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('DINLOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('DINLOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('DINLOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('DINLOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('DINLOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for DINLOOKUPVIEW
 	GoExplorer.odbcx.Validate("DINLOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!DINLOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Dinlookupview Remote View") &&Description
+		"VFECDESCRIPT","DINLOOKUPVIEW Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!DINLOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!DINLOOKUPVIEW","VIEW",;
@@ -59,9 +61,9 @@ ENDIF
 
 *!* Field Level Properties for DINLOOKUPVIEW
 *** Props for the DINLOOKUPVIEW.dini field.
-DBSetProp('DINLOOKUPVIEW.dini', 'Field', 'KeyField', .T.)
+DBSetProp('DINLOOKUPVIEW.dini', 'Field', 'KeyField', .F.)
 DBSetProp('DINLOOKUPVIEW.dini', 'Field', 'Updatable', .T.)
-DBSetProp('DINLOOKUPVIEW.dini', 'Field', 'UpdateName', 'dbo.Din.Dini')
+DBSetProp('DINLOOKUPVIEW.dini', 'Field', 'UpdateName', 'hbysreferans!din.dini')
 DBSetProp('DINLOOKUPVIEW.dini', 'Field', 'DataType', "C(15)")
 *** DBCX Field Properties for DINLOOKUPVIEW.dini
 IF lWriteDBCXProps

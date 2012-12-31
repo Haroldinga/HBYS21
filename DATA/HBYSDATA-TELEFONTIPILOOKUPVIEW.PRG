@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,9 +30,8 @@ ENDIF
 
 
 CREATE SQL VIEW "TELEFONTIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Telefontipi.Telefon_Tipi;
-	FROM dbo.TelefonTipi Telefontipi
+	AS SELECT Telefontipi.telefon_tipi;
+	FROM hbysreferans!telefontipi
 
 DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'UpdateType', 1)
 DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'WhereType', 3)
@@ -37,20 +39,20 @@ DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
 DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'Tables', 'dbo.TelefonTipi')
+DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!telefontipi')
 DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('TELEFONTIPILOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for TELEFONTIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("TELEFONTIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TELEFONTIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Telefontipilookupview Remote View") &&Description
+		"VFECDESCRIPT","Telefontipilookupview Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TELEFONTIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TELEFONTIPILOOKUPVIEW","VIEW",;
@@ -59,9 +61,9 @@ ENDIF
 
 *!* Field Level Properties for TELEFONTIPILOOKUPVIEW
 *** Props for the TELEFONTIPILOOKUPVIEW.telefon_tipi field.
-DBSetProp('TELEFONTIPILOOKUPVIEW.telefon_tipi', 'Field', 'KeyField', .T.)
-DBSetProp('TELEFONTIPILOOKUPVIEW.telefon_tipi', 'Field', 'Updatable', .F.)
-DBSetProp('TELEFONTIPILOOKUPVIEW.telefon_tipi', 'Field', 'UpdateName', 'dbo.TelefonTipi.Telefon_Tipi')
+DBSetProp('TELEFONTIPILOOKUPVIEW.telefon_tipi', 'Field', 'KeyField', .F.)
+DBSetProp('TELEFONTIPILOOKUPVIEW.telefon_tipi', 'Field', 'Updatable', .T.)
+DBSetProp('TELEFONTIPILOOKUPVIEW.telefon_tipi', 'Field', 'UpdateName', 'hbysreferans!telefontipi.telefon_tipi')
 DBSetProp('TELEFONTIPILOOKUPVIEW.telefon_tipi', 'Field', 'DataType', "C(15)")
 *** DBCX Field Properties for TELEFONTIPILOOKUPVIEW.telefon_tipi
 IF lWriteDBCXProps

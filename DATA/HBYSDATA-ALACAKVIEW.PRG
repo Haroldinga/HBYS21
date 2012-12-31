@@ -14,7 +14,7 @@ ENDIF
 
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -223,6 +223,16 @@ IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
 		"VFELFILTER",.T.) &&Filterable
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
+		"VFENLUTYPE",2) &&Look Up Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
+		"VFECLUTABLE","hbysreferans!alacakbelgetipi") &&Look Up Cursor
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
+		"VFECLUTAG","belge_tipi") &&Look Up Index Tag
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
+		"VFEMLUFIELDS","belge_tipi") &&Look Up Display Fields
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
+		"VFEMLUUPDTEXP","Alacakbelgetipi.belge_tipi") &&Look Up Update Expression
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
 		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
 		"VFECCLASS","iField") &&Behavior Class
@@ -234,8 +244,6 @@ IF lWriteDBCXProps
 		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
 		"VFELQUICKFIND",.T.) &&Allow Quick Find
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
-		"VFEMINLIST",'"Çek","Senet","Sözleþme","Diðer"') &&Value Is In List
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
 		"VFENDFLTTYPE",2) &&Default Type
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.belge_tipi","FIELD",;
@@ -318,7 +326,7 @@ IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.doviz_tipi","FIELD",;
 		"VFECLUTAG","doviz_tipi") &&Look Up Index Tag
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.doviz_tipi","FIELD",;
-		"VFEMLUFIELDS","doviz_tipi") &&Look Up Display Fields
+		"VFEMLUFIELDS","doviz_tipi, aciklama") &&Look Up Display Fields
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.doviz_tipi","FIELD",;
 		"VFEMLUUPDTEXP","Doviztipilookupview.doviz_tipi") &&Look Up Update Expression
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ALACAKVIEW.doviz_tipi","FIELD",;

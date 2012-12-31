@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,30 +30,29 @@ ENDIF
 
 
 CREATE SQL VIEW "ADRESTIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Adrestipi.Adres_Tipi;
-	FROM dbo.AdresTipi Adrestipi
+	AS SELECT Adrestipi.adres_tipi;
+	FROM hbysreferans!adrestipi
 
 DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'UpdateType', 1)
-DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'WhereType', 1)
+DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'WhereType', 3)
 DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
-DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'Tables', 'dbo.AdresTipi')
+DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!adrestipi')
 DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('ADRESTIPILOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for ADRESTIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("ADRESTIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESTIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Adrestipilookupview Remote View") &&Description
+		"VFECDESCRIPT","ADRESTIPILOOKUPVIEW Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESTIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESTIPILOOKUPVIEW","VIEW",;
@@ -59,10 +61,10 @@ ENDIF
 
 *!* Field Level Properties for ADRESTIPILOOKUPVIEW
 *** Props for the ADRESTIPILOOKUPVIEW.adres_tipi field.
-DBSetProp('ADRESTIPILOOKUPVIEW.adres_tipi', 'Field', 'KeyField', .T.)
+DBSetProp('ADRESTIPILOOKUPVIEW.adres_tipi', 'Field', 'KeyField', .F.)
 DBSetProp('ADRESTIPILOOKUPVIEW.adres_tipi', 'Field', 'Updatable', .T.)
-DBSetProp('ADRESTIPILOOKUPVIEW.adres_tipi', 'Field', 'UpdateName', 'dbo.AdresTipi.Adres_Tipi')
-DBSetProp('ADRESTIPILOOKUPVIEW.adres_tipi', 'Field', 'DataType', "C(15)")
+DBSetProp('ADRESTIPILOOKUPVIEW.adres_tipi', 'Field', 'UpdateName', 'hbysreferans!adrestipi.adres_tipi')
+DBSetProp('ADRESTIPILOOKUPVIEW.adres_tipi', 'Field', 'DataType', "C(20)")
 *** DBCX Field Properties for ADRESTIPILOOKUPVIEW.adres_tipi
 IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESTIPILOOKUPVIEW.adres_tipi","FIELD",;

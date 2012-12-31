@@ -14,7 +14,7 @@ ENDIF
 
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -197,7 +197,7 @@ ENDIF
 DBSetProp('ADRESVIEW.adres_tipi', 'Field', 'KeyField', .F.)
 DBSetProp('ADRESVIEW.adres_tipi', 'Field', 'Updatable', .T.)
 DBSetProp('ADRESVIEW.adres_tipi', 'Field', 'UpdateName', 'dbo.Adres.Adres_Tipi')
-DBSetProp('ADRESVIEW.adres_tipi', 'Field', 'DataType', "C(15)")
+DBSetProp('ADRESVIEW.adres_tipi', 'Field', 'DataType', "C(20)")
 *** DBCX Field Properties for ADRESVIEW.adres_tipi
 IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESVIEW.adres_tipi","FIELD",;

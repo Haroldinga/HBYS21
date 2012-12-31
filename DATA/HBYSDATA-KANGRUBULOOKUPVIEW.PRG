@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,30 +30,29 @@ ENDIF
 
 
 CREATE SQL VIEW "KANGRUBULOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Kangrubu.Kan_Grubu;
-	FROM dbo.KanGrubu Kangrubu
+	AS SELECT Kangrubu.kan_grubu;
+	FROM hbysreferans!kangrubu
 
 DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'UpdateType', 1)
-DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'WhereType', 1)
+DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'WhereType', 3)
 DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'FetchMemo', .T.)
-DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'Tables', 'dbo.KanGrubu')
+DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'Tables', 'hbysreferans!kangrubu')
 DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('KANGRUBULOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for KANGRUBULOOKUPVIEW
 	GoExplorer.odbcx.Validate("KANGRUBULOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!KANGRUBULOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Kangrubulookupview Remote View") &&Description
+		"VFECDESCRIPT","Kangrubulookupview Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!KANGRUBULOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!KANGRUBULOOKUPVIEW","VIEW",;
@@ -59,10 +61,10 @@ ENDIF
 
 *!* Field Level Properties for KANGRUBULOOKUPVIEW
 *** Props for the KANGRUBULOOKUPVIEW.kan_grubu field.
-DBSetProp('KANGRUBULOOKUPVIEW.kan_grubu', 'Field', 'KeyField', .T.)
+DBSetProp('KANGRUBULOOKUPVIEW.kan_grubu', 'Field', 'KeyField', .F.)
 DBSetProp('KANGRUBULOOKUPVIEW.kan_grubu', 'Field', 'Updatable', .T.)
-DBSetProp('KANGRUBULOOKUPVIEW.kan_grubu', 'Field', 'UpdateName', 'dbo.KanGrubu.Kan_Grubu')
-DBSetProp('KANGRUBULOOKUPVIEW.kan_grubu', 'Field', 'DataType', "C(50)")
+DBSetProp('KANGRUBULOOKUPVIEW.kan_grubu', 'Field', 'UpdateName', 'hbysreferans!kangrubu.kan_grubu')
+DBSetProp('KANGRUBULOOKUPVIEW.kan_grubu', 'Field', 'DataType', "C(15)")
 *** DBCX Field Properties for KANGRUBULOOKUPVIEW.kan_grubu
 IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!KANGRUBULOOKUPVIEW.kan_grubu","FIELD",;

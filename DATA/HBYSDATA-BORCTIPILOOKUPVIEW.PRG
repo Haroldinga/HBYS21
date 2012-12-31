@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,30 +30,29 @@ ENDIF
 
 
 CREATE SQL VIEW "BORCTIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Borctipi.Borc_Tipi;
-	FROM dbo.BorcTipi Borctipi
+	AS SELECT Borctipi.borc_tipi;
+	FROM hbysreferans!borctipi
 
 DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'UpdateType', 1)
-DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'WhereType', 1)
+DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'WhereType', 3)
 DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
-DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'Tables', 'dbo.BorcTipi')
+DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!borctipi')
 DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('BORCTIPILOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for BORCTIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("BORCTIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Borctipilookupview Remote View") &&Description
+		"VFECDESCRIPT","BORCTIPILOOKUPVIEW Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW","VIEW",;
@@ -59,26 +61,26 @@ ENDIF
 
 *!* Field Level Properties for BORCTIPILOOKUPVIEW
 *** Props for the BORCTIPILOOKUPVIEW.borc_tipi field.
-DBSetProp('BORCTIPILOOKUPVIEW.borc_tipi', 'Field', 'KeyField', .T.)
+DBSetProp('BORCTIPILOOKUPVIEW.borc_tipi', 'Field', 'KeyField', .F.)
 DBSetProp('BORCTIPILOOKUPVIEW.borc_tipi', 'Field', 'Updatable', .T.)
-DBSetProp('BORCTIPILOOKUPVIEW.borc_tipi', 'Field', 'UpdateName', 'dbo.BorcTipi.Borc_Tipi')
+DBSetProp('BORCTIPILOOKUPVIEW.borc_tipi', 'Field', 'UpdateName', 'hbysreferans!borctipi.borc_tipi')
 DBSetProp('BORCTIPILOOKUPVIEW.borc_tipi', 'Field', 'DataType', "C(25)")
 *** DBCX Field Properties for BORCTIPILOOKUPVIEW.borc_tipi
 IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW.borc_tipi","FIELD",;
 		"VFECDESCRIPT","Borc Tipi Field") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW.borc_tipi","FIELD",;
-		"VFECFRMCAPTN","Borc Tipi") &&Form Caption
+		"VFECFRMCAPTN","Borç Tipi") &&Form Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW.borc_tipi","FIELD",;
-		"VFECDLGCAPTN","Borc Tipi") &&Dialog Caption
+		"VFECDLGCAPTN","Borç Tipi") &&Dialog Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW.borc_tipi","FIELD",;
-		"VFECGRDCAPTN","Borc Tipi") &&Grid Caption
+		"VFECGRDCAPTN","Borç Tipi") &&Grid Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW.borc_tipi","FIELD",;
-		"VFECRPTCAPTN","Borc Tipi") &&Report Caption
+		"VFECRPTCAPTN","Borç Tipi") &&Report Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW.borc_tipi","FIELD",;
-		"VFEMTOOLTIP","Borc Tipi") &&Tooltip Text
+		"VFEMTOOLTIP","Borç Tipi                                            ") &&Tooltip Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW.borc_tipi","FIELD",;
-		"VFEMSTATUSTXT","Borc Tipi") &&Status Bar Text
+		"VFEMSTATUSTXT","Borç Tipi                                            ") &&Status Bar Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW.borc_tipi","FIELD",;
 		"VFELSEARCH",.T.) &&Searchable
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCTIPILOOKUPVIEW.borc_tipi","FIELD",;

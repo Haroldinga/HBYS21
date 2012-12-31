@@ -14,7 +14,7 @@ ENDIF
 
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -32,7 +32,8 @@ CREATE SQL VIEW "VEKILVIEW" ;
 		Vekil.Vekil_Fk,;
 		Vekil.Personel_Id,;
 		Vekil.Avukat_Adi,;
-		Vekil.Baro_Sicil_No;
+		Vekil.Baro_Sicil_No,;
+		Vekil.Borclu_Vekili;
 	FROM dbo.Vekil Vekil
 
 DBSetProp('VEKILVIEW', 'View', 'UpdateType', 1)
@@ -327,5 +328,48 @@ IF lWriteDBCXProps
 		"VFENDFLTTYPE",1) &&Default Type
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.baro_sicil_no","FIELD",;
 		"VFENDISPORDER",5) &&Display Order
+ENDIF
+ 
+*** Props for the VEKILVIEW.borclu_vekili field.
+DBSetProp('VEKILVIEW.borclu_vekili', 'Field', 'KeyField', .F.)
+DBSetProp('VEKILVIEW.borclu_vekili', 'Field', 'Updatable', .T.)
+DBSetProp('VEKILVIEW.borclu_vekili', 'Field', 'UpdateName', 'dbo.Vekil.Borclu_Vekili')
+DBSetProp('VEKILVIEW.borclu_vekili', 'Field', 'DataType', "L")
+*** DBCX Field Properties for VEKILVIEW.borclu_vekili
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFECDESCRIPT","Borclu Vekili Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFECFRMCAPTN","Borçlu Vekili") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFECDLGCAPTN","Borçlu Vekili") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFECGRDCAPTN","Borçlu Vekili") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFECRPTCAPTN","Borçlu Vekili") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFEMTOOLTIP","Borçlu Vekili                                        ") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFEMSTATUSTXT","Borçlu Vekili                                        ") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFECOBJTYPE","icheckbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!VEKILVIEW.borclu_vekili","FIELD",;
+		"VFENDISPORDER",6) &&Display Order
 ENDIF
  

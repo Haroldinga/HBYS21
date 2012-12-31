@@ -14,7 +14,7 @@ ENDIF
 
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -287,9 +287,9 @@ IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MASRAFVIEW.masraf_tipi","FIELD",;
 		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MASRAFVIEW.masraf_tipi","FIELD",;
-		"VFECCLASS","iField") &&Behavior Class
+		"VFECCLASS","afieldnovalidateduringsave") &&Behavior Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MASRAFVIEW.masraf_tipi","FIELD",;
-		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+		"VFEMCLASSLIB","libs\abhavior.vcx") &&Behavior Class Library
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MASRAFVIEW.masraf_tipi","FIELD",;
 		"VFECOBJTYPE","itextbox") &&User Interface Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MASRAFVIEW.masraf_tipi","FIELD",;

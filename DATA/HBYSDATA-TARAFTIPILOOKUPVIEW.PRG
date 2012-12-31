@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,30 +30,29 @@ ENDIF
 
 
 CREATE SQL VIEW "TARAFTIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Taraftipi.Taraf_Tipi;
-	FROM dbo.TarafTipi Taraftipi
+	AS SELECT Taraftipi.taraf_tipi;
+	FROM hbysreferans!taraftipi
 
 DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'UpdateType', 1)
 DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'WhereType', 3)
 DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
-DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'Tables', 'dbo.TarafTipi')
+DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!taraftipi')
 DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('TARAFTIPILOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for TARAFTIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("TARAFTIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TARAFTIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Taraftipilookupview Remote View") &&Description
+		"VFECDESCRIPT","Taraftipilookupview Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TARAFTIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TARAFTIPILOOKUPVIEW","VIEW",;
@@ -59,9 +61,9 @@ ENDIF
 
 *!* Field Level Properties for TARAFTIPILOOKUPVIEW
 *** Props for the TARAFTIPILOOKUPVIEW.taraf_tipi field.
-DBSetProp('TARAFTIPILOOKUPVIEW.taraf_tipi', 'Field', 'KeyField', .T.)
+DBSetProp('TARAFTIPILOOKUPVIEW.taraf_tipi', 'Field', 'KeyField', .F.)
 DBSetProp('TARAFTIPILOOKUPVIEW.taraf_tipi', 'Field', 'Updatable', .T.)
-DBSetProp('TARAFTIPILOOKUPVIEW.taraf_tipi', 'Field', 'UpdateName', 'dbo.TarafTipi.Taraf_Tipi')
+DBSetProp('TARAFTIPILOOKUPVIEW.taraf_tipi', 'Field', 'UpdateName', 'hbysreferans!taraftipi.taraf_tipi')
 DBSetProp('TARAFTIPILOOKUPVIEW.taraf_tipi', 'Field', 'DataType', "C(25)")
 *** DBCX Field Properties for TARAFTIPILOOKUPVIEW.taraf_tipi
 IF lWriteDBCXProps
@@ -98,6 +100,6 @@ IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TARAFTIPILOOKUPVIEW.taraf_tipi","FIELD",;
 		"VFENDFLTTYPE",1) &&Default Type
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TARAFTIPILOOKUPVIEW.taraf_tipi","FIELD",;
-		"VFENDISPORDER",2) &&Display Order
+		"VFENDISPORDER",1) &&Display Order
 ENDIF
  

@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,9 +30,8 @@ ENDIF
 
 
 CREATE SQL VIEW "IZLEMESONUCULOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Izlemesonucu.Izleme_Sonucu;
-	FROM dbo.IzlemeSonucu Izlemesonucu
+	AS SELECT Izlemesonucu.izleme_sonucu;
+	FROM hbysreferans!izlemesonucu
 
 DBSetProp('IZLEMESONUCULOOKUPVIEW', 'View', 'UpdateType', 1)
 DBSetProp('IZLEMESONUCULOOKUPVIEW', 'View', 'WhereType', 3)
@@ -37,7 +39,7 @@ DBSetProp('IZLEMESONUCULOOKUPVIEW', 'View', 'FetchMemo', .T.)
 DBSetProp('IZLEMESONUCULOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('IZLEMESONUCULOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('IZLEMESONUCULOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('IZLEMESONUCULOOKUPVIEW', 'View', 'Tables', 'dbo.IzlemeSonucu')
+DBSetProp('IZLEMESONUCULOOKUPVIEW', 'View', 'Tables', 'hbysreferans!izlemesonucu')
 DBSetProp('IZLEMESONUCULOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('IZLEMESONUCULOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('IZLEMESONUCULOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
@@ -50,7 +52,7 @@ IF lWriteDBCXProps
 	*** DBCX View Properties for IZLEMESONUCULOOKUPVIEW
 	GoExplorer.odbcx.Validate("IZLEMESONUCULOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Izlemesonuculookupview Remote View") &&Description
+		"VFECDESCRIPT","Izlemesonuculookupview Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW","VIEW",;
@@ -59,26 +61,26 @@ ENDIF
 
 *!* Field Level Properties for IZLEMESONUCULOOKUPVIEW
 *** Props for the IZLEMESONUCULOOKUPVIEW.izleme_sonucu field.
-DBSetProp('IZLEMESONUCULOOKUPVIEW.izleme_sonucu', 'Field', 'KeyField', .T.)
-DBSetProp('IZLEMESONUCULOOKUPVIEW.izleme_sonucu', 'Field', 'Updatable', .F.)
-DBSetProp('IZLEMESONUCULOOKUPVIEW.izleme_sonucu', 'Field', 'UpdateName', 'dbo.IzlemeSonucu.Izleme_Sonucu')
+DBSetProp('IZLEMESONUCULOOKUPVIEW.izleme_sonucu', 'Field', 'KeyField', .F.)
+DBSetProp('IZLEMESONUCULOOKUPVIEW.izleme_sonucu', 'Field', 'Updatable', .T.)
+DBSetProp('IZLEMESONUCULOOKUPVIEW.izleme_sonucu', 'Field', 'UpdateName', 'hbysreferans!izlemesonucu.izleme_sonucu')
 DBSetProp('IZLEMESONUCULOOKUPVIEW.izleme_sonucu', 'Field', 'DataType', "C(15)")
 *** DBCX Field Properties for IZLEMESONUCULOOKUPVIEW.izleme_sonucu
 IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW.izleme_sonucu","FIELD",;
 		"VFECDESCRIPT","Izleme Sonucu Field") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW.izleme_sonucu","FIELD",;
-		"VFECFRMCAPTN","Izleme Sonucu") &&Form Caption
+		"VFECFRMCAPTN","Ýzleme Sonucu") &&Form Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW.izleme_sonucu","FIELD",;
-		"VFECDLGCAPTN","Izleme Sonucu") &&Dialog Caption
+		"VFECDLGCAPTN","Ýzleme Sonucu") &&Dialog Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW.izleme_sonucu","FIELD",;
-		"VFECGRDCAPTN","Izleme Sonucu") &&Grid Caption
+		"VFECGRDCAPTN","Ýzleme Sonucu") &&Grid Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW.izleme_sonucu","FIELD",;
-		"VFECRPTCAPTN","Izleme Sonucu") &&Report Caption
+		"VFECRPTCAPTN","Ýzleme Sonucu") &&Report Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW.izleme_sonucu","FIELD",;
-		"VFEMTOOLTIP","Izleme Sonucu") &&Tooltip Text
+		"VFEMTOOLTIP","Ýzleme Sonucu                                        ") &&Tooltip Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW.izleme_sonucu","FIELD",;
-		"VFEMSTATUSTXT","Izleme Sonucu") &&Status Bar Text
+		"VFEMSTATUSTXT","Ýzleme Sonucu                                        ") &&Status Bar Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW.izleme_sonucu","FIELD",;
 		"VFELSEARCH",.T.) &&Searchable
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!IZLEMESONUCULOOKUPVIEW.izleme_sonucu","FIELD",;

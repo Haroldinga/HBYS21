@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,30 +30,29 @@ ENDIF
 
 
 CREATE SQL VIEW "DOKUMANTIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Dokumantipi.Dokuman_Tipi;
-	FROM dbo.DokumanTipi Dokumantipi
+	AS SELECT Dokumantipi.dokuman_tipi;
+	FROM hbysreferans!dokumantipi
 
 DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'UpdateType', 1)
 DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'WhereType', 3)
 DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
-DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'Tables', 'dbo.DokumanTipi')
+DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!dokumantipi')
 DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('DOKUMANTIPILOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for DOKUMANTIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("DOKUMANTIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!DOKUMANTIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Dokumantipilookupview Remote View") &&Description
+		"VFECDESCRIPT","DOKUMANTIPILOOKUPVIEW Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!DOKUMANTIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!DOKUMANTIPILOOKUPVIEW","VIEW",;
@@ -59,9 +61,9 @@ ENDIF
 
 *!* Field Level Properties for DOKUMANTIPILOOKUPVIEW
 *** Props for the DOKUMANTIPILOOKUPVIEW.dokuman_tipi field.
-DBSetProp('DOKUMANTIPILOOKUPVIEW.dokuman_tipi', 'Field', 'KeyField', .T.)
+DBSetProp('DOKUMANTIPILOOKUPVIEW.dokuman_tipi', 'Field', 'KeyField', .F.)
 DBSetProp('DOKUMANTIPILOOKUPVIEW.dokuman_tipi', 'Field', 'Updatable', .T.)
-DBSetProp('DOKUMANTIPILOOKUPVIEW.dokuman_tipi', 'Field', 'UpdateName', 'dbo.DokumanTipi.Dokuman_Tipi')
+DBSetProp('DOKUMANTIPILOOKUPVIEW.dokuman_tipi', 'Field', 'UpdateName', 'hbysreferans!dokumantipi.dokuman_tipi')
 DBSetProp('DOKUMANTIPILOOKUPVIEW.dokuman_tipi', 'Field', 'DataType', "C(15)")
 *** DBCX Field Properties for DOKUMANTIPILOOKUPVIEW.dokuman_tipi
 IF lWriteDBCXProps

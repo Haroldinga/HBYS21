@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,30 +30,29 @@ ENDIF
 
 
 CREATE SQL VIEW "BORCLUTIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Borclutipi.Borclu_Tipi;
-	FROM dbo.BorcluTipi Borclutipi
+	AS SELECT Borclutipi.borclu_tipi;
+	FROM hbysreferans!borclutipi
 
 DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'UpdateType', 1)
-DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'WhereType', 1)
+DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'WhereType', 3)
 DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
-DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'Tables', 'dbo.BorcluTipi')
+DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!borclutipi')
 DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('BORCLUTIPILOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for BORCLUTIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("BORCLUTIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLUTIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Borclutipilookupview Remote View") &&Description
+		"VFECDESCRIPT","BORCLUTIPILOOKUPVIEW Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLUTIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLUTIPILOOKUPVIEW","VIEW",;
@@ -59,9 +61,9 @@ ENDIF
 
 *!* Field Level Properties for BORCLUTIPILOOKUPVIEW
 *** Props for the BORCLUTIPILOOKUPVIEW.borclu_tipi field.
-DBSetProp('BORCLUTIPILOOKUPVIEW.borclu_tipi', 'Field', 'KeyField', .T.)
+DBSetProp('BORCLUTIPILOOKUPVIEW.borclu_tipi', 'Field', 'KeyField', .F.)
 DBSetProp('BORCLUTIPILOOKUPVIEW.borclu_tipi', 'Field', 'Updatable', .T.)
-DBSetProp('BORCLUTIPILOOKUPVIEW.borclu_tipi', 'Field', 'UpdateName', 'dbo.BorcluTipi.Borclu_Tipi')
+DBSetProp('BORCLUTIPILOOKUPVIEW.borclu_tipi', 'Field', 'UpdateName', 'hbysreferans!borclutipi.borclu_tipi')
 DBSetProp('BORCLUTIPILOOKUPVIEW.borclu_tipi', 'Field', 'DataType', "C(10)")
 *** DBCX Field Properties for BORCLUTIPILOOKUPVIEW.borclu_tipi
 IF lWriteDBCXProps

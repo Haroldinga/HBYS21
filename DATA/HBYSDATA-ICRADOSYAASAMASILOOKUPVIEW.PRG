@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,9 +30,8 @@ ENDIF
 
 
 CREATE SQL VIEW "ICRADOSYAASAMASILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Icradosyaasamasi.Dosya_Asamasi;
-	FROM dbo.IcraDosyaAsamasi Icradosyaasamasi
+	AS SELECT Icradosyaasamasi.dosya_asamasi;
+	FROM hbysreferans!icradosyaasamasi
 
 DBSetProp('ICRADOSYAASAMASILOOKUPVIEW', 'View', 'UpdateType', 1)
 DBSetProp('ICRADOSYAASAMASILOOKUPVIEW', 'View', 'WhereType', 3)
@@ -37,7 +39,7 @@ DBSetProp('ICRADOSYAASAMASILOOKUPVIEW', 'View', 'FetchMemo', .T.)
 DBSetProp('ICRADOSYAASAMASILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('ICRADOSYAASAMASILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('ICRADOSYAASAMASILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('ICRADOSYAASAMASILOOKUPVIEW', 'View', 'Tables', 'dbo.IcraDosyaAsamasi')
+DBSetProp('ICRADOSYAASAMASILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!icradosyaasamasi')
 DBSetProp('ICRADOSYAASAMASILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('ICRADOSYAASAMASILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('ICRADOSYAASAMASILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
@@ -50,7 +52,7 @@ IF lWriteDBCXProps
 	*** DBCX View Properties for ICRADOSYAASAMASILOOKUPVIEW
 	GoExplorer.odbcx.Validate("ICRADOSYAASAMASILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAASAMASILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Icradosyaasamasilookupview Remote View") &&Description
+		"VFECDESCRIPT","ICRADOSYAASAMASILOOKUPVIEW Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAASAMASILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ICRADOSYAASAMASILOOKUPVIEW","VIEW",;
@@ -59,9 +61,9 @@ ENDIF
 
 *!* Field Level Properties for ICRADOSYAASAMASILOOKUPVIEW
 *** Props for the ICRADOSYAASAMASILOOKUPVIEW.dosya_asamasi field.
-DBSetProp('ICRADOSYAASAMASILOOKUPVIEW.dosya_asamasi', 'Field', 'KeyField', .T.)
-DBSetProp('ICRADOSYAASAMASILOOKUPVIEW.dosya_asamasi', 'Field', 'Updatable', .F.)
-DBSetProp('ICRADOSYAASAMASILOOKUPVIEW.dosya_asamasi', 'Field', 'UpdateName', 'dbo.IcraDosyaAsamasi.Dosya_Asamasi')
+DBSetProp('ICRADOSYAASAMASILOOKUPVIEW.dosya_asamasi', 'Field', 'KeyField', .F.)
+DBSetProp('ICRADOSYAASAMASILOOKUPVIEW.dosya_asamasi', 'Field', 'Updatable', .T.)
+DBSetProp('ICRADOSYAASAMASILOOKUPVIEW.dosya_asamasi', 'Field', 'UpdateName', 'hbysreferans!icradosyaasamasi.dosya_asamasi')
 DBSetProp('ICRADOSYAASAMASILOOKUPVIEW.dosya_asamasi', 'Field', 'DataType', "C(25)")
 *** DBCX Field Properties for ICRADOSYAASAMASILOOKUPVIEW.dosya_asamasi
 IF lWriteDBCXProps

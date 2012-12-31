@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,30 +30,29 @@ ENDIF
 
 
 CREATE SQL VIEW "BELGETIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Belgetipi.Belge_Tipi;
-	FROM dbo.BelgeTipi Belgetipi
+	AS SELECT Belgetipi.belge_tipi;
+	FROM hbysreferans!belgetipi
 
 DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'UpdateType', 1)
 DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'WhereType', 3)
-DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'FetchMemo', .F.)
+DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
 DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'Tables', 'dbo.BelgeTipi')
+DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!belgetipi')
 DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'Prepared', .F.)
-DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'CompareMemo', .F.)
+DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('BELGETIPILOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for BELGETIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("BELGETIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BELGETIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Belgetipilookupview Remote View") &&Description
+		"VFECDESCRIPT","BELGETIPILOOKUPVIEW Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BELGETIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BELGETIPILOOKUPVIEW","VIEW",;
@@ -61,7 +63,7 @@ ENDIF
 *** Props for the BELGETIPILOOKUPVIEW.belge_tipi field.
 DBSetProp('BELGETIPILOOKUPVIEW.belge_tipi', 'Field', 'KeyField', .F.)
 DBSetProp('BELGETIPILOOKUPVIEW.belge_tipi', 'Field', 'Updatable', .T.)
-DBSetProp('BELGETIPILOOKUPVIEW.belge_tipi', 'Field', 'UpdateName', 'dbo.BelgeTipi.Belge_Tipi')
+DBSetProp('BELGETIPILOOKUPVIEW.belge_tipi', 'Field', 'UpdateName', 'hbysreferans!belgetipi.belge_tipi')
 DBSetProp('BELGETIPILOOKUPVIEW.belge_tipi', 'Field', 'DataType', "C(15)")
 *** DBCX Field Properties for BELGETIPILOOKUPVIEW.belge_tipi
 IF lWriteDBCXProps

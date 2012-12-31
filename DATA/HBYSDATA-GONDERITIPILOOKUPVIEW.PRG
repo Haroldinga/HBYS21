@@ -12,9 +12,12 @@ IF lcSet_Exact='OFF'
 ENDIF
 
 
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSREFERANS")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\hbysreferans"
+ENDIF
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -27,10 +30,9 @@ ENDIF
 
 
 CREATE SQL VIEW "GONDERITIPILOOKUPVIEW" ; 
- REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT Gonderitipi.Gonderi_Tipi,;
-		Gonderitipi.Gonderi_Kodu;
-	FROM dbo.GonderiTipi Gonderitipi
+	AS SELECT Gonderitipi.gonderi_tipi,;
+		Gonderitipi.gonderi_kodu;
+	FROM hbysreferans!gonderitipi
 
 DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'UpdateType', 1)
 DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'WhereType', 3)
@@ -38,20 +40,20 @@ DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'FetchMemo', .T.)
 DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'SendUpdates', .F.)
 DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'UseMemoSize', 255)
 DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'MaxRecords', -1)
-DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'Tables', 'dbo.GonderiTipi')
+DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'Tables', 'hbysreferans!gonderitipi')
 DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'Prepared', .F.)
 DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'FetchSize', 100)
 DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'Comment', "")
 DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'ShareConnection', .T.)
+DBSetProp('GONDERITIPILOOKUPVIEW', 'View', 'ShareConnection', .F.)
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for GONDERITIPILOOKUPVIEW
 	GoExplorer.odbcx.Validate("GONDERITIPILOOKUPVIEW","View")
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW","VIEW",;
-		"VFECDESCRIPT","Gonderitipilookupview Remote View") &&Description
+		"VFECDESCRIPT","GONDERITIPILOOKUPVIEW Local View") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW","VIEW",;
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW","VIEW",;
@@ -60,26 +62,26 @@ ENDIF
 
 *!* Field Level Properties for GONDERITIPILOOKUPVIEW
 *** Props for the GONDERITIPILOOKUPVIEW.gonderi_tipi field.
-DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_tipi', 'Field', 'KeyField', .T.)
-DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_tipi', 'Field', 'Updatable', .F.)
-DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_tipi', 'Field', 'UpdateName', 'dbo.GonderiTipi.Gonderi_Tipi')
+DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_tipi', 'Field', 'KeyField', .F.)
+DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_tipi', 'Field', 'Updatable', .T.)
+DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_tipi', 'Field', 'UpdateName', 'hbysreferans!gonderitipi.gonderi_tipi')
 DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_tipi', 'Field', 'DataType', "C(15)")
 *** DBCX Field Properties for GONDERITIPILOOKUPVIEW.gonderi_tipi
 IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_tipi","FIELD",;
 		"VFECDESCRIPT","Gonderi Tipi Field") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_tipi","FIELD",;
-		"VFECFRMCAPTN","Gonderi Tipi") &&Form Caption
+		"VFECFRMCAPTN","Gönderi Tipi") &&Form Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_tipi","FIELD",;
-		"VFECDLGCAPTN","Gonderi Tipi") &&Dialog Caption
+		"VFECDLGCAPTN","Gönderi Tipi") &&Dialog Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_tipi","FIELD",;
-		"VFECGRDCAPTN","Gonderi Tipi") &&Grid Caption
+		"VFECGRDCAPTN","Gönderi Tipi") &&Grid Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_tipi","FIELD",;
-		"VFECRPTCAPTN","Gonderi Tipi") &&Report Caption
+		"VFECRPTCAPTN","Gönderi Tipi") &&Report Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_tipi","FIELD",;
-		"VFEMTOOLTIP","Gonderi Tipi") &&Tooltip Text
+		"VFEMTOOLTIP","Gönderi Tipi                                         ") &&Tooltip Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_tipi","FIELD",;
-		"VFEMSTATUSTXT","Gonderi Tipi") &&Status Bar Text
+		"VFEMSTATUSTXT","Gönderi Tipi                                         ") &&Status Bar Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_tipi","FIELD",;
 		"VFELSEARCH",.T.) &&Searchable
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_tipi","FIELD",;
@@ -105,24 +107,24 @@ ENDIF
 *** Props for the GONDERITIPILOOKUPVIEW.gonderi_kodu field.
 DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_kodu', 'Field', 'KeyField', .F.)
 DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_kodu', 'Field', 'Updatable', .T.)
-DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_kodu', 'Field', 'UpdateName', 'dbo.GonderiTipi.Gonderi_Kodu')
+DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_kodu', 'Field', 'UpdateName', 'hbysreferans!gonderitipi.gonderi_kodu')
 DBSetProp('GONDERITIPILOOKUPVIEW.gonderi_kodu', 'Field', 'DataType', "C(2)")
 *** DBCX Field Properties for GONDERITIPILOOKUPVIEW.gonderi_kodu
 IF lWriteDBCXProps
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_kodu","FIELD",;
 		"VFECDESCRIPT","Gonderi Kodu Field") &&Description
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_kodu","FIELD",;
-		"VFECFRMCAPTN","Gonderi Kodu") &&Form Caption
+		"VFECFRMCAPTN","Gönderi Kodu") &&Form Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_kodu","FIELD",;
-		"VFECDLGCAPTN","Gonderi Kodu") &&Dialog Caption
+		"VFECDLGCAPTN","Gönderi Kodu") &&Dialog Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_kodu","FIELD",;
-		"VFECGRDCAPTN","Gonderi Kodu") &&Grid Caption
+		"VFECGRDCAPTN","Gönderi Kodu") &&Grid Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_kodu","FIELD",;
-		"VFECRPTCAPTN","Gonderi Kodu") &&Report Caption
+		"VFECRPTCAPTN","Gönderi Kodu") &&Report Caption
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_kodu","FIELD",;
-		"VFEMTOOLTIP","Gonderi Kodu") &&Tooltip Text
+		"VFEMTOOLTIP","Gönderi Kodu                                         ") &&Tooltip Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_kodu","FIELD",;
-		"VFEMSTATUSTXT","Gonderi Kodu") &&Status Bar Text
+		"VFEMSTATUSTXT","Gönderi Kodu                                         ") &&Status Bar Text
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_kodu","FIELD",;
 		"VFELSEARCH",.T.) &&Searchable
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!GONDERITIPILOOKUPVIEW.gonderi_kodu","FIELD",;

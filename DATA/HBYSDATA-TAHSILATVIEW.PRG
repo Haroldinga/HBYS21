@@ -14,7 +14,7 @@ ENDIF
 
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -344,8 +344,6 @@ IF lWriteDBCXProps
 		"VFEMLUUPDTEXP","Tahsilattipilookupview.tahsilat_tipi") &&Look Up Update Expression
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TAHSILATVIEW.tahsilat_tipi","FIELD",;
 		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TAHSILATVIEW.tahsilat_tipi","FIELD",;
-		"VFECADDFORM","TAHSILATTIPILOOKUPVIEWFORM") &&Look Up Add Form
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TAHSILATVIEW.tahsilat_tipi","FIELD",;
 		"VFECCLASS","iField") &&Behavior Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!TAHSILATVIEW.tahsilat_tipi","FIELD",;

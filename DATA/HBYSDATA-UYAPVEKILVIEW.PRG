@@ -14,7 +14,7 @@ ENDIF
 
 ***Make sure the current database is correct
 IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
-	OPEN DATABASE "C:\VFPPROJECTS\HBYS20\DATA\HBYSDATA"
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
 ELSE
 	SET DATABASE TO "HBYSDATA"
 ENDIF
@@ -28,7 +28,7 @@ ENDIF
 
 CREATE SQL VIEW "UYAPVEKILVIEW" ; 
  REMOTE CONNECT "HBYSDataConnect" ; 
-	AS SELECT CAST('VekilKisi_1' AS CHARACTER(15)) AS id,;
+	AS SELECT CAST('VekilKisi_1' AS CHARACTER(15)) AS vekilkisi_id,;
 		Personel.Baro_Sicil_No,;
 		Personel.Tbb_No,;
 		Buro.Buro_Adi,;
@@ -37,25 +37,42 @@ CREATE SQL VIEW "UYAPVEKILVIEW" ;
 		Personel.Vekil_Tipi,;
 		Personel.Ssk_No,;
 		Vekil.Borclu_Vekili,;
-		CAST('' as Char(1)) As KayitNo,;
-		Personel.Personel_Adi As Soyadi,;
-		CAST('' as char(1)) as ybnNfsKayitliOldgyer,;
-		CAST('kisiKurumBilgileri_1' as Char(25)) As Id,;
-		CAST('' as char(1)) as aileSiraNo,;
-		Personel.Kimlik_No AS CuzdanNo,;
+		CAST('' AS CHAR(1)) AS kayitno,;
+		Personel.Personel_Adi AS soyadi,;
+		CAST('' AS CHAR(1)) AS ybnnfskayitlioldgyer,;
+		CAST('kisiTumBilgileri_1' AS CHAR(25)) AS kisiTumBilgileri_id,;
+		CAST('' AS CHAR(1)) AS ailesirano,;
+		Personel.Kimlik_No AS cuzdanno,;
 		Personel.Baba_Adi,;
 		Personel.Ana_Adi,;
-		Personel.Kimlik_No,;
-		Personel.Personel_Adi As Adi,;
-		Personel.TcKimlik_No,;
+		Personel.Personel_Adi AS adi,;
+		CAST('' AS CHAR(1)) AS oncekisoyadi,;
 		Personel.Cinsiyeti,;
 		Personel.Cilt_No,;
+		CAST('' AS CHAR(1)) AS cuzdanserino,;
 		Personel.Sira_No,;
-		Personel.Mahalle,;
-		Personel.Dogum_Yeri;
-	FROM dbo.Buro Buro, dbo.Vekil Vekil;
+		Personel.Mahalle AS mahkoy,;
+		Personel.Dogum_Yeri,;
+		Personel.e_Posta,;
+		Buro.Posta_Kodu,;
+		CAST('Yurt Ýçi Ýþyeri Adresi' AS CHAR(25)) AS adresturuaciklama,;
+		CAST('ADRTR00002' AS CHAR(10)) AS adresturu,;
+		Personel.Cep_Tel_No AS ceptelefon,;
+		Buro.Il_Adi AS il,;
+		Buro.Ilce_Adi AS ilce,;
+		Buro.Adres,;
+		Buro.Tel AS telefon,;
+		Buro.Faks,;
+		CAST('Adres_1' AS CHAR(10)) AS adres_id,;
+		CAST('' AS CHAR(2)) AS ilkodu,;
+		CAST('' AS CHAR(3)) AS ilcekodu;
+	FROM dbo.Vekil Vekil;
 		INNER JOIN dbo.Personel Personel;
-			ON Vekil.Personel_Id = Personel.Personel_Id
+			ON Vekil.Personel_Id = Personel.Personel_Id, {oj{oj dbo.Buro Buro;
+		LEFT OUTER JOIN dbo.Iluyapkodu Iluyapkodu;
+			ON Buro.Il_Adi = Iluyapkodu.Il_Adi};
+		LEFT OUTER JOIN dbo.Iluyapkodu Iluyapkodu_a;
+			ON Buro.Ilce_Adi = Iluyapkodu_a.Ilce_Adi}
 
 DBSetProp('UYAPVEKILVIEW', 'View', 'UpdateType', 1)
 DBSetProp('UYAPVEKILVIEW', 'View', 'WhereType', 3)
@@ -67,10 +84,14 @@ DBSetProp('UYAPVEKILVIEW', 'View', 'Tables', 'dbo.Personel,dbo.Buro,dbo.Vekil')
 DBSetProp('UYAPVEKILVIEW', 'View', 'Prepared', .F.)
 DBSetProp('UYAPVEKILVIEW', 'View', 'CompareMemo', .T.)
 DBSetProp('UYAPVEKILVIEW', 'View', 'FetchAsNeeded', .F.)
-DBSetProp('UYAPVEKILVIEW', 'View', 'FetchSize', 100)
+DBSetProp('UYAPVEKILVIEW', 'View', 'FetchSize', -1)
+DBSetProp('UYAPVEKILVIEW', 'View', 'ParameterList', "vp_Vekil_Fk,'C'")
 DBSetProp('UYAPVEKILVIEW', 'View', 'Comment', "")
 DBSetProp('UYAPVEKILVIEW', 'View', 'BatchUpdateCount', 1)
-DBSetProp('UYAPVEKILVIEW', 'View', 'ShareConnection', .F.)
+DBSetProp('UYAPVEKILVIEW', 'View', 'ShareConnection', .T.)
+
+_VFEGenView_F1()
+
 IF lWriteDBCXProps
  
 	*** DBCX View Properties for UYAPVEKILVIEW
@@ -81,49 +102,87 @@ IF lWriteDBCXProps
 		"VFECCLASS","iCursor") &&Default Cursor Class
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW","VIEW",;
 		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Default Cursor Class Library
+ 
+	*** DBCX View Parameter Properties for vp_Vekil_Fk
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFECDESCRIPT","Vp Vekil Fk View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFECFRMCAPTN","Vekil Fk") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFECDLGCAPTN","Vekil Fk") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFECVPTYPE","C") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFENVPSIZE",36) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFEMTOOLTIP","Vekil Fk") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFEMSTATUSTXT","Vekil Fk") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFEMCOMPARETO","Vekil.Vekil_Fk") &&Compare to Field/Expression
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFECOPERATOR","Begins With") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vp_Vekil_Fk","PARAMETER",;
+		"VFEMOPERLIST","Equals, Contains, Begins With, Ends With") &&Available Operators
 ENDIF
 
 *!* Field Level Properties for UYAPVEKILVIEW
-*** Props for the UYAPVEKILVIEW.id field.
-DBSetProp('UYAPVEKILVIEW.id', 'Field', 'KeyField', .F.)
-DBSetProp('UYAPVEKILVIEW.id', 'Field', 'Updatable', .F.)
-DBSetProp('UYAPVEKILVIEW.id', 'Field', 'UpdateName', 'Id')
-DBSetProp('UYAPVEKILVIEW.id', 'Field', 'DataType', "C(15)")
-*** DBCX Field Properties for UYAPVEKILVIEW.id
+*** Props for the UYAPVEKILVIEW.vekilkisi_id field.
+DBSetProp('UYAPVEKILVIEW.vekilkisi_id', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.vekilkisi_id', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.vekilkisi_id', 'Field', 'UpdateName', 'VekilKisi_id')
+DBSetProp('UYAPVEKILVIEW.vekilkisi_id', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for UYAPVEKILVIEW.vekilkisi_id
 IF lWriteDBCXProps
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
-		"VFECDESCRIPT","Id Field") &&Description
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
-		"VFECFRMCAPTN","Id") &&Form Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
-		"VFECDLGCAPTN","Id") &&Dialog Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
-		"VFECGRDCAPTN","Id") &&Grid Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
-		"VFECRPTCAPTN","Id") &&Report Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
-		"VFEMTOOLTIP","Id") &&Tooltip Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
-		"VFEMSTATUSTXT","Id") &&Status Bar Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
+		"VFECDESCRIPT","Vekilkisi Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
+		"VFECFRMCAPTN","Vekilkisi Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
+		"VFECDLGCAPTN","Vekilkisi Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
+		"VFECGRDCAPTN","Vekilkisi Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
+		"VFECRPTCAPTN","Vekilkisi Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
+		"VFEMTOOLTIP","Vekilkisi Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
+		"VFEMSTATUSTXT","Vekilkisi Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
 		"VFELSEARCH",.T.) &&Searchable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
 		"VFELFILTER",.T.) &&Filterable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
 		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
 		"VFECCLASS","iField") &&Behavior Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
 		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
 		"VFECOBJTYPE","itextbox") &&User Interface Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
 		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
 		"VFELQUICKFIND",.T.) &&Allow Quick Find
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
 		"VFENDFLTTYPE",1) &&Default Type
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.id","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.vekilkisi_id","FIELD",;
 		"VFENDISPORDER",1) &&Display Order
 ENDIF
  
@@ -471,57 +530,262 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",9) &&Display Order
 ENDIF
  
-*** Props for the UYAPVEKILVIEW.personel_adi field.
-*** DBCX Field Properties for UYAPVEKILVIEW.personel_adi
+*** Props for the UYAPVEKILVIEW.kayitno field.
+DBSetProp('UYAPVEKILVIEW.kayitno', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.kayitno', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.kayitno', 'Field', 'UpdateName', 'KayitNo')
+DBSetProp('UYAPVEKILVIEW.kayitno', 'Field', 'DataType', "C(1)")
+*** DBCX Field Properties for UYAPVEKILVIEW.kayitno
 IF lWriteDBCXProps
-ENDIF
- 
-*** Props for the UYAPVEKILVIEW.personel_adi1 field.
-*** DBCX Field Properties for UYAPVEKILVIEW.personel_adi1
-IF lWriteDBCXProps
-ENDIF
- 
-*** Props for the UYAPVEKILVIEW.kimlik_no field.
-DBSetProp('UYAPVEKILVIEW.kimlik_no', 'Field', 'KeyField', .F.)
-DBSetProp('UYAPVEKILVIEW.kimlik_no', 'Field', 'Updatable', .T.)
-DBSetProp('UYAPVEKILVIEW.kimlik_no', 'Field', 'UpdateName', 'dbo.Personel.Kimlik_No')
-DBSetProp('UYAPVEKILVIEW.kimlik_no', 'Field', 'DataType', "C(15)")
-*** DBCX Field Properties for UYAPVEKILVIEW.kimlik_no
-IF lWriteDBCXProps
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
-		"VFECDESCRIPT","Kimlik No Field") &&Description
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
-		"VFECFRMCAPTN","Kimlik No") &&Form Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
-		"VFECDLGCAPTN","Kimlik No") &&Dialog Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
-		"VFECGRDCAPTN","Kimlik No") &&Grid Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
-		"VFECRPTCAPTN","Kimlik No") &&Report Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
-		"VFEMTOOLTIP","Kimlik No") &&Tooltip Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
-		"VFEMSTATUSTXT","Kimlik No") &&Status Bar Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
+		"VFECDESCRIPT","Kayitno Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
+		"VFECFRMCAPTN","Kayitno") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
+		"VFECDLGCAPTN","Kayitno") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
+		"VFECGRDCAPTN","Kayitno") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
+		"VFECRPTCAPTN","Kayitno") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
+		"VFEMTOOLTIP","Kayitno") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
+		"VFEMSTATUSTXT","Kayitno") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
 		"VFELSEARCH",.T.) &&Searchable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
 		"VFELFILTER",.T.) &&Filterable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
 		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
 		"VFECCLASS","iField") &&Behavior Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
 		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
 		"VFECOBJTYPE","itextbox") &&User Interface Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
 		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
 		"VFELQUICKFIND",.T.) &&Allow Quick Find
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
 		"VFENDFLTTYPE",1) &&Default Type
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kimlik_no","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kayitno","FIELD",;
+		"VFENDISPORDER",10) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.soyadi field.
+DBSetProp('UYAPVEKILVIEW.soyadi', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.soyadi', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.soyadi', 'Field', 'UpdateName', 'dbo.Personel.Personel_Adi')
+DBSetProp('UYAPVEKILVIEW.soyadi', 'Field', 'DataType', "C(50)")
+*** DBCX Field Properties for UYAPVEKILVIEW.soyadi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFECDESCRIPT","Soyadi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFECFRMCAPTN","Soyadi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFECDLGCAPTN","Soyadi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFECGRDCAPTN","Soyadi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFECRPTCAPTN","Soyadi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFEMTOOLTIP","Soyadi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFEMSTATUSTXT","Soyadi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.soyadi","FIELD",;
+		"VFENDISPORDER",11) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.ybnnfskayitlioldgyer field.
+DBSetProp('UYAPVEKILVIEW.ybnnfskayitlioldgyer', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.ybnnfskayitlioldgyer', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.ybnnfskayitlioldgyer', 'Field', 'UpdateName', 'ybnNfsKayitliOldgyer')
+DBSetProp('UYAPVEKILVIEW.ybnnfskayitlioldgyer', 'Field', 'DataType', "C(1)")
+*** DBCX Field Properties for UYAPVEKILVIEW.ybnnfskayitlioldgyer
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFECDESCRIPT","Ybnnfskayitlioldgyer Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFECFRMCAPTN","Ybnnfskayitlioldgyer") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFECDLGCAPTN","Ybnnfskayitlioldgyer") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFECGRDCAPTN","Ybnnfskayitlioldgyer") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFECRPTCAPTN","Ybnnfskayitlioldgyer") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFEMTOOLTIP","Ybnnfskayitlioldgyer") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFEMSTATUSTXT","Ybnnfskayitlioldgyer") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ybnnfskayitlioldgyer","FIELD",;
 		"VFENDISPORDER",12) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.kisitumbilgileri_id field.
+DBSetProp('UYAPVEKILVIEW.kisitumbilgileri_id', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.kisitumbilgileri_id', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.kisitumbilgileri_id', 'Field', 'UpdateName', 'kisiTumBilgileri_id')
+DBSetProp('UYAPVEKILVIEW.kisitumbilgileri_id', 'Field', 'DataType', "C(25)")
+*** DBCX Field Properties for UYAPVEKILVIEW.kisitumbilgileri_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFECDESCRIPT","Kisitumbilgileri Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFECFRMCAPTN","Kisitumbilgileri Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFECDLGCAPTN","Kisitumbilgileri Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFECGRDCAPTN","Kisitumbilgileri Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFECRPTCAPTN","Kisitumbilgileri Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFEMTOOLTIP","Kisitumbilgileri Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFEMSTATUSTXT","Kisitumbilgileri Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.kisitumbilgileri_id","FIELD",;
+		"VFENDISPORDER",13) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.ailesirano field.
+DBSetProp('UYAPVEKILVIEW.ailesirano', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.ailesirano', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.ailesirano', 'Field', 'UpdateName', 'aileSiraNo')
+DBSetProp('UYAPVEKILVIEW.ailesirano', 'Field', 'DataType', "C(1)")
+*** DBCX Field Properties for UYAPVEKILVIEW.ailesirano
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFECDESCRIPT","Ailesirano Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFECFRMCAPTN","Ailesirano") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFECDLGCAPTN","Ailesirano") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFECGRDCAPTN","Ailesirano") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFECRPTCAPTN","Ailesirano") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFEMTOOLTIP","Ailesirano") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFEMSTATUSTXT","Ailesirano") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ailesirano","FIELD",;
+		"VFENDISPORDER",14) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.cuzdanno field.
+DBSetProp('UYAPVEKILVIEW.cuzdanno', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.cuzdanno', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.cuzdanno', 'Field', 'UpdateName', 'dbo.Personel.Kimlik_No')
+DBSetProp('UYAPVEKILVIEW.cuzdanno', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for UYAPVEKILVIEW.cuzdanno
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFECDESCRIPT","Cuzdanno Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFECFRMCAPTN","Cuzdanno") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFECDLGCAPTN","Cuzdanno") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFECGRDCAPTN","Cuzdanno") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFECRPTCAPTN","Cuzdanno") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFEMTOOLTIP","Cuzdanno") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFEMSTATUSTXT","Cuzdanno") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanno","FIELD",;
+		"VFENDISPORDER",15) &&Display Order
 ENDIF
  
 *** Props for the UYAPVEKILVIEW.baba_adi field.
@@ -610,9 +874,90 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",14) &&Display Order
 ENDIF
  
-*** Props for the UYAPVEKILVIEW.tckimlik_no1 field.
-*** DBCX Field Properties for UYAPVEKILVIEW.tckimlik_no1
+*** Props for the UYAPVEKILVIEW.adi field.
+DBSetProp('UYAPVEKILVIEW.adi', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.adi', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.adi', 'Field', 'UpdateName', 'dbo.Personel.Personel_Adi')
+DBSetProp('UYAPVEKILVIEW.adi', 'Field', 'DataType', "C(50)")
+*** DBCX Field Properties for UYAPVEKILVIEW.adi
 IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFECDESCRIPT","Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFECFRMCAPTN","Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFECDLGCAPTN","Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFECGRDCAPTN","Adi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFECRPTCAPTN","Adi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFEMTOOLTIP","Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFEMSTATUSTXT","Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adi","FIELD",;
+		"VFENDISPORDER",19) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.oncekisoyadi field.
+DBSetProp('UYAPVEKILVIEW.oncekisoyadi', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.oncekisoyadi', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.oncekisoyadi', 'Field', 'UpdateName', 'OncekiSoyadi')
+DBSetProp('UYAPVEKILVIEW.oncekisoyadi', 'Field', 'DataType', "C(1)")
+*** DBCX Field Properties for UYAPVEKILVIEW.oncekisoyadi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFECDESCRIPT","Oncekisoyadi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFECFRMCAPTN","Oncekisoyadi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFECDLGCAPTN","Oncekisoyadi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFECGRDCAPTN","Oncekisoyadi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFECRPTCAPTN","Oncekisoyadi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFEMTOOLTIP","Oncekisoyadi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFEMSTATUSTXT","Oncekisoyadi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.oncekisoyadi","FIELD",;
+		"VFENDISPORDER",20) &&Display Order
 ENDIF
  
 *** Props for the UYAPVEKILVIEW.cinsiyeti field.
@@ -701,6 +1046,49 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",17) &&Display Order
 ENDIF
  
+*** Props for the UYAPVEKILVIEW.cuzdanserino field.
+DBSetProp('UYAPVEKILVIEW.cuzdanserino', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.cuzdanserino', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.cuzdanserino', 'Field', 'UpdateName', 'CuzdanSeriNo')
+DBSetProp('UYAPVEKILVIEW.cuzdanserino', 'Field', 'DataType', "C(1)")
+*** DBCX Field Properties for UYAPVEKILVIEW.cuzdanserino
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFECDESCRIPT","Cuzdanserino Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFECFRMCAPTN","Cuzdanserino") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFECDLGCAPTN","Cuzdanserino") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFECGRDCAPTN","Cuzdanserino") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFECRPTCAPTN","Cuzdanserino") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFEMTOOLTIP","Cuzdanserino") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFEMSTATUSTXT","Cuzdanserino") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.cuzdanserino","FIELD",;
+		"VFENDISPORDER",23) &&Display Order
+ENDIF
+ 
 *** Props for the UYAPVEKILVIEW.sira_no field.
 DBSetProp('UYAPVEKILVIEW.sira_no', 'Field', 'KeyField', .F.)
 DBSetProp('UYAPVEKILVIEW.sira_no', 'Field', 'Updatable', .T.)
@@ -744,49 +1132,53 @@ IF lWriteDBCXProps
 		"VFENDISPORDER",18) &&Display Order
 ENDIF
  
-*** Props for the UYAPVEKILVIEW.mahalle field.
-DBSetProp('UYAPVEKILVIEW.mahalle', 'Field', 'KeyField', .F.)
-DBSetProp('UYAPVEKILVIEW.mahalle', 'Field', 'Updatable', .T.)
-DBSetProp('UYAPVEKILVIEW.mahalle', 'Field', 'UpdateName', 'dbo.Personel.Mahalle')
-DBSetProp('UYAPVEKILVIEW.mahalle', 'Field', 'DataType', "C(25)")
-*** DBCX Field Properties for UYAPVEKILVIEW.mahalle
+*** Props for the UYAPVEKILVIEW.mahkoy field.
+DBSetProp('UYAPVEKILVIEW.mahkoy', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.mahkoy', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.mahkoy', 'Field', 'UpdateName', 'dbo.Personel.Mahalle')
+DBSetProp('UYAPVEKILVIEW.mahkoy', 'Field', 'DataType', "C(25)")
+*** DBCX Field Properties for UYAPVEKILVIEW.mahkoy
 IF lWriteDBCXProps
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
-		"VFECDESCRIPT","Mahalle Field") &&Description
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
-		"VFECFRMCAPTN","Mahalle") &&Form Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
-		"VFECDLGCAPTN","Mahalle") &&Dialog Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
-		"VFECGRDCAPTN","Mahalle") &&Grid Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
-		"VFECRPTCAPTN","Mahalle") &&Report Caption
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
-		"VFEMTOOLTIP","Mahalle") &&Tooltip Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
-		"VFEMSTATUSTXT","Mahalle") &&Status Bar Text
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
+		"VFECDESCRIPT","Mahkoy Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
+		"VFECFRMCAPTN","Mahkoy") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
+		"VFECDLGCAPTN","Mahkoy") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
+		"VFECGRDCAPTN","Mahkoy") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
+		"VFECRPTCAPTN","Mahkoy") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
+		"VFEMTOOLTIP","Mahkoy") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
+		"VFEMSTATUSTXT","Mahkoy") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
 		"VFELSEARCH",.T.) &&Searchable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
 		"VFELFILTER",.T.) &&Filterable
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
 		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
 		"VFECCLASS","iField") &&Behavior Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
 		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
 		"VFECOBJTYPE","itextbox") &&User Interface Class
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
 		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
 		"VFELQUICKFIND",.T.) &&Allow Quick Find
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
 		"VFENDFLTTYPE",1) &&Default Type
-	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahalle","FIELD",;
-		"VFENDISPORDER",19) &&Display Order
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.mahkoy","FIELD",;
+		"VFENDISPORDER",25) &&Display Order
 ENDIF
  
+
+
+***Split to stay below 64K limit***
+FUNCTION _VFEGenView_F1
 *** Props for the UYAPVEKILVIEW.dogum_yeri field.
 DBSetProp('UYAPVEKILVIEW.dogum_yeri', 'Field', 'KeyField', .F.)
 DBSetProp('UYAPVEKILVIEW.dogum_yeri', 'Field', 'Updatable', .T.)
@@ -828,5 +1220,564 @@ IF lWriteDBCXProps
 		"VFENDFLTTYPE",1) &&Default Type
 	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.dogum_yeri","FIELD",;
 		"VFENDISPORDER",20) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.e_posta field.
+DBSetProp('UYAPVEKILVIEW.e_posta', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.e_posta', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.e_posta', 'Field', 'UpdateName', 'dbo.Personel.e_Posta')
+DBSetProp('UYAPVEKILVIEW.e_posta', 'Field', 'DataType', "C(50)")
+*** DBCX Field Properties for UYAPVEKILVIEW.e_posta
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFECDESCRIPT","E Posta Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFECFRMCAPTN","E Posta") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFECDLGCAPTN","E Posta") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFECGRDCAPTN","E Posta") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFECRPTCAPTN","E Posta") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFEMTOOLTIP","E Posta") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFEMSTATUSTXT","E Posta") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.e_posta","FIELD",;
+		"VFENDISPORDER",27) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.posta_kodu field.
+DBSetProp('UYAPVEKILVIEW.posta_kodu', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.posta_kodu', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.posta_kodu', 'Field', 'UpdateName', 'dbo.Buro.Posta_Kodu')
+DBSetProp('UYAPVEKILVIEW.posta_kodu', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for UYAPVEKILVIEW.posta_kodu
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFECDESCRIPT","Posta Kodu Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFECFRMCAPTN","Posta Kodu") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFECDLGCAPTN","Posta Kodu") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFECGRDCAPTN","Posta Kodu") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFECRPTCAPTN","Posta Kodu") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFEMTOOLTIP","Posta Kodu") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFEMSTATUSTXT","Posta Kodu") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.posta_kodu","FIELD",;
+		"VFENDISPORDER",28) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.adresturuaciklama field.
+DBSetProp('UYAPVEKILVIEW.adresturuaciklama', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.adresturuaciklama', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.adresturuaciklama', 'Field', 'UpdateName', 'AdresTuruAciklama')
+DBSetProp('UYAPVEKILVIEW.adresturuaciklama', 'Field', 'DataType', "C(25)")
+*** DBCX Field Properties for UYAPVEKILVIEW.adresturuaciklama
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFECDESCRIPT","Adresturuaciklama Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFECFRMCAPTN","Adresturuaciklama") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFECDLGCAPTN","Adresturuaciklama") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFECGRDCAPTN","Adresturuaciklama") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFECRPTCAPTN","Adresturuaciklama") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFEMTOOLTIP","Adresturuaciklama") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFEMSTATUSTXT","Adresturuaciklama") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturuaciklama","FIELD",;
+		"VFENDISPORDER",29) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.adresturu field.
+DBSetProp('UYAPVEKILVIEW.adresturu', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.adresturu', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.adresturu', 'Field', 'UpdateName', 'AdresTuru')
+DBSetProp('UYAPVEKILVIEW.adresturu', 'Field', 'DataType', "C(10)")
+*** DBCX Field Properties for UYAPVEKILVIEW.adresturu
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFECDESCRIPT","Adresturu Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFECFRMCAPTN","Adresturu") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFECDLGCAPTN","Adresturu") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFECGRDCAPTN","Adresturu") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFECRPTCAPTN","Adresturu") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFEMTOOLTIP","Adresturu") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFEMSTATUSTXT","Adresturu") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adresturu","FIELD",;
+		"VFENDISPORDER",30) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.ceptelefon field.
+DBSetProp('UYAPVEKILVIEW.ceptelefon', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.ceptelefon', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.ceptelefon', 'Field', 'UpdateName', 'dbo.Personel.Cep_Tel_No')
+DBSetProp('UYAPVEKILVIEW.ceptelefon', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for UYAPVEKILVIEW.ceptelefon
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFECDESCRIPT","Ceptelefon Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFECFRMCAPTN","Ceptelefon") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFECDLGCAPTN","Ceptelefon") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFECGRDCAPTN","Ceptelefon") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFECRPTCAPTN","Ceptelefon") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFEMTOOLTIP","Ceptelefon") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFEMSTATUSTXT","Ceptelefon") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ceptelefon","FIELD",;
+		"VFENDISPORDER",31) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.il field.
+DBSetProp('UYAPVEKILVIEW.il', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.il', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.il', 'Field', 'UpdateName', 'dbo.Buro.Il_Adi')
+DBSetProp('UYAPVEKILVIEW.il', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for UYAPVEKILVIEW.il
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFECDESCRIPT","Il Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFECFRMCAPTN","Il") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFECDLGCAPTN","Il") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFECGRDCAPTN","Il") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFECRPTCAPTN","Il") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFEMTOOLTIP","Il") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFEMSTATUSTXT","Il") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.il","FIELD",;
+		"VFENDISPORDER",32) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.ilce field.
+DBSetProp('UYAPVEKILVIEW.ilce', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.ilce', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.ilce', 'Field', 'UpdateName', 'dbo.Buro.Ilce_Adi')
+DBSetProp('UYAPVEKILVIEW.ilce', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for UYAPVEKILVIEW.ilce
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFECDESCRIPT","Ilce Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFECFRMCAPTN","Ilce") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFECDLGCAPTN","Ilce") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFECGRDCAPTN","Ilce") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFECRPTCAPTN","Ilce") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFEMTOOLTIP","Ilce") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFEMSTATUSTXT","Ilce") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilce","FIELD",;
+		"VFENDISPORDER",33) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.adres field.
+DBSetProp('UYAPVEKILVIEW.adres', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.adres', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.adres', 'Field', 'UpdateName', 'dbo.Buro.Adres')
+DBSetProp('UYAPVEKILVIEW.adres', 'Field', 'DataType', "C(100)")
+*** DBCX Field Properties for UYAPVEKILVIEW.adres
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFECDESCRIPT","Adres Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFECFRMCAPTN","Adres") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFECDLGCAPTN","Adres") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFECGRDCAPTN","Adres") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFECRPTCAPTN","Adres") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFEMTOOLTIP","Adres") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFEMSTATUSTXT","Adres") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres","FIELD",;
+		"VFENDISPORDER",31) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.telefon field.
+DBSetProp('UYAPVEKILVIEW.telefon', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.telefon', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.telefon', 'Field', 'UpdateName', 'dbo.Buro.Tel')
+DBSetProp('UYAPVEKILVIEW.telefon', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for UYAPVEKILVIEW.telefon
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFECDESCRIPT","Telefon Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFECFRMCAPTN","Telefon") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFECDLGCAPTN","Telefon") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFECGRDCAPTN","Telefon") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFECRPTCAPTN","Telefon") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFEMTOOLTIP","Telefon") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFEMSTATUSTXT","Telefon") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.telefon","FIELD",;
+		"VFENDISPORDER",35) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.faks field.
+DBSetProp('UYAPVEKILVIEW.faks', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.faks', 'Field', 'Updatable', .T.)
+DBSetProp('UYAPVEKILVIEW.faks', 'Field', 'UpdateName', 'dbo.Buro.Faks')
+DBSetProp('UYAPVEKILVIEW.faks', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for UYAPVEKILVIEW.faks
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFECDESCRIPT","Faks Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFECFRMCAPTN","Faks") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFECDLGCAPTN","Faks") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFECGRDCAPTN","Faks") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFECRPTCAPTN","Faks") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFEMTOOLTIP","Faks") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFEMSTATUSTXT","Faks") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.faks","FIELD",;
+		"VFENDISPORDER",32) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.adres_id field.
+DBSetProp('UYAPVEKILVIEW.adres_id', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.adres_id', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.adres_id', 'Field', 'UpdateName', 'Adres_Id')
+DBSetProp('UYAPVEKILVIEW.adres_id', 'Field', 'DataType', "C(10)")
+*** DBCX Field Properties for UYAPVEKILVIEW.adres_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFECDESCRIPT","Adres Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFECFRMCAPTN","Adres Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFECDLGCAPTN","Adres Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFECGRDCAPTN","Adres Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFECRPTCAPTN","Adres Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFEMTOOLTIP","Adres Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFEMSTATUSTXT","Adres Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.adres_id","FIELD",;
+		"VFENDISPORDER",36) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.ilkodu field.
+DBSetProp('UYAPVEKILVIEW.ilkodu', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.ilkodu', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.ilkodu', 'Field', 'UpdateName', 'IlKodu')
+DBSetProp('UYAPVEKILVIEW.ilkodu', 'Field', 'DataType', "C(2)")
+*** DBCX Field Properties for UYAPVEKILVIEW.ilkodu
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFECDESCRIPT","Ilkodu Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFECFRMCAPTN","Ilkodu") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFECDLGCAPTN","Ilkodu") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFECGRDCAPTN","Ilkodu") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFECRPTCAPTN","Ilkodu") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFEMTOOLTIP","Ilkodu") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFEMSTATUSTXT","Ilkodu") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilkodu","FIELD",;
+		"VFENDISPORDER",37) &&Display Order
+ENDIF
+ 
+*** Props for the UYAPVEKILVIEW.ilcekodu field.
+DBSetProp('UYAPVEKILVIEW.ilcekodu', 'Field', 'KeyField', .F.)
+DBSetProp('UYAPVEKILVIEW.ilcekodu', 'Field', 'Updatable', .F.)
+DBSetProp('UYAPVEKILVIEW.ilcekodu', 'Field', 'UpdateName', 'IlceKodu')
+DBSetProp('UYAPVEKILVIEW.ilcekodu', 'Field', 'DataType', "C(3)")
+*** DBCX Field Properties for UYAPVEKILVIEW.ilcekodu
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFECDESCRIPT","Ilcekodu Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFECFRMCAPTN","Ilcekodu") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFECDLGCAPTN","Ilcekodu") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFECGRDCAPTN","Ilcekodu") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFECRPTCAPTN","Ilcekodu") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFEMTOOLTIP","Ilcekodu") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFEMSTATUSTXT","Ilcekodu") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!UYAPVEKILVIEW.ilcekodu","FIELD",;
+		"VFENDISPORDER",38) &&Display Order
 ENDIF
  
