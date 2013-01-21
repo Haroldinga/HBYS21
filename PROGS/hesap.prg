@@ -828,10 +828,6 @@ FUNCTION getTOAlacak
 
 	llNewIcraDosyaHesabi = .F.
 
-	*WITH loApp
-	*	loIcraDosyaHesabiBizObj = .Getbizobj("IcraDosyaHesabiViewBizObj")
-	*ENDWITH
-
 	IF TYPE("_Screen.ActiveForm") = T_Object AND PEMSTATUS(_SCREEN.ACTIVEFORM, "Getbizobj", 5)
 		loIcraDosyaHesabiBizObj = _SCREEN.ACTIVEFORM.Getbizobj("IcraDosyaHesabiViewBizObj")
 	ELSE
@@ -850,6 +846,7 @@ FUNCTION getTOAlacak
 			ENDIF
 		ENDWITH
 	ENDIF
+	
 
 	llNewHesapSekli = .F.
 	WITH loApp
@@ -886,7 +883,11 @@ FUNCTION getTOAlacak
 					lnTO_Alacak_Tutari = loIcraDosyaHesabiBizObj.GetField(TO_Alacak_Tutari)
 				ENDIF
 			ELSE
-				lnTO_Alacak_Tutari = EVALUATE(.&TO_Alacak_Hesabi)
+			    IF NULLOREMPTY(CHRTRAN(ALLTRIM(.&TO_Alacak_Hesabi),"0123456789.",""))
+			        lnTO_Alacak_Tutari = loIcraDosyaHesabiBizObj.GetField(TO_Alacak_Tutari)
+			    ELSE    
+					lnTO_Alacak_Tutari = EVALUATE(.&TO_Alacak_Hesabi)
+				ENDIF 
 			ENDIF
 
 			lcTO_Alacak_Adi		   = .&TO_Alacak_Adi
@@ -1237,21 +1238,6 @@ FUNCTION GetHarcTutari
 
 	loApp = FindApplication()
 
-	*!*		loHarcOraniRec	  = NULL
-	*!*		loHarcOraniBizObj = loApp.Getbizobj("HarcOraniListViewBizObj")
-	*!*		IF VARTYPE(loHarcOraniBizObj) = T_Object AND TYPE([loHarcOranibizobj.name]) = T_Character
-	*!*		ELSE
-	*!*			loHarcOraniBizObj = CREATEOBJECT("HarcOraniListViewBizObj")
-	*!*		ENDIF
-	*!*		WITH loHarcOraniBizObj
-	*!*			IF .REQUERY() = Requery_Success AND .recordcount > 0
-	*!*				.NAVIGATE("LAST")  && Assume ordered by date
-	*!*				loHarcOraniRec = .GetValues()
-	*!*			ENDIF
-	*!*			.RELEASE()
-	*!*		ENDWITH
-	*!*		loHarcOraniBizObj = NULL
-
 	llNewObject	 = .F.
 
 	*	loHarcBizObj = loApp.Getbizobj("HarcListViewBizObj")
@@ -1283,11 +1269,6 @@ FUNCTION GetHarcTutari
 			lnHarc_Orani   = .GetField("Harc_Orani")
 			lnHarc_Miktari = .GetField("Harc_Miktari")
 
-			*!*				IF lnHarc_Miktari = 0 AND lnHarc_Orani > 0
-			*!*					lnHarc_Miktari = ROUND((m.Takip_Alacagi * lnHarc_Orani), 2)
-			*!*					.setfield("Harc_Miktari", lnHarc_Miktari)
-			*!*				ENDIF
-
 			IF lnHarc_Orani > 0
 				lnHarc_Mikt = ROUND((m.Takip_Alacagi * lnHarc_Orani), 2)
 
@@ -1295,6 +1276,8 @@ FUNCTION GetHarcTutari
 					lnHarc_Miktari = lnHarc_Mikt
 
 					.setfield("Harc_Miktari", lnHarc_Miktari)
+					
+					.Save()
 				ENDIF
 			ENDIF
 
@@ -1338,7 +1321,7 @@ FUNCTION GetTakipAlacakHesabi
 
 	lcTakip_Alacak_Hesabi = ;
 		TRANSFORM(m.Asil_Alacak, "999,999,999.99") + " Asýl Alacak" + "\par " + ;
-		IIF(m.Gecikme_Faizi_Tutari > 0, TRANSFORM(m.Gecikme_Faizi_Tutari, "999,999,999.99") + " Gecikme Faizi " + m.Gecikme_Faizi_Aciklamasi + " \par ", "") + ;
+		IIF(m.Gecikme_Faizi_Tutari > 0, TRANSFORM(m.Gecikme_Faizi_Tutari, "999,999,999.99") + " Akdi Gecikme Faizi " + m.Gecikme_Faizi_Aciklamasi + " \par ", "") + ;
 		TRANSFORM(m.Temerrut_Faizi_Tutari, "999,999,999.99") + " Temerrüt Faizi " + m.Temerrut_Faizi_Aciklamasi + " \par " + ;
 		IIF(m.TO_Alacak_Tutari_1 > 0, TRANSFORM(m.TO_Alacak_Tutari_1, "999,999,999.99") + " " + IIF(NOE(m.TO_Alacak_Aciklamasi_1), m.TO_Alacak_Adi_1, m.TO_Alacak_Aciklamasi_1) + "\par ", "") + ;
 		IIF(m.TO_Alacak_Tutari_2 > 0, TRANSFORM(m.TO_Alacak_Tutari_2, "999,999,999.99") + " " + IIF(NOE(m.TO_Alacak_Aciklamasi_2), m.TO_Alacak_Adi_2, m.TO_Alacak_Aciklamasi_2) + "\par ", "") + ;
