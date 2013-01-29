@@ -1,5 +1,7 @@
 Programdaki Yenilikler
 ------------------------
+28.01.2013 : Özel Hesaplama eklendi. Bu sayede Takip öncesi dosya hesap kalemlerinin deðerlerini elle kaydedebilmek mümkün oluyor.
+
 24.01.2013 : Borçlu için isim deðiþikliði eklendi.
 
 31.12.2012 : Hýzlý Takip Açýlýþ ekranýna, Takip Açýlýþ Evraklarý basým ekranýna hýzlý geçiþ eklendi.

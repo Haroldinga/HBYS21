@@ -1,5 +1,5 @@
-*#INCLUDE ..\INCLUDE\VFE.H
-#INCLUDE VFE.H
+#INCLUDE ..\INCLUDE\VFE.H
+*#INCLUDE VFE.H
 
 LPARAMETERS ;
 	tuParameter, ;
@@ -11,6 +11,7 @@ LOCAL ;
 	loIcraDosyaBizObj, ;
 	loIcraDosyaVal, ;
 	loIcraDosyaHesabiBizObj, ;
+	loHesapSekliBizObj,;
 	lcIcraDosya_Id, ;
 	lcDosyaTipi_Id, ;
 	lcMuvekkil_Id, ;
@@ -31,6 +32,7 @@ LOCAL ;
 
 
 PRIVATE ;
+    loHesapSekliRec,;
 	Asil_Alacak, ;
 	Gecikme_Faizi_Orani, ;
 	Gecikme_Faizi_Tutari, ;
@@ -56,8 +58,8 @@ PRIVATE ;
 	Ts_Alacak_Aciklamasi_1, Ts_Alacak_Aciklamasi_2, Ts_Alacak_Aciklamasi_3, Ts_Alacak_Aciklamasi_4, Ts_Alacak_Aciklamasi_5, ;
 	Ts_Tahsilat_Tutari, ;
 	Toplam_Alacak, ;
-	Indirim_Tutari,;
-	Kalan_Alacak,;
+	Indirim_Tutari, ;
+	Kalan_Alacak, ;
 	Alacakli_Bilgisi, ;
 	Vekil_Bilgisi, ;
 	Borclu_Bilgisi
@@ -67,60 +69,20 @@ PRIVATE ;
 
 llreturn = .T.
 DO CASE
-CASE VARTYPE(tuParameter) = T_Object
-	** loIcraDosyayaVal gönderilmiþ, Icradosyabizobj ye gerek yok
-	loIcraDosyaVal = tuParameter
-	lcIcraDosya_Id = loIcraDosyaVal.IcraDosya_Id
-CASE VARTYPE(tuParameter) = T_Character
-	llreturn = .F.
-
-	*!*			lcIcraDosya_Id=tuParameter
-	*!*			loIcraDosyaBizObj=loApp.GetbizObj("IcraDosyaEditBizObj")
-	*!*			IF VARTYPE(loIcraDosyaBizObj)=T_Object AND TYPE([loIcraDosyaBizObj.Name])=T_Character
-	*!*			ELSE
-	*!*				loIcraDosyaBizObj=CREATEOBJECT("IcraDosyaEditBizObj")
-	*!*			ENDIF
-	*!*			WITH loIcraDosyaBizObj
-	*!*				.setparameter("IcraDosya_Id",lcIcraDosya_Id)
-	*!*				IF REQUERY()=REQUERY_SUCCESS AND. recordCount>0
-	*!*					loIcraDosyaVal=.GetDEValues()
-	*!*				ELSE
-	*!*					llreturn=.F.
-	*!*				ENDIF
-	*!*			ENDWITH
-	*!*			***IcraDosyaHesabi
-	*!*			loIcraDosyaHesabiBizObj=loApp.GetbizObj("IcraDosyaHesabiViewBizObj")
-	*!*			IF VARTYPE(loIcraDosyaHesabiBizObj)=T_Object AND TYPE([loIcraDosyaHesabiBizObj.Name])=T_Character
-	*!*			ELSE
-	*!*				loIcraDosyaHesabiBizObj=CREATEOBJECT("IcraDosyaHesabiViewBizObj")
-	*!*				WITH loIcraDosyaHesabiBizObj
-	*!*					.setparameter("vp_IcraDosyaHesabi_Fk",lcIcraDosya_Id)
-	*!*					.REQUERY()
-	*!*				ENDWITH
-	*!*			ENDIF
-	*!*			WITH loIcraDosyaHesabiBizObj
-	*!*				loIcraDosyaHesabiRec=.GetValues()
-	*!*			ENDWITH
-
-OTHERWISE
-	llreturn = .F.
+	CASE VARTYPE(tuParameter) = T_Object
+		** loIcraDosyaVal gönderilmiþ, Icradosyabizobj ye gerek yok
+		loIcraDosyaVal = tuParameter
+		lcIcraDosya_Id = loIcraDosyaVal.IcraDosya_Id
+	CASE VARTYPE(tuParameter) = T_Character  && IcraDosya_Id Gönderilmiþ.. Ýçeriðine Versiyon20 den bakabilirsin
+		llreturn = .F.
+	OTHERWISE
+		llreturn = .F.
 ENDCASE
 
 IF NOT llreturn
 	RETURN llreturn
 ENDIF
 
-
-*!*	WITH loIcraDosyaHesabiRec
-*!*		IF NullOrEmpty(.Hesap_Tipi)
-*!*			.Hesap_Tipi = "Standart Hesap"
-*!*		ENDIF
-
-*!*		IF .Hesap_Tipi = "Özel Hesap" OR ;
-*!*				.Hesap_Tipi = "Kampanya Hesabý"
-*!*			RETURN .T.
-*!*		ENDIF
-*!*	ENDWITH
 
 WITH loIcraDosyaVal
 	lcIcraDosya_Id	   = .IcraDosya_Id
@@ -131,8 +93,16 @@ WITH loIcraDosyaVal
 	ldTakip_Tarihi	   = .Takip_Tarihi
 ENDWITH
 
+loHesapSekliBizObj = CREATEOBJECT("AlacakHesapSekliViewBizObj")
+WITH loHesapSekliBizObj
+	.setparameter("vp_HesapSekli_Fk", lcDosyaTipi_Id)
+	.REQUERY()
+	loHesapSekliRec = .GetValues()
+ENDWITH
+loHesapSekliBizObj = NULL
+
 *** Asýl Alacak
-m.Asil_Alacak = GetAsil_Alacak(lcIcraDosya_Id,ldTakip_Tarihi)
+m.Asil_Alacak = GetAsil_Alacak(lcIcraDosya_Id, ldTakip_Tarihi)
 m.Asil_Alacak = ROUND(m.Asil_Alacak, 2)
 WITH loIcraDosyaHesabiRec
 	.Asil_Alacak = m.Asil_Alacak
@@ -148,11 +118,15 @@ IF NOT ISNULL(loFaizBilgisi)
 	WITH loFaizBilgisi
 		m.Gecikme_Faizi_Orani	   = .Faiz_Orani
 		m.Gecikme_Faizi_Tutari	   = .Faiz_Tutari
-		m.Gecikme_Faizi_Aciklamasi = NVL(.Faiz_Aciklamasi,"")
+		m.Gecikme_Faizi_Aciklamasi = NVL(.Faiz_Aciklamasi, "")
 	ENDWITH
 ENDIF
 m.Gecikme_Faizi_Tutari = ROUND(m.Gecikme_Faizi_Tutari, 2)
 WITH loIcraDosyaHesabiRec
+    IF tcHesap_Tipi="Özel Hesap"
+	   	m.Gecikme_Faizi_Tutari	  = .Gecikme_Faizi_Tutari
+    ENDIF 
+
 	.Gecikme_Faizi_Orani	  = m.Gecikme_Faizi_Orani
 	.Gecikme_Faizi_Tutari	  = m.Gecikme_Faizi_Tutari
 	.Gecikme_Faizi_Aciklamasi = m.Gecikme_Faizi_Aciklamasi
@@ -167,11 +141,15 @@ IF NOT ISNULL(loFaizBilgisi)
 	WITH loFaizBilgisi
 		m.Temerrut_Faizi_Orani		= .Faiz_Orani
 		m.Temerrut_Faizi_Tutari		= .Faiz_Tutari
-		m.Temerrut_Faizi_Aciklamasi	= NVL(.Faiz_Aciklamasi,"")
+		m.Temerrut_Faizi_Aciklamasi	= NVL(.Faiz_Aciklamasi, "")
 	ENDWITH
 ENDIF
 m.Temerrut_Faizi_Tutari = ROUND(m.Temerrut_Faizi_Tutari, 2)
 WITH loIcraDosyaHesabiRec
+    IF tcHesap_Tipi="Özel Hesap"
+	   	m.Temerrut_Faizi_Tutari	  = .Temerrut_Faizi_Tutari
+    ENDIF 
+  
 	.Temerrut_Faizi_Orani	   = m.Temerrut_Faizi_Orani
 	.Temerrut_Faizi_Tutari	   = m.Temerrut_Faizi_Tutari
 	.Temerrut_Faizi_Aciklamasi = m.Temerrut_Faizi_Aciklamasi
@@ -198,6 +176,10 @@ FOR i = 1 TO 10
 	ENDWITH
 
 	WITH loIcraDosyaHesabiRec
+	    IF tcHesap_Tipi="Özel Hesap"
+			m.&To_Alacak_Tutari	   = .&To_Alacak_Tutari
+        ENDIF 
+
 		.&To_Alacak_Adi		   = m.&To_Alacak_Adi
 		.&To_Alacak_Hesabi	   = m.&To_Alacak_Hesabi
 		.&To_Alacak_Tutari	   = m.&To_Alacak_Tutari
@@ -232,7 +214,7 @@ IF NOT ISNULL(loFaizBilgisi)
 	WITH loFaizBilgisi
 		m.Takip_Faizi_Orani		 = .Faiz_Orani
 		m.Takip_Faizi_Tutari	 = .Faiz_Tutari
-		m.Takip_Faizi_Aciklamasi = NVL(.Faiz_Aciklamasi,"")
+		m.Takip_Faizi_Aciklamasi = NVL(.Faiz_Aciklamasi, "")
 	ENDWITH
 ENDIF
 m.Takip_Faizi_Tutari = ROUND(m.Takip_Faizi_Tutari, 2)
@@ -288,7 +270,7 @@ FOR i = 1 TO 5
 NEXT i
 
 *** Tahsilat Toplamý
-m.Ts_Tahsilat_Tutari = GetTahsilatTutari(lcIcraDosya_Id,ldTakip_Tarihi)
+m.Ts_Tahsilat_Tutari = GetTahsilatTutari(lcIcraDosya_Id, ldTakip_Tarihi)
 m.Ts_Tahsilat_Tutari = ROUND(m.Ts_Tahsilat_Tutari, 2)
 WITH loIcraDosyaHesabiRec
 	.Ts_Tahsilat_Tutari = m.Ts_Tahsilat_Tutari
@@ -305,7 +287,7 @@ WITH loIcraDosyaHesabiRec
 ENDWITH
 
 *** Indirim Tutari
-m.Indirim_Tutari=0
+m.Indirim_Tutari = 0
 WITH loIcraDosyaHesabiRec
 	.Indirim_Tutari = 0
 ENDWITH
@@ -349,6 +331,7 @@ WITH loIcraDosyaHesabiRec
 ENDWITH
 
 RETURN .T.
+
 
 
 

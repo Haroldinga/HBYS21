@@ -639,7 +639,7 @@ FUNCTION GetVekilBilgisi
 		loPersonelBizObj = CREATEOBJECT("PersonelViewBizObj")
 	ENDIF
 
-    
+
 	WITH loVekilBizobj
 		.setparameter("vp_Vekil_Fk", tcIcraDosya_Id) && dosyaya özel müvekkil tanýmý
 		IF .REQUERY() = Requery_Success AND .recordcount > 0
@@ -647,16 +647,16 @@ FUNCTION GetVekilBilgisi
 			.setparameter("vp_Vekil_Fk", tcMuvekkil_Id)
 			.REQUERY()
 		ENDIF
-        
-        lcBanka_Hesap_No=""
-        
+
+		lcBanka_Hesap_No = ""
+
 		lnOk = .NAVIGATE("First")
 		DO WHILE lnOk = File_Ok OR lnOk = File_Bof
 			lcPersonel_Id	 = .GetField("Personel_Id")
-			
+
 			IF NullOrEmpty(lcBanka_Hesap_No)
 				lcBanka_Hesap_No = .GetField("Banka_Hesap_No")
-			ENDIF 
+			ENDIF
 
 			WITH loPersonelBizObj
 				.setparameter("vp_Personel_Id", lcPersonel_Id)
@@ -680,11 +680,11 @@ FUNCTION GetVekilBilgisi
 
 		loBuroRec = loApp.oBuro
 		WITH loBuroRec
-*!*				lcVekil_Bilgisi = lcVekil_Bilgisi + ;
-*!*					N2B(.Buro_adi) + " " + N2B(.Adres) + " " + N2B(.Il_adi) + " " + N2B(.Ilce_Adi) + " " + N2B(lcBanka_Hesap_No)+ " \par "
-				
+			*!*				lcVekil_Bilgisi = lcVekil_Bilgisi + ;
+			*!*					N2B(.Buro_adi) + " " + N2B(.Adres) + " " + N2B(.Il_adi) + " " + N2B(.Ilce_Adi) + " " + N2B(lcBanka_Hesap_No)+ " \par "
+
 			lcVekil_Bilgisi = lcVekil_Bilgisi + ;
-				N2B(.Buro_adi) + " " + N2B(.Adres) + " " + N2B(.Il_adi)  + " \par " + N2B(lcBanka_Hesap_No)+ " \par "	
+				N2B(.Buro_adi) + " " + N2B(.Adres) + " " + N2B(.Il_adi)  + " \par " + N2B(lcBanka_Hesap_No) + " \par "
 		ENDWITH
 
 		IF llNewVekil
@@ -810,8 +810,6 @@ FUNCTION getTOAlacak
 		loApp, ;
 		loTOAlacakRec, ;
 		loHesapSekliBizObj, ;
-		loHesapSekliRec, ;
-		llNewHesapSekli, ;
 		loIcraDosyaHesabiBizObj, ;
 		llNewIcraDosyaHesabi, ;
 		TO_Alacak_Adi, ;
@@ -846,30 +844,30 @@ FUNCTION getTOAlacak
 			ENDIF
 		ENDWITH
 	ENDIF
-	
 
-	llNewHesapSekli = .F.
-	WITH loApp
-		loHesapSekliBizObj = .Getbizobj("AlacakHesapSekliViewBizObj")
-	ENDWITH
 
-	IF VARTYPE(loHesapSekliBizObj) = T_Object AND TYPE([loHesapSekliBizObj.Name]) = T_Character
-	ELSE
-		llNewHesapSekli	   = .T.
-		loHesapSekliBizObj = CREATEOBJECT("AlacakHesapSekliViewBizObj")
-	ENDIF
+*!*		llNewHesapSekli = .F.
+*!*		WITH loApp
+*!*			loHesapSekliBizObj = .Getbizobj("AlacakHesapSekliViewBizObj")
+*!*		ENDWITH
 
-	WITH loHesapSekliBizObj
-		.setparameter("vp_HesapSekli_Fk", tcDosyaTipi_Id)
-		.REQUERY()
-		loHesapSekliRec = .GetValues()
-		IF llNewHesapSekli
-			.RELEASE()
-		ENDIF
-	ENDWITH
-	loHesapSekliBizObj = NULL
+*!*		IF VARTYPE(loHesapSekliBizObj) = T_Object AND TYPE([loHesapSekliBizObj.Name]) = T_Character
+*!*		ELSE
+*!*			llNewHesapSekli	   = .T.
+*!*			loHesapSekliBizObj = CREATEOBJECT("AlacakHesapSekliViewBizObj")
+*!*		ENDIF
 
-	WITH loHesapSekliRec
+*!*		WITH loHesapSekliBizObj
+*!*			.setparameter("vp_HesapSekli_Fk", tcDosyaTipi_Id)
+*!*			.REQUERY()
+*!*			loHesapSekliRec = .GetValues()
+*!*			IF llNewHesapSekli
+*!*				.RELEASE()
+*!*			ENDIF
+*!*		ENDWITH
+*!*		loHesapSekliBizObj = NULL
+
+	WITH loHesapSekliRec && Private Variable
 		FOR i = 1 TO 10
 			TO_Alacak_Adi		 = "To_Alacak_Adi_" + ALLTRIM(STR(i))
 			TO_Alacak_Hesabi	 = "To_Alacak_Hesabi_" + ALLTRIM(STR(i))
@@ -883,11 +881,11 @@ FUNCTION getTOAlacak
 					lnTO_Alacak_Tutari = loIcraDosyaHesabiBizObj.GetField(TO_Alacak_Tutari)
 				ENDIF
 			ELSE
-			    IF NULLOREMPTY(CHRTRAN(ALLTRIM(.&TO_Alacak_Hesabi),"0123456789.",""))
-			        lnTO_Alacak_Tutari = loIcraDosyaHesabiBizObj.GetField(TO_Alacak_Tutari)
-			    ELSE    
+				IF NullOrEmpty(CHRTRAN(ALLTRIM(.&TO_Alacak_Hesabi), "0123456789.", ""))
+					lnTO_Alacak_Tutari = loIcraDosyaHesabiBizObj.GetField(TO_Alacak_Tutari)
+				ELSE
 					lnTO_Alacak_Tutari = EVALUATE(.&TO_Alacak_Hesabi)
-				ENDIF 
+				ENDIF
 			ENDIF
 
 			lcTO_Alacak_Adi		   = .&TO_Alacak_Adi
@@ -984,8 +982,6 @@ FUNCTION getTSAlacak
 		loApp, ;
 		loTsAlacakRec, ;
 		loHesapSekliBizObj, ;
-		loHesapSekliRec, ;
-		llNewHesapSekli, ;
 		loIcraDosyaHesabiBizObj, ;
 		llNewIcraDosyaHesabi, ;
 		Ts_Alacak_Adi, ;
@@ -1024,28 +1020,28 @@ FUNCTION getTSAlacak
 		ENDWITH
 	ENDIF
 
-	llNewHesapSekli = .F.
-	WITH loApp
-		loHesapSekliBizObj = .Getbizobj("AlacakHesapSekliViewBizObj")
-	ENDWITH
+*!*		llNewHesapSekli = .F.
+*!*		WITH loApp
+*!*			loHesapSekliBizObj = .Getbizobj("AlacakHesapSekliViewBizObj")
+*!*		ENDWITH
 
-	IF VARTYPE(loHesapSekliBizObj) = T_Object AND TYPE([loHesapSekliBizObj.Name]) = T_Character
-	ELSE
-		llNewHesapSekli	   = .T.
-		loHesapSekliBizObj = CREATEOBJECT("AlacakHesapSekliViewBizObj")
-	ENDIF
+*!*		IF VARTYPE(loHesapSekliBizObj) = T_Object AND TYPE([loHesapSekliBizObj.Name]) = T_Character
+*!*		ELSE
+*!*			llNewHesapSekli	   = .T.
+*!*			loHesapSekliBizObj = CREATEOBJECT("AlacakHesapSekliViewBizObj")
+*!*		ENDIF
 
-	WITH loHesapSekliBizObj
-		.setparameter("vp_HesapSekli_Fk", tcDosyaTipi_Id)
-		.REQUERY()
-		loHesapSekliRec = .GetValues()
-		IF llNewHesapSekli
-			.RELEASE()
-		ENDIF
-	ENDWITH
-	loHesapSekliBizObj = NULL
+*!*		WITH loHesapSekliBizObj
+*!*			.setparameter("vp_HesapSekli_Fk", tcDosyaTipi_Id)
+*!*			.REQUERY()
+*!*			loHesapSekliRec = .GetValues()
+*!*			IF llNewHesapSekli
+*!*				.RELEASE()
+*!*			ENDIF
+*!*		ENDWITH
+*!*		loHesapSekliBizObj = NULL
 
-	WITH loHesapSekliRec
+	WITH loHesapSekliRec   &&Private variable
 		FOR i = 1 TO 5
 			Ts_Alacak_Adi		 = "Ts_Alacak_Adi_" + ALLTRIM(STR(i))
 			Ts_Alacak_Hesabi	 = "Ts_Alacak_Hesabi_" + ALLTRIM(STR(i))
@@ -1059,7 +1055,11 @@ FUNCTION getTSAlacak
 					lnTs_Alacak_Tutari = loIcraDosyaHesabiBizObj.GetField(Ts_Alacak_Tutari)
 				ENDIF
 			ELSE
-				lnTs_Alacak_Tutari = EVALUATE(.&Ts_Alacak_Hesabi)
+				IF NullOrEmpty(CHRTRAN(ALLTRIM(.&Ts_Alacak_Hesabi), "0123456789.", ""))
+					lnTs_Alacak_Tutari = loIcraDosyaHesabiBizObj.GetField(Ts_Alacak_Tutari)
+				ELSE
+					lnTs_Alacak_Tutari = EVALUATE(.&Ts_Alacak_Hesabi)
+				ENDIF
 			ENDIF
 
 			lcTs_Alacak_Adi		   = .&Ts_Alacak_Adi
@@ -1276,8 +1276,8 @@ FUNCTION GetHarcTutari
 					lnHarc_Miktari = lnHarc_Mikt
 
 					.setfield("Harc_Miktari", lnHarc_Miktari)
-					
-					.Save()
+
+					.SAVE()
 				ENDIF
 			ENDIF
 
@@ -1368,6 +1368,7 @@ FUNCTION GetToplamAlacakHesabi
 		TRANSFORM((m.Takip_Alacagi * (1.0 * m.Takip_Faizi_Orani / 100.0)) / 365.0, "9999.99") + " TL. Günlük Faiz"
 
 	RETURN lcToplam_Alacak_Hesabi
+
 
 
 
