@@ -1,4 +1,6 @@
-#INCLUDE VFE.H
+#INCLUDE ..\INCLUDE\VFE.H
+
+*#INCLUDE VFE.H
 
 
 *==============================================================================
@@ -684,7 +686,9 @@ FUNCTION GetVekilBilgisi
 			*!*					N2B(.Buro_adi) + " " + N2B(.Adres) + " " + N2B(.Il_adi) + " " + N2B(.Ilce_Adi) + " " + N2B(lcBanka_Hesap_No)+ " \par "
 
 			lcVekil_Bilgisi = lcVekil_Bilgisi + ;
-				N2B(.Buro_adi) + " " + N2B(.Adres) + " " + N2B(.Il_adi)  + " \par " + N2B(lcBanka_Hesap_No) + " \par "
+				N2B(.Buro_adi) + " " + N2B(.Adres) + " " + N2B(.Il_adi)  + " \par " + ;
+				IIF(!NullOrEmpty(.Tel),"Tel : "+Rtrim(.Tel),"") +" "+IIF(!NullOrEmpty(.e_Posta),"e-Mail : "+Rtrim(.e_Posta),"") + " \par "+;
+				N2B(lcBanka_Hesap_No) + " \par "
 		ENDWITH
 
 		IF llNewVekil
@@ -766,6 +770,8 @@ FUNCTION getBorcluBilgisi
 
 	FOR i = 1 TO lnAdet
 		lcRehber_Id = aRehberId(i)
+		
+		IF NOT NullOrEmpty(lcRehber_Id)
 		WITH loRehberBizObj
 			.setparameter("vp_Rehber_Id", lcRehber_Id)
 			IF .REQUERY() = Requery_Success AND .recordcount > 0
@@ -778,6 +784,7 @@ FUNCTION getBorcluBilgisi
 				ENDWITH
 			ENDIF
 		ENDWITH
+		ENDIF 
 	NEXT i
 
 	IF llNewRehber

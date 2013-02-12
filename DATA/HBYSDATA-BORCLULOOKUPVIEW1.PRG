@@ -1,0 +1,273 @@
+***************** Begin View Definition BORCLULOOKUPVIEW ***************
+
+
+LOCAL LAOPENEDDBCS[1,1], lcSet_Exact
+PRIVATE lWriteDBCXProps
+
+lWriteDBCXProps=.T.
+
+lcSet_Exact=SET('EXACT')
+IF lcSet_Exact='OFF'
+	SET EXACT ON
+ENDIF
+
+
+***Make sure the current database is correct
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
+ELSE
+	SET DATABASE TO "HBYSDATA"
+ENDIF
+
+
+IF lcSet_Exact='OFF'
+	SET EXACT OFF
+ENDIF
+
+
+
+CREATE SQL VIEW "BORCLULOOKUPVIEW" ; 
+ REMOTE CONNECT "HBYSDataConnect" ; 
+	AS SELECT Borclu.Borclu_Id,;
+		Borclu.Borclu_Fk,;
+		Borclu.Rehber_Id,;
+		Borclu.Borclu_Adi;
+	FROM dbo.Borclu Borclu;
+	WHERE Borclu.Borclu_Fk = ( ?vp_Borclu_Fk )
+
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'UpdateType', 1)
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'WhereType', 3)
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'FetchMemo', .T.)
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'SendUpdates', .F.)
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'UseMemoSize', 255)
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'MaxRecords', -1)
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'Tables', 'dbo.Borclu')
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'Prepared', .F.)
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'CompareMemo', .T.)
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'FetchAsNeeded', .F.)
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'FetchSize', -1)
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'ParameterList', "vp_Borclu_Fk,'C'")
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'Comment', "")
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'BatchUpdateCount', 1)
+DBSetProp('BORCLULOOKUPVIEW', 'View', 'ShareConnection', .T.)
+IF lWriteDBCXProps
+ 
+	*** DBCX View Properties for BORCLULOOKUPVIEW
+	GoExplorer.odbcx.Validate("BORCLULOOKUPVIEW","View")
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW","VIEW",;
+		"VFECDESCRIPT","Borclulookupview Remote View") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW","VIEW",;
+		"VFECCLASS","iCursor") &&Default Cursor Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW","VIEW",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Default Cursor Class Library
+ 
+	*** DBCX View Parameter Properties for vp_Borclu_Fk
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFECDESCRIPT","Vp Borclu Fk View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFECFRMCAPTN","Borclu Fk") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFECDLGCAPTN","Borclu Fk") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFECVPTYPE","C") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFENVPSIZE",36) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFEMTOOLTIP","Borclu Fk") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFEMSTATUSTXT","Borclu Fk") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFECCLASS","iviewparameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\idata.vcx") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFECOPERATOR","Begins With") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.vp_Borclu_Fk","PARAMETER",;
+		"VFEMOPERLIST","Equals, Contains, Begins With, Ends With") &&Available Operators
+ENDIF
+
+*!* Field Level Properties for BORCLULOOKUPVIEW
+*** Props for the BORCLULOOKUPVIEW.borclu_id field.
+DBSetProp('BORCLULOOKUPVIEW.borclu_id', 'Field', 'KeyField', .T.)
+DBSetProp('BORCLULOOKUPVIEW.borclu_id', 'Field', 'Updatable', .F.)
+DBSetProp('BORCLULOOKUPVIEW.borclu_id', 'Field', 'UpdateName', 'dbo.Borclu.Borclu_Id')
+DBSetProp('BORCLULOOKUPVIEW.borclu_id', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for BORCLULOOKUPVIEW.borclu_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFECDESCRIPT","Borclu Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFECFRMCAPTN","Borclu Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFECDLGCAPTN","Borclu Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFECGRDCAPTN","Borclu Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFECRPTCAPTN","Borclu Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFEMTOOLTIP","Borclu Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFEMSTATUSTXT","Borclu Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_id","FIELD",;
+		"VFENDISPORDER",1) &&Display Order
+ENDIF
+ 
+*** Props for the BORCLULOOKUPVIEW.borclu_fk field.
+DBSetProp('BORCLULOOKUPVIEW.borclu_fk', 'Field', 'KeyField', .F.)
+DBSetProp('BORCLULOOKUPVIEW.borclu_fk', 'Field', 'Updatable', .T.)
+DBSetProp('BORCLULOOKUPVIEW.borclu_fk', 'Field', 'UpdateName', 'dbo.Borclu.Borclu_Fk')
+DBSetProp('BORCLULOOKUPVIEW.borclu_fk', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for BORCLULOOKUPVIEW.borclu_fk
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFECDESCRIPT","Borclu Fk Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFECFRMCAPTN","Borclu Fk") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFECDLGCAPTN","Borclu Fk") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFECGRDCAPTN","Borclu Fk") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFECRPTCAPTN","Borclu Fk") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFEMTOOLTIP","Borclu Fk") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFEMSTATUSTXT","Borclu Fk") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_fk","FIELD",;
+		"VFENDISPORDER",2) &&Display Order
+ENDIF
+ 
+*** Props for the BORCLULOOKUPVIEW.rehber_id field.
+DBSetProp('BORCLULOOKUPVIEW.rehber_id', 'Field', 'KeyField', .F.)
+DBSetProp('BORCLULOOKUPVIEW.rehber_id', 'Field', 'Updatable', .T.)
+DBSetProp('BORCLULOOKUPVIEW.rehber_id', 'Field', 'UpdateName', 'dbo.Borclu.Rehber_Id')
+DBSetProp('BORCLULOOKUPVIEW.rehber_id', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for BORCLULOOKUPVIEW.rehber_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFECDESCRIPT","Rehber Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFECFRMCAPTN","Rehber Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFECDLGCAPTN","Rehber Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFECGRDCAPTN","Rehber Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFECRPTCAPTN","Rehber Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFEMTOOLTIP","Rehber Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFEMSTATUSTXT","Rehber Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.rehber_id","FIELD",;
+		"VFENDISPORDER",3) &&Display Order
+ENDIF
+ 
+*** Props for the BORCLULOOKUPVIEW.borclu_adi field.
+DBSetProp('BORCLULOOKUPVIEW.borclu_adi', 'Field', 'KeyField', .F.)
+DBSetProp('BORCLULOOKUPVIEW.borclu_adi', 'Field', 'Updatable', .T.)
+DBSetProp('BORCLULOOKUPVIEW.borclu_adi', 'Field', 'UpdateName', 'dbo.Borclu.Borclu_Adi')
+DBSetProp('BORCLULOOKUPVIEW.borclu_adi', 'Field', 'DataType', "C(50)")
+*** DBCX Field Properties for BORCLULOOKUPVIEW.borclu_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFECDESCRIPT","Borclu Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFECFRMCAPTN","Borclu Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFECDLGCAPTN","Borclu Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFECGRDCAPTN","Borclu Adi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFECRPTCAPTN","Borclu Adi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFEMTOOLTIP","Borclu Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFEMSTATUSTXT","Borclu Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!BORCLULOOKUPVIEW.borclu_adi","FIELD",;
+		"VFENDISPORDER",3) &&Display Order
+ENDIF
+ 
