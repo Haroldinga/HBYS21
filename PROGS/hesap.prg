@@ -310,8 +310,8 @@ FUNCTION GetFaiz
 						.Faiz_Aciklamasi = .Faiz_Aciklamasi + ", "
 					ENDIF
 
-					*.Faiz_Aciklamasi = .Faiz_Aciklamasi + DTOC(ldFaiz_Baslama_Tarihi) + " itibaren %"
-					.Faiz_Aciklamasi = .Faiz_Aciklamasi + DTOC(tdHesap_Baslama_Tarihi) + " - " + DTOC(tdHesap_Bitis_Tarihi) + " arasi %"
+					* Faiz Açýklamasýnda tarih aralýðýnýn görülmesine gerek yok dendi.
+					*.Faiz_Aciklamasi = .Faiz_Aciklamasi + DTOC(tdHesap_Baslama_Tarihi) + " - " + DTOC(tdHesap_Bitis_Tarihi) + " arasi %"
 
 					DO CASE
 						CASE tcHesap_Donemi = "GECIKME"
