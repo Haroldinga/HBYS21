@@ -188,10 +188,18 @@ FUNCTION Date2StrictDate
 
 	LPARAMETERS tdDate
 
-	RETURN "{^" + TRANSFORM(YEAR(tdDate)) + "/" + ;
-		TRANSFORM(MONTH(tdDate)) + "/" + ;
-		TRANSFORM(DAY(tdDate)) + ;
-		"}"
+	LOCAL lcDate
+
+	IF NullOrEmpty(tdDate)
+		lcDate = "{^1900/01/01}"
+	ELSE
+		lcDate = "{^" + TRANSFORM(YEAR(tdDate)) + "/" + ;
+			TRANSFORM(MONTH(tdDate)) + "/" + ;
+			TRANSFORM(DAY(tdDate)) + ;
+			"}"
+	ENDIF
+
+	RETURN lcDate
 
 
 
@@ -248,15 +256,15 @@ FUNCTION ExtractMailInfo
 	= ADDPROPERTY(loMailInfo, "cKonu", "")
 	= ADDPROPERTY(loMailInfo, "cMesaj", "")
 
-	lcKime	= STREXTRACT(tcText, "Kime :", "Bilgi :")
-	lcKime	= CHRTRAN(CHRTRAN(lcKime, CHR(10), ""), CHR(13), "")
-	
+	lcKime = STREXTRACT(tcText, "Kime :", "Bilgi :")
+	lcKime = CHRTRAN(CHRTRAN(lcKime, CHR(10), ""), CHR(13), "")
+
 	lcBilgi	= STREXTRACT(tcText, "Bilgi :", "Konu :")
 	lcBilgi	= CHRTRAN(CHRTRAN(lcBilgi, CHR(10), ""), CHR(13), "")
-	
-	lcKonu	= STREXTRACT(tcText, "Konu :", "Mesaj :")
-	lcKonu	= CHRTRAN(CHRTRAN(lcKonu, CHR(10), ""), CHR(13), "")
-	
+
+	lcKonu = STREXTRACT(tcText, "Konu :", "Mesaj :")
+	lcKonu = CHRTRAN(CHRTRAN(lcKonu, CHR(10), ""), CHR(13), "")
+
 	lcMesaj	= STREXTRACT(tcText, "Mesaj :", "", 1, 2)
 
 	WITH loMailInfo
@@ -282,10 +290,23 @@ FUNCTION ExtractMailInfo
 	*==============================================================================
 
 FUNCTION Tr2Eng
-LPARAMETERS lcStr
+	LPARAMETERS lcStr
 
-IF ISNULL(lcStr)
-   lcStr=""
-ENDIF 
-   
-RETURN CHRTRAN(lcStr,'ÐÜÞÝÖÇðüþýöç','GUSIOCgusioc')
+	IF ISNULL(lcStr)
+		lcStr = ""
+	ENDIF
+
+	RETURN CHRTRAN(lcStr, 'ÐÜÞÝÖÇðüþýöç', 'GUSIOCgusioc')
+
+
+	*==============================================================================
+	* Procedure:		SetStopPrint
+	* Purpose:			Set the private variable 
+	*                   
+	* Author:			ARPB
+	* Returns:			- Translated String
+	* Added:			21/02/2013
+	*==============================================================================
+PROCEDURE SetStopPrint
+	plStopPrint = .T.
+	RETURN

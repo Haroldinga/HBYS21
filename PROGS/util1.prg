@@ -1,4 +1,5 @@
-#INCLUDE VFE.H
+#INCLUDE ..\INCLUDE\VFE.H
+*#INCLUDE VFE.H
 
 *==============================================================================
 * Procedure:		Util1
@@ -194,9 +195,9 @@ FUNCTION Date2StrictDate
 		lcDate = "{^1900/01/01}"
 	ELSE
 		lcDate = "{^" + TRANSFORM(YEAR(tdDate)) + "/" + ;
-						TRANSFORM(MONTH(tdDate)) + "/" + ;
-						TRANSFORM(DAY(tdDate)) + ;
-				  "}"
+			TRANSFORM(MONTH(tdDate)) + "/" + ;
+			TRANSFORM(DAY(tdDate)) + ;
+			"}"
 	ENDIF
 
 	RETURN lcDate
@@ -298,3 +299,15 @@ FUNCTION Tr2Eng
 
 	RETURN CHRTRAN(lcStr, 'ÐÜÞÝÖÇðüþýöç', 'GUSIOCgusioc')
 
+
+	*==============================================================================
+	* Procedure:		SetStopPrint
+	* Purpose:			Set the private variable 
+	*                   
+	* Author:			ARPB
+	* Returns:			- Translated String
+	* Added:			21/02/2013
+	*==============================================================================
+PROCEDURE SetStopPrint
+	plStopPrint = .T.
+	RETURN
