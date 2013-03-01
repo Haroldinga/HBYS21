@@ -1,0 +1,1579 @@
+***************** Begin View Definition MUAMELELERLISTVIEW ***************
+
+
+LOCAL LAOPENEDDBCS[1,1], lcSet_Exact
+PRIVATE lWriteDBCXProps
+
+lWriteDBCXProps=.T.
+
+lcSet_Exact=SET('EXACT')
+IF lcSet_Exact='OFF'
+	SET EXACT ON
+ENDIF
+
+
+***Make sure the current database is correct
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
+ELSE
+	SET DATABASE TO "HBYSDATA"
+ENDIF
+
+
+IF lcSet_Exact='OFF'
+	SET EXACT OFF
+ENDIF
+
+
+
+CREATE SQL VIEW "MUAMELELERLISTVIEW" ; 
+ REMOTE CONNECT "HBYSDataConnect" ; 
+	AS SELECT Muamele.Muamele_Id,;
+		Muamele.Muamele_Fk,;
+		Muamele.Borclu_Id,;
+		Muamele.Borclu_Adi,;
+		Muamele.Rehber_Id,;
+		Muamele.Muamele_Tarihi,;
+		Muamele.Muzekkere_Adi,;
+		Muamele.Talep_Ifadesi,;
+		Muamele.Masraf_Tipi,;
+		Muamele.Masraf_Miktari,;
+		Muamele.Mal_Tipi,;
+		Muamele.Mal_Bilgisi,;
+		Muamele.Muhatap_Adi,;
+		Muamele.Muhatap_Adresi,;
+		Muamele.Haciz_Tarihi,;
+		Muamele.Maas_Muvafakat_Miktari,;
+		Muamele.Muamele_Statusu,;
+		Muamele.Personel_Id,;
+		Muamele.Personel_Adi,;
+		Icradosya.IcraDosya_Id,;
+		Icradosya.Icra_Dosya_No,;
+		Icradosya.Buro_Dosya_No,;
+		Icradosya.Hitam_Tarihi,;
+		Icradosya.Itiraz_Edildi,;
+		Icradosya.Bila_Tarihi,;
+		Icradosya.Kesinlesme_Tarihi,;
+		CAST('' AS VARCHAR(250)) AS borclu_adresi,;
+		CAST(1 AS BIT) AS lmuzekkerebas;
+	FROM dbo.Muamele Muamele;
+		INNER JOIN dbo.IcraDosya Icradosya;
+			ON Muamele.Muamele_Fk = Icradosya.IcraDosya_Id
+
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'UpdateType', 1)
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'WhereType', 3)
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'FetchMemo', .T.)
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'UseMemoSize', 255)
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'MaxRecords', -1)
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'Tables', 'dbo.Muamele')
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'Prepared', .F.)
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'CompareMemo', .T.)
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'FetchAsNeeded', .F.)
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'FetchSize', -1)
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'ParameterList', "vp_Icra_Dosya_No,'V';vp_Buro_Dosya_No,'V';vp_Muamele_Tarihi1,'T';vp_Muamele_Tarihi2,'T';vp_Muzekkere_Adi,'C';vp_Personel_Id,'C'")
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'Comment', "")
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'BatchUpdateCount', 1)
+DBSetProp('MUAMELELERLISTVIEW', 'View', 'ShareConnection', .T.)
+
+_VFEGenView_F1()
+
+IF lWriteDBCXProps
+ 
+	*** DBCX View Properties for MUAMELELERLISTVIEW
+	GoExplorer.odbcx.Validate("MUAMELELERLISTVIEW","View")
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW","VIEW",;
+		"VFECDESCRIPT","Muamelelerlistview Remote View") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW","VIEW",;
+		"VFECCLASS","iCursor") &&Default Cursor Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW","VIEW",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Default Cursor Class Library
+ 
+	*** DBCX View Parameter Properties for vp_Icra_Dosya_No
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFECDESCRIPT","Vp Icra Dosya No View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFECFRMCAPTN","Cra Dosya No") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFECDLGCAPTN","Cra Dosya No") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFECVPTYPE","V") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFENVPSIZE",25) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFEMTOOLTIP","Cra Dosya No") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFEMSTATUSTXT","Cra Dosya No") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFECOBJTYPE","ITEXTBOX") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFECOPERATOR","=") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Icra_Dosya_No","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+ 
+	*** DBCX View Parameter Properties for vp_Buro_Dosya_No
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFECDESCRIPT","Vp Buro Dosya No View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFECFRMCAPTN","Uro Dosya No") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFECDLGCAPTN","Uro Dosya No") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFECVPTYPE","V") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFENVPSIZE",4) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFEMTOOLTIP","Uro Dosya No") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFEMSTATUSTXT","Uro Dosya No") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFECOBJTYPE","ITEXTBOX") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFECOPERATOR","=") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Buro_Dosya_No","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+ 
+	*** DBCX View Parameter Properties for vp_Muamele_Tarihi1
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFECDESCRIPT","Vp Muamele Tarihi1 View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFECFRMCAPTN","Uamele Tarihi1") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFECDLGCAPTN","Uamele Tarihi1") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFECVPTYPE","T") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFENVPSIZE",20) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFEMTOOLTIP","Uamele Tarihi1") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFEMSTATUSTXT","Uamele Tarihi1") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFECOPERATOR","=") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi1","PARAMETER",;
+		"VFEMOPERLIST","=, >, <, >=, <=") &&Available Operators
+ 
+	*** DBCX View Parameter Properties for vp_Muamele_Tarihi2
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFECDESCRIPT","Vp Muamele Tarihi2 View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFECFRMCAPTN","Uamele Tarihi2") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFECDLGCAPTN","Uamele Tarihi2") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFECVPTYPE","T") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFENVPSIZE",20) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFEMTOOLTIP","Uamele Tarihi2") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFEMSTATUSTXT","Uamele Tarihi2") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFECOPERATOR","=") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muamele_Tarihi2","PARAMETER",;
+		"VFEMOPERLIST","=, >, <, >=, <=") &&Available Operators
+ 
+	*** DBCX View Parameter Properties for vp_Muzekkere_Adi
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFECDESCRIPT","Vp Muzekkere Adi View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFECFRMCAPTN","Uzekkere Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFECDLGCAPTN","Uzekkere Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFECVPTYPE","C") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFENVPSIZE",50) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFEMTOOLTIP","Uzekkere Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFEMSTATUSTXT","Uzekkere Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFECOPERATOR","Begins With") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Muzekkere_Adi","PARAMETER",;
+		"VFEMOPERLIST","Equals, Contains, Begins With, Ends With") &&Available Operators
+ 
+	*** DBCX View Parameter Properties for vp_Personel_Id
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFECDESCRIPT","Vp Personel Id View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFECFRMCAPTN","Ersonel Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFECDLGCAPTN","Ersonel Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFECVPTYPE","C") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFENVPSIZE",36) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFEMTOOLTIP","Ersonel Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFEMSTATUSTXT","Ersonel Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFECOPERATOR","Begins With") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.vp_Personel_Id","PARAMETER",;
+		"VFEMOPERLIST","Equals, Contains, Begins With, Ends With") &&Available Operators
+ 
+	*** DBCX Index Properties for hbysdata!muamelelerlistview.icradosyno
+	GoExplorer.odbcx.AddViewIndex("hbysdata!muamelelerlistview","icradosyno","ICRA_DOSYA_NO","")
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.icradosyno","INDEX",;
+		"VFECDESCRIPT","Icradosyno Index") &&Description
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.icradosyno","INDEX",;
+		"VFELDISPLAY",.T.) &&Display
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.icradosyno","INDEX",;
+		"VFECTAGCAPTN","Icradosyno") &&Tag Caption
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.icradosyno","INDEX",;
+		"VFENDISPORDER",1) &&Display Order
+ 
+	*** DBCX Index Properties for hbysdata!muamelelerlistview.burodosyno
+	GoExplorer.odbcx.AddViewIndex("hbysdata!muamelelerlistview","burodosyno","BURO_DOSYA_NO","")
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.burodosyno","INDEX",;
+		"VFECDESCRIPT","Burodosyno Index") &&Description
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.burodosyno","INDEX",;
+		"VFELDISPLAY",.T.) &&Display
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.burodosyno","INDEX",;
+		"VFECTAGCAPTN","Burodosyno") &&Tag Caption
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.burodosyno","INDEX",;
+		"VFENDISPORDER",1) &&Display Order
+ 
+	*** DBCX Index Properties for hbysdata!muamelelerlistview.muamltarh
+	GoExplorer.odbcx.AddViewIndex("hbysdata!muamelelerlistview","muamltarh","MUAMELE_TARIHI","")
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muamltarh","INDEX",;
+		"VFECDESCRIPT","Muamltarh Index") &&Description
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muamltarh","INDEX",;
+		"VFELDISPLAY",.T.) &&Display
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muamltarh","INDEX",;
+		"VFECTAGCAPTN","Muamltarh") &&Tag Caption
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muamltarh","INDEX",;
+		"VFENDISPORDER",1) &&Display Order
+ 
+	*** DBCX Index Properties for hbysdata!muamelelerlistview.borcluadi
+	GoExplorer.odbcx.AddViewIndex("hbysdata!muamelelerlistview","borcluadi","BORCLU_ADI","")
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.borcluadi","INDEX",;
+		"VFECDESCRIPT","Borcluadi Index") &&Description
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.borcluadi","INDEX",;
+		"VFELDISPLAY",.T.) &&Display
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.borcluadi","INDEX",;
+		"VFECTAGCAPTN","Borcluadi") &&Tag Caption
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.borcluadi","INDEX",;
+		"VFENDISPORDER",1) &&Display Order
+ 
+	*** DBCX Index Properties for hbysdata!muamelelerlistview.muzekradi
+	GoExplorer.odbcx.AddViewIndex("hbysdata!muamelelerlistview","muzekradi","MUZEKKERE_ADI","")
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muzekradi","INDEX",;
+		"VFECDESCRIPT","Muzekradi Index") &&Description
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muzekradi","INDEX",;
+		"VFELDISPLAY",.T.) &&Display
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muzekradi","INDEX",;
+		"VFECTAGCAPTN","Muzekradi") &&Tag Caption
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muzekradi","INDEX",;
+		"VFENDISPORDER",1) &&Display Order
+ 
+	*** DBCX Index Properties for hbysdata!muamelelerlistview.muhatapadi
+	GoExplorer.odbcx.AddViewIndex("hbysdata!muamelelerlistview","muhatapadi","MUHATAP_ADI","")
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muhatapadi","INDEX",;
+		"VFECDESCRIPT","Muhatapadi Index") &&Description
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muhatapadi","INDEX",;
+		"VFELDISPLAY",.T.) &&Display
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muhatapadi","INDEX",;
+		"VFECTAGCAPTN","Muhatapadi") &&Tag Caption
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!muamelelerlistview.muhatapadi","INDEX",;
+		"VFENDISPORDER",1) &&Display Order
+ENDIF
+
+*!* Field Level Properties for MUAMELELERLISTVIEW
+*** Props for the MUAMELELERLISTVIEW.muamele_id field.
+DBSetProp('MUAMELELERLISTVIEW.muamele_id', 'Field', 'KeyField', .T.)
+DBSetProp('MUAMELELERLISTVIEW.muamele_id', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.muamele_id', 'Field', 'UpdateName', 'dbo.Muamele.Muamele_Id')
+DBSetProp('MUAMELELERLISTVIEW.muamele_id', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.muamele_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFECDESCRIPT","Muamele Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFECFRMCAPTN","Uamele Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFECDLGCAPTN","Uamele Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFECGRDCAPTN","Uamele Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFECRPTCAPTN","Uamele Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFEMTOOLTIP","Uamele Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFEMSTATUSTXT","Uamele Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_id","FIELD",;
+		"VFENDISPORDER",1) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.muamele_fk field.
+DBSetProp('MUAMELELERLISTVIEW.muamele_fk', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.muamele_fk', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.muamele_fk', 'Field', 'UpdateName', 'dbo.Muamele.Muamele_Fk')
+DBSetProp('MUAMELELERLISTVIEW.muamele_fk', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.muamele_fk
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFECDESCRIPT","Muamele Fk Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFECFRMCAPTN","Uamele Fk") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFECDLGCAPTN","Uamele Fk") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFECGRDCAPTN","Uamele Fk") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFECRPTCAPTN","Uamele Fk") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFEMTOOLTIP","Uamele Fk") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFEMSTATUSTXT","Uamele Fk") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_fk","FIELD",;
+		"VFENDISPORDER",2) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.borclu_id field.
+DBSetProp('MUAMELELERLISTVIEW.borclu_id', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.borclu_id', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.borclu_id', 'Field', 'UpdateName', 'dbo.Muamele.Borclu_Id')
+DBSetProp('MUAMELELERLISTVIEW.borclu_id', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.borclu_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFECDESCRIPT","Borclu Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFECFRMCAPTN","Orclu Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFECDLGCAPTN","Orclu Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFECGRDCAPTN","Orclu Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFECRPTCAPTN","Orclu Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFEMTOOLTIP","Orclu Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFEMSTATUSTXT","Orclu Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_id","FIELD",;
+		"VFENDISPORDER",3) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.borclu_adi field.
+DBSetProp('MUAMELELERLISTVIEW.borclu_adi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.borclu_adi', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.borclu_adi', 'Field', 'UpdateName', 'dbo.Muamele.Borclu_Adi')
+DBSetProp('MUAMELELERLISTVIEW.borclu_adi', 'Field', 'DataType', "C(50)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.borclu_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFECDESCRIPT","Borclu Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFECFRMCAPTN","Orclu Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFECDLGCAPTN","Orclu Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFECGRDCAPTN","Orclu Adi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFECRPTCAPTN","Orclu Adi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFEMTOOLTIP","Orclu Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFEMSTATUSTXT","Orclu Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adi","FIELD",;
+		"VFENDISPORDER",4) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.rehber_id field.
+DBSetProp('MUAMELELERLISTVIEW.rehber_id', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.rehber_id', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.rehber_id', 'Field', 'UpdateName', 'dbo.Muamele.Rehber_Id')
+DBSetProp('MUAMELELERLISTVIEW.rehber_id', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.rehber_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFECDESCRIPT","Rehber Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFECFRMCAPTN","Ehber Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFECDLGCAPTN","Ehber Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFECGRDCAPTN","Ehber Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFECRPTCAPTN","Ehber Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFEMTOOLTIP","Ehber Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFEMSTATUSTXT","Ehber Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.rehber_id","FIELD",;
+		"VFENDISPORDER",5) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.muamele_tarihi field.
+DBSetProp('MUAMELELERLISTVIEW.muamele_tarihi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.muamele_tarihi', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.muamele_tarihi', 'Field', 'UpdateName', 'dbo.Muamele.Muamele_Tarihi')
+DBSetProp('MUAMELELERLISTVIEW.muamele_tarihi', 'Field', 'DataType', "T")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.muamele_tarihi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFECDESCRIPT","Muamele Tarihi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFECFRMCAPTN","Uamele Tarihi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFECDLGCAPTN","Uamele Tarihi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFECGRDCAPTN","Uamele Tarihi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFECRPTCAPTN","Uamele Tarihi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFEMTOOLTIP","Uamele Tarihi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFEMSTATUSTXT","Uamele Tarihi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_tarihi","FIELD",;
+		"VFENDISPORDER",6) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.muzekkere_adi field.
+DBSetProp('MUAMELELERLISTVIEW.muzekkere_adi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.muzekkere_adi', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.muzekkere_adi', 'Field', 'UpdateName', 'dbo.Muamele.Muzekkere_Adi')
+DBSetProp('MUAMELELERLISTVIEW.muzekkere_adi', 'Field', 'DataType', "C(50)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.muzekkere_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFECDESCRIPT","Muzekkere Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFECFRMCAPTN","Uzekkere Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFECDLGCAPTN","Uzekkere Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFECGRDCAPTN","Uzekkere Adi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFECRPTCAPTN","Uzekkere Adi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFEMTOOLTIP","Uzekkere Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFEMSTATUSTXT","Uzekkere Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muzekkere_adi","FIELD",;
+		"VFENDISPORDER",7) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.talep_ifadesi field.
+DBSetProp('MUAMELELERLISTVIEW.talep_ifadesi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.talep_ifadesi', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.talep_ifadesi', 'Field', 'UpdateName', 'dbo.Muamele.Talep_Ifadesi')
+DBSetProp('MUAMELELERLISTVIEW.talep_ifadesi', 'Field', 'DataType', "C(250)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.talep_ifadesi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFECDESCRIPT","Talep Ifadesi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFECFRMCAPTN","Alep Ifadesi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFECDLGCAPTN","Alep Ifadesi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFECGRDCAPTN","Alep Ifadesi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFECRPTCAPTN","Alep Ifadesi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFEMTOOLTIP","Alep Ifadesi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFEMSTATUSTXT","Alep Ifadesi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.talep_ifadesi","FIELD",;
+		"VFENDISPORDER",8) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.masraf_tipi field.
+DBSetProp('MUAMELELERLISTVIEW.masraf_tipi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.masraf_tipi', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.masraf_tipi', 'Field', 'UpdateName', 'dbo.Muamele.Masraf_Tipi')
+DBSetProp('MUAMELELERLISTVIEW.masraf_tipi', 'Field', 'DataType', "C(25)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.masraf_tipi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFECDESCRIPT","Masraf Tipi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFECFRMCAPTN","Asraf Tipi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFECDLGCAPTN","Asraf Tipi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFECGRDCAPTN","Asraf Tipi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFECRPTCAPTN","Asraf Tipi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFEMTOOLTIP","Asraf Tipi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFEMSTATUSTXT","Asraf Tipi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_tipi","FIELD",;
+		"VFENDISPORDER",9) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.masraf_miktari field.
+DBSetProp('MUAMELELERLISTVIEW.masraf_miktari', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.masraf_miktari', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.masraf_miktari', 'Field', 'UpdateName', 'dbo.Muamele.Masraf_Miktari')
+DBSetProp('MUAMELELERLISTVIEW.masraf_miktari', 'Field', 'DataType', "Y")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.masraf_miktari
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFECDESCRIPT","Masraf Miktari Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFECFRMCAPTN","Asraf Miktari") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFECDLGCAPTN","Asraf Miktari") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFECGRDCAPTN","Asraf Miktari") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFECRPTCAPTN","Asraf Miktari") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFEMTOOLTIP","Asraf Miktari") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFEMSTATUSTXT","Asraf Miktari") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.masraf_miktari","FIELD",;
+		"VFENDISPORDER",10) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.mal_tipi field.
+DBSetProp('MUAMELELERLISTVIEW.mal_tipi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.mal_tipi', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.mal_tipi', 'Field', 'UpdateName', 'dbo.Muamele.Mal_Tipi')
+DBSetProp('MUAMELELERLISTVIEW.mal_tipi', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.mal_tipi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFECDESCRIPT","Mal Tipi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFECFRMCAPTN","Al Tipi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFECDLGCAPTN","Al Tipi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFECGRDCAPTN","Al Tipi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFECRPTCAPTN","Al Tipi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFEMTOOLTIP","Al Tipi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFEMSTATUSTXT","Al Tipi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_tipi","FIELD",;
+		"VFENDISPORDER",11) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.mal_bilgisi field.
+DBSetProp('MUAMELELERLISTVIEW.mal_bilgisi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.mal_bilgisi', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.mal_bilgisi', 'Field', 'UpdateName', 'dbo.Muamele.Mal_Bilgisi')
+DBSetProp('MUAMELELERLISTVIEW.mal_bilgisi', 'Field', 'DataType', "C(250)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.mal_bilgisi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFECDESCRIPT","Mal Bilgisi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFECFRMCAPTN","Al Bilgisi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFECDLGCAPTN","Al Bilgisi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFECGRDCAPTN","Al Bilgisi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFECRPTCAPTN","Al Bilgisi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFEMTOOLTIP","Al Bilgisi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFEMSTATUSTXT","Al Bilgisi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.mal_bilgisi","FIELD",;
+		"VFENDISPORDER",12) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.muhatap_adi field.
+DBSetProp('MUAMELELERLISTVIEW.muhatap_adi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.muhatap_adi', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.muhatap_adi', 'Field', 'UpdateName', 'dbo.Muamele.Muhatap_Adi')
+DBSetProp('MUAMELELERLISTVIEW.muhatap_adi', 'Field', 'DataType', "C(50)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.muhatap_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFECDESCRIPT","Muhatap Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFECFRMCAPTN","Uhatap Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFECDLGCAPTN","Uhatap Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFECGRDCAPTN","Uhatap Adi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFECRPTCAPTN","Uhatap Adi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFEMTOOLTIP","Uhatap Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFEMSTATUSTXT","Uhatap Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adi","FIELD",;
+		"VFENDISPORDER",13) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.muhatap_adresi field.
+DBSetProp('MUAMELELERLISTVIEW.muhatap_adresi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.muhatap_adresi', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.muhatap_adresi', 'Field', 'UpdateName', 'dbo.Muamele.Muhatap_Adresi')
+DBSetProp('MUAMELELERLISTVIEW.muhatap_adresi', 'Field', 'DataType', "C(250)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.muhatap_adresi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFECDESCRIPT","Muhatap Adresi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFECFRMCAPTN","Uhatap Adresi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFECDLGCAPTN","Uhatap Adresi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFECGRDCAPTN","Uhatap Adresi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFECRPTCAPTN","Uhatap Adresi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFEMTOOLTIP","Uhatap Adresi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFEMSTATUSTXT","Uhatap Adresi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muhatap_adresi","FIELD",;
+		"VFENDISPORDER",14) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.haciz_tarihi field.
+DBSetProp('MUAMELELERLISTVIEW.haciz_tarihi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.haciz_tarihi', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.haciz_tarihi', 'Field', 'UpdateName', 'dbo.Muamele.Haciz_Tarihi')
+DBSetProp('MUAMELELERLISTVIEW.haciz_tarihi', 'Field', 'DataType', "D")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.haciz_tarihi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFECDESCRIPT","Haciz Tarihi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFECFRMCAPTN","Aciz Tarihi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFECDLGCAPTN","Aciz Tarihi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFECGRDCAPTN","Aciz Tarihi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFECRPTCAPTN","Aciz Tarihi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFEMTOOLTIP","Aciz Tarihi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFEMSTATUSTXT","Aciz Tarihi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.haciz_tarihi","FIELD",;
+		"VFENDISPORDER",15) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.maas_muvafakat_miktari field.
+DBSetProp('MUAMELELERLISTVIEW.maas_muvafakat_miktari', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.maas_muvafakat_miktari', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.maas_muvafakat_miktari', 'Field', 'UpdateName', 'dbo.Muamele.Maas_Muvafakat_Miktari')
+DBSetProp('MUAMELELERLISTVIEW.maas_muvafakat_miktari', 'Field', 'DataType', "Y")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.maas_muvafakat_miktari
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFECDESCRIPT","Maas Muvafakat Miktari Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFECFRMCAPTN","Aas Muvafakat Miktari") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFECDLGCAPTN","Aas Muvafakat Miktari") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFECGRDCAPTN","Aas Muvafakat Miktari") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFECRPTCAPTN","Aas Muvafakat Miktari") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFEMTOOLTIP","Aas Muvafakat Miktari") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFEMSTATUSTXT","Aas Muvafakat Miktari") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.maas_muvafakat_miktari","FIELD",;
+		"VFENDISPORDER",16) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.muamele_statusu field.
+DBSetProp('MUAMELELERLISTVIEW.muamele_statusu', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.muamele_statusu', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.muamele_statusu', 'Field', 'UpdateName', 'dbo.Muamele.Muamele_Statusu')
+DBSetProp('MUAMELELERLISTVIEW.muamele_statusu', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.muamele_statusu
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFECDESCRIPT","Muamele Statusu Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFECFRMCAPTN","Uamele Statusu") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFECDLGCAPTN","Uamele Statusu") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFECGRDCAPTN","Uamele Statusu") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFECRPTCAPTN","Uamele Statusu") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFEMTOOLTIP","Uamele Statusu") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFEMSTATUSTXT","Uamele Statusu") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.muamele_statusu","FIELD",;
+		"VFENDISPORDER",17) &&Display Order
+ENDIF
+ 
+
+
+***Split to stay below 64K limit***
+FUNCTION _VFEGenView_F1
+*** Props for the MUAMELELERLISTVIEW.personel_id field.
+DBSetProp('MUAMELELERLISTVIEW.personel_id', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.personel_id', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.personel_id', 'Field', 'UpdateName', 'dbo.Muamele.Personel_Id')
+DBSetProp('MUAMELELERLISTVIEW.personel_id', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.personel_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFECDESCRIPT","Personel Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFECFRMCAPTN","Ersonel Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFECDLGCAPTN","Ersonel Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFECGRDCAPTN","Ersonel Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFECRPTCAPTN","Ersonel Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFEMTOOLTIP","Ersonel Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFEMSTATUSTXT","Ersonel Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_id","FIELD",;
+		"VFENDISPORDER",18) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.personel_adi field.
+DBSetProp('MUAMELELERLISTVIEW.personel_adi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.personel_adi', 'Field', 'Updatable', .T.)
+DBSetProp('MUAMELELERLISTVIEW.personel_adi', 'Field', 'UpdateName', 'dbo.Muamele.Personel_Adi')
+DBSetProp('MUAMELELERLISTVIEW.personel_adi', 'Field', 'DataType', "C(50)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.personel_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFECDESCRIPT","Personel Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFECFRMCAPTN","Ersonel Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFECDLGCAPTN","Ersonel Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFECGRDCAPTN","Ersonel Adi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFECRPTCAPTN","Ersonel Adi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFEMTOOLTIP","Ersonel Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFEMSTATUSTXT","Ersonel Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.personel_adi","FIELD",;
+		"VFENDISPORDER",19) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.icradosya_id field.
+DBSetProp('MUAMELELERLISTVIEW.icradosya_id', 'Field', 'KeyField', .T.)
+DBSetProp('MUAMELELERLISTVIEW.icradosya_id', 'Field', 'Updatable', .F.)
+DBSetProp('MUAMELELERLISTVIEW.icradosya_id', 'Field', 'UpdateName', 'dbo.IcraDosya.IcraDosya_Id')
+DBSetProp('MUAMELELERLISTVIEW.icradosya_id', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.icradosya_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFECDESCRIPT","Icradosya Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFECFRMCAPTN","Cradosya Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFECDLGCAPTN","Cradosya Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFECGRDCAPTN","Cradosya Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFECRPTCAPTN","Cradosya Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFEMTOOLTIP","Cradosya Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFEMSTATUSTXT","Cradosya Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icradosya_id","FIELD",;
+		"VFENDISPORDER",20) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.icra_dosya_no field.
+DBSetProp('MUAMELELERLISTVIEW.icra_dosya_no', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.icra_dosya_no', 'Field', 'Updatable', .F.)
+DBSetProp('MUAMELELERLISTVIEW.icra_dosya_no', 'Field', 'UpdateName', 'dbo.IcraDosya.Icra_Dosya_No')
+DBSetProp('MUAMELELERLISTVIEW.icra_dosya_no', 'Field', 'DataType', "C(25)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.icra_dosya_no
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFECDESCRIPT","Icra Dosya No Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFECFRMCAPTN","Cra Dosya No") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFECDLGCAPTN","Cra Dosya No") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFECGRDCAPTN","Cra Dosya No") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFECRPTCAPTN","Cra Dosya No") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFEMTOOLTIP","Cra Dosya No") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFEMSTATUSTXT","Cra Dosya No") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.icra_dosya_no","FIELD",;
+		"VFENDISPORDER",21) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.buro_dosya_no field.
+DBSetProp('MUAMELELERLISTVIEW.buro_dosya_no', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.buro_dosya_no', 'Field', 'Updatable', .F.)
+DBSetProp('MUAMELELERLISTVIEW.buro_dosya_no', 'Field', 'UpdateName', 'dbo.IcraDosya.Buro_Dosya_No')
+DBSetProp('MUAMELELERLISTVIEW.buro_dosya_no', 'Field', 'DataType', "I")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.buro_dosya_no
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFECDESCRIPT","Buro Dosya No Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFECFRMCAPTN","Uro Dosya No") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFECDLGCAPTN","Uro Dosya No") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFECGRDCAPTN","Uro Dosya No") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFECRPTCAPTN","Uro Dosya No") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFEMTOOLTIP","Uro Dosya No") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFEMSTATUSTXT","Uro Dosya No") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.buro_dosya_no","FIELD",;
+		"VFENDISPORDER",22) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.hitam_tarihi field.
+DBSetProp('MUAMELELERLISTVIEW.hitam_tarihi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.hitam_tarihi', 'Field', 'Updatable', .F.)
+DBSetProp('MUAMELELERLISTVIEW.hitam_tarihi', 'Field', 'UpdateName', 'dbo.IcraDosya.Hitam_Tarihi')
+DBSetProp('MUAMELELERLISTVIEW.hitam_tarihi', 'Field', 'DataType', "D")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.hitam_tarihi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFECDESCRIPT","Hitam Tarihi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFECFRMCAPTN","Itam Tarihi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFECDLGCAPTN","Itam Tarihi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFECGRDCAPTN","Itam Tarihi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFECRPTCAPTN","Itam Tarihi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFEMTOOLTIP","Itam Tarihi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFEMSTATUSTXT","Itam Tarihi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.hitam_tarihi","FIELD",;
+		"VFENDISPORDER",23) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.itiraz_edildi field.
+DBSetProp('MUAMELELERLISTVIEW.itiraz_edildi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.itiraz_edildi', 'Field', 'Updatable', .F.)
+DBSetProp('MUAMELELERLISTVIEW.itiraz_edildi', 'Field', 'UpdateName', 'dbo.IcraDosya.Itiraz_Edildi')
+DBSetProp('MUAMELELERLISTVIEW.itiraz_edildi', 'Field', 'DataType', "L")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.itiraz_edildi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFECDESCRIPT","Itiraz Edildi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFECFRMCAPTN","Tiraz Edildi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFECDLGCAPTN","Tiraz Edildi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFECGRDCAPTN","Tiraz Edildi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFECRPTCAPTN","Tiraz Edildi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFEMTOOLTIP","Tiraz Edildi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFEMSTATUSTXT","Tiraz Edildi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFECOBJTYPE","icheckbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.itiraz_edildi","FIELD",;
+		"VFENDISPORDER",24) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.bila_tarihi field.
+DBSetProp('MUAMELELERLISTVIEW.bila_tarihi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.bila_tarihi', 'Field', 'Updatable', .F.)
+DBSetProp('MUAMELELERLISTVIEW.bila_tarihi', 'Field', 'UpdateName', 'dbo.IcraDosya.Bila_Tarihi')
+DBSetProp('MUAMELELERLISTVIEW.bila_tarihi', 'Field', 'DataType', "T")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.bila_tarihi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFECDESCRIPT","Bila Tarihi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFECFRMCAPTN","Ila Tarihi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFECDLGCAPTN","Ila Tarihi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFECGRDCAPTN","Ila Tarihi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFECRPTCAPTN","Ila Tarihi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFEMTOOLTIP","Ila Tarihi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFEMSTATUSTXT","Ila Tarihi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.bila_tarihi","FIELD",;
+		"VFENDISPORDER",25) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.kesinlesme_tarihi field.
+DBSetProp('MUAMELELERLISTVIEW.kesinlesme_tarihi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.kesinlesme_tarihi', 'Field', 'Updatable', .F.)
+DBSetProp('MUAMELELERLISTVIEW.kesinlesme_tarihi', 'Field', 'UpdateName', 'dbo.IcraDosya.Kesinlesme_Tarihi')
+DBSetProp('MUAMELELERLISTVIEW.kesinlesme_tarihi', 'Field', 'DataType', "T")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.kesinlesme_tarihi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFECDESCRIPT","Kesinlesme Tarihi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFECFRMCAPTN","Esinlesme Tarihi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFECDLGCAPTN","Esinlesme Tarihi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFECGRDCAPTN","Esinlesme Tarihi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFECRPTCAPTN","Esinlesme Tarihi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFEMTOOLTIP","Esinlesme Tarihi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFEMSTATUSTXT","Esinlesme Tarihi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.kesinlesme_tarihi","FIELD",;
+		"VFENDISPORDER",26) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.borclu_adresi field.
+DBSetProp('MUAMELELERLISTVIEW.borclu_adresi', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.borclu_adresi', 'Field', 'Updatable', .F.)
+DBSetProp('MUAMELELERLISTVIEW.borclu_adresi', 'Field', 'UpdateName', 'borclu_adresi')
+DBSetProp('MUAMELELERLISTVIEW.borclu_adresi', 'Field', 'DataType', "C(250)")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.borclu_adresi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFECDESCRIPT","Borclu Adresi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFECFRMCAPTN","Orclu Adresi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFECDLGCAPTN","Orclu Adresi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFECGRDCAPTN","Orclu Adresi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFECRPTCAPTN","Orclu Adresi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFEMTOOLTIP","Orclu Adresi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFEMSTATUSTXT","Orclu Adresi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.borclu_adresi","FIELD",;
+		"VFENDISPORDER",27) &&Display Order
+ENDIF
+ 
+*** Props for the MUAMELELERLISTVIEW.lmuzekkerebas field.
+DBSetProp('MUAMELELERLISTVIEW.lmuzekkerebas', 'Field', 'KeyField', .F.)
+DBSetProp('MUAMELELERLISTVIEW.lmuzekkerebas', 'Field', 'Updatable', .F.)
+DBSetProp('MUAMELELERLISTVIEW.lmuzekkerebas', 'Field', 'UpdateName', 'lMuzekkereBas')
+DBSetProp('MUAMELELERLISTVIEW.lmuzekkerebas', 'Field', 'DataType', "L")
+*** DBCX Field Properties for MUAMELELERLISTVIEW.lmuzekkerebas
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFECDESCRIPT","Lmuzekkerebas Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFECFRMCAPTN","Muzekkerebas") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFECDLGCAPTN","Muzekkerebas") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFECGRDCAPTN","Muzekkerebas") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFECRPTCAPTN","Muzekkerebas") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFEMTOOLTIP","Muzekkerebas") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFEMSTATUSTXT","Muzekkerebas") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFECOBJTYPE","icheckbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!MUAMELELERLISTVIEW.lmuzekkerebas","FIELD",;
+		"VFENDISPORDER",28) &&Display Order
+ENDIF
+ 
