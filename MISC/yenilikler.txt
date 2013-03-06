@@ -1,5 +1,7 @@
 Programdaki Yenilikler
 ------------------------
+06.03.2003 : Muamele Analizi modülüne Muamele adýna göre analiz eklendi.
+
 05.02.2013 : Hýzlý Bilgi Giriþi eklendi. Bu sayede Icra Dosya Numaralarý pratik bir þekilde girilebilir. 
 
 28.01.2013 : Özel Hesaplama eklendi. Bu sayede Takip öncesi dosya hesap kalemlerinin deðerlerini elle kaydedebilmek mümkün oluyor.

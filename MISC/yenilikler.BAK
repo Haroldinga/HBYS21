@@ -1,5 +1,7 @@
 Programdaki Yenilikler
 ------------------------
+05.02.2013 : Hýzlý Bilgi Giriþi eklendi. Bu sayede Icra Dosya Numaralarý pratik bir þekilde girilebilir. 
+
 28.01.2013 : Özel Hesaplama eklendi. Bu sayede Takip öncesi dosya hesap kalemlerinin deðerlerini elle kaydedebilmek mümkün oluyor.
 
 24.01.2013 : Borçlu için isim deðiþikliði eklendi.
@@ -12,4 +14,4 @@ Programdaki Yenilikler
 
 28.12.2012 : Programýn ekran ve formlar bilgisayar ekranýna sýðmadýðýnda yapýlan ekran geniþletme ve daraltma, ekran pozisyonu gibi ayarlar saklanýyor. Her seferinde tekrar ayar yapmaya gerek kalmýyor.
 
-27.12.2012 : Icra Dosya ekranýnýn açýlmasý hýzlandýrýldý.
+27.12.2012 : Icra Dosya ekranýnýn açýlmasý hýzlandýrýldý. 
