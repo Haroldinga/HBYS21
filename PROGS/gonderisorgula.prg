@@ -1,4 +1,6 @@
-#INCLUDE VFE.H
+#INCLUDE ..\INCLUDE\VFE.H
+
+**#INCLUDE VFE.H
 
 
 FUNCTION GonderiSorgula
@@ -23,14 +25,14 @@ FUNCTION GonderiSorgula
 	LOCAL lcImerk, ;
 		lcIslem, ;
 		lcSiraNo, ;
-		lcTarih,;
+		lcTarih, ;
 		lcOldDate
 
 	*:Global aSorgu_Bilgisi[1], ;
 	i
 
 	*debugmode()
-	lcOldDate=SET("Date")
+	lcOldDate = SET("Date")
 
 	lcSorgu_Bilgisi	= ""
 	lcSonuc_Bilgisi	= ""
@@ -101,27 +103,29 @@ FUNCTION GonderiSorgula
 			lcSorgu_Bilgisi = lcSorgu_Bilgisi + PADR(lcIslem, 50) + CHR(9) + lcTarih + CHR(9) + lcSiraNo + CR
 		ENDDO
 
-		**** 		
-		IF ATC("Mazbata Teslim Listesine Eklendi", lcSorgu_Bilgisi) > 0
-			DO CASE
-				CASE ATC("AYNI KONUTTA YAKINA TESLiM", lcSorgu_Bilgisi) > 0
-					lcSonuc_Bilgisi = "AYNI KONUTTA YAKINA TESLiM"
-				CASE ATC("21.MAD. GORE MUHTARA TESLiM", lcSorgu_Bilgisi) > 0
-					lcSonuc_Bilgisi = "21.MAD. GORE MUHTARA TESLiM"
-				CASE ATC("MUHATABA BiZZAT TESLiM", lcSorgu_Bilgisi) > 0
-					lcSonuc_Bilgisi = "MUHATABA BiZZAT TESLiM"
-				OTHERWISE
-					lcSonuc_Bilgisi = " iADE EDiLDi"
-			ENDCASE
+		**** 	
+		*IF ATC("Mazbata Teslim Listesine Eklendi", lcSorgu_Bilgisi) > 0 OR ATC("DAGITICIYA VERiLEREK DAGITIMA", lcSorgu_Bilgisi) > 0
+		DO CASE
+			CASE ATC("AYNI KONUTTA YAKINA TESLiM", lcSorgu_Bilgisi) > 0
+				lcSonuc_Bilgisi = "AYNI KONUTTA YAKINA TESLiM"
+			CASE ATC("21.MAD. GORE MUHTARA TESLiM", lcSorgu_Bilgisi) > 0
+				lcSonuc_Bilgisi = "21.MAD. GORE MUHTARA TESLiM"
+			CASE ATC("MUHATABA BiZZAT TESLiM", lcSorgu_Bilgisi) > 0
+				lcSonuc_Bilgisi = "MUHATABA BiZZAT TESLiM"
+			CASE ATC("iADE EDiLDi", lcSorgu_Bilgisi) > 0
+				lcSonuc_Bilgisi = " iADE EDiLDi"
+		ENDCASE
 
+		IF NOT EMPTY(lcSonuc_Bilgisi)
 			lnLine = ALINES(aSorgu_Bilgisi, lcSorgu_Bilgisi, CHR(13))
 			lnRow  = ASCAN(aSorgu_Bilgisi, lcSonuc_Bilgisi, -1, -1, 1, 13) &&Case Insensitive; Return row number; Exact OFF
-            
-            SET DATE BRITISH 
+
+			SET DATE BRITISH
 			IF lnRow > 0
 				ldSonuc_Tarihi = CTOD(SUBSTR(aSorgu_Bilgisi(lnRow), 52, 10))
 			ENDIF
 		ENDIF
+		*ENDIF
 		****
 
 	ENDIF
@@ -134,8 +138,8 @@ FUNCTION GonderiSorgula
 		.dSonuc_Tarihi	= ldSonuc_Tarihi
 	ENDWITH
 
-    SET DATE &lcOldDate
-    
+	SET DATE &lcOldDate
+
 	RETURN loSorgu_Bilgisi
 
 
@@ -144,6 +148,8 @@ DEFINE CLASS SorguBilgisi AS CUSTOM
 	cSonuc_Bilgisi = ""
 	dSonuc_Tarihi  = {  /  /    }
 ENDDEFINE
+
+
 
 
 
