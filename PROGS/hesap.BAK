@@ -310,8 +310,8 @@ FUNCTION GetFaiz
 						.Faiz_Aciklamasi = .Faiz_Aciklamasi + ", "
 					ENDIF
 
-					*.Faiz_Aciklamasi = .Faiz_Aciklamasi + DTOC(ldFaiz_Baslama_Tarihi) + " itibaren %"
-					.Faiz_Aciklamasi = .Faiz_Aciklamasi + DTOC(tdHesap_Baslama_Tarihi) + " - " + DTOC(tdHesap_Bitis_Tarihi) + " arasi %"
+					* Faiz Açýklamasýnda tarih aralýðýnýn görülmesine gerek yok dendi.
+					*.Faiz_Aciklamasi = .Faiz_Aciklamasi + DTOC(tdHesap_Baslama_Tarihi) + " - " + DTOC(tdHesap_Bitis_Tarihi) + " arasi %"
 
 					DO CASE
 						CASE tcHesap_Donemi = "GECIKME"
@@ -729,6 +729,14 @@ FUNCTION getBorcluBilgisi
 		lnAdet
 
 	lcBorclu_Bilgisi = ""
+	
+	********************************
+	* Borclu Bilgisi artýk getBorclu_Bilgisi stored Function ile hesaplanýyor. Bu module gerek kalmadý.
+	* Testler yapýldýktan sonra tamamen kaldýrýlabilir. IcraDosyaHesabi dosyasýndaki Borclu_Bilgisi alanýda silinebilir.
+	*
+	RETURN lcBorclu_Bilgisi 
+	********************************
+	
 	loApp			 = FindApplication()
 
 	llNewBorclu = .F.

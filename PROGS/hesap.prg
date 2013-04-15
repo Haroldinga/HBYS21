@@ -518,6 +518,14 @@ FUNCTION getAlacakliBilgisi
 		lnAdet
 
 	lcAlacakli_Bilgisi = ""
+	
+	********************************
+	* Alacakli Bilgisi artýk getAlacakli_Bilgisi stored Function ile hesaplanýyor. Bu module gerek kalmadý.
+	* Testler yapýldýktan sonra tamamen kaldýrýlabilir. IcraDosyaHesabi dosyasýndaki Alacakli_Bilgisi alanýda silinebilir.
+	*
+	RETURN lcAlacakli_Bilgisi 
+	********************************
+	
 	loApp			   = FindApplication()
 
 	llNewAlacakli = .F.
@@ -619,6 +627,14 @@ FUNCTION GetVekilBilgisi
 	*debugmode()
 
 	lcVekil_Bilgisi	= ""
+
+	********************************
+	* Vekil Bilgisi artýk getVekil_Bilgisi stored Function ile hesaplanýyor. Bu module gerek kalmadý.
+	* Testler yapýldýktan sonra tamamen kaldýrýlabilir. IcraDosyaHesabi dosyasýndaki Vekil_Bilgisi alanýda silinebilir.
+	*
+	RETURN lcVekil_Bilgisi 
+	********************************
+
 	loApp			= FindApplication()
 
 	llNewVekil = .F.
@@ -729,6 +745,14 @@ FUNCTION getBorcluBilgisi
 		lnAdet
 
 	lcBorclu_Bilgisi = ""
+	
+	********************************
+	* Borclu Bilgisi artýk getBorclu_Bilgisi stored Function ile hesaplanýyor. Bu module gerek kalmadý.
+	* Testler yapýldýktan sonra tamamen kaldýrýlabilir. IcraDosyaHesabi dosyasýndaki Borclu_Bilgisi alanýda silinebilir.
+	*
+	RETURN lcBorclu_Bilgisi 
+	********************************
+	
 	loApp			 = FindApplication()
 
 	llNewBorclu = .F.
