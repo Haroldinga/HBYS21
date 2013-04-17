@@ -311,3 +311,45 @@ FUNCTION Tr2Eng
 PROCEDURE SetStopPrint
 	plStopPrint = .T.
 	RETURN
+
+
+
+	*==============================================================================
+	* Procedure:		getDistList
+	* Purpose:			Searches a list of comma delimited values and drops 
+	*                   any duplicate values from the list
+	*                   
+	* Author:			ARPB
+	* Parameters:		- lcList 	 : list of comma delimited values
+	* Returns:			- lcDistList : streamlined List
+	* Added:			15/04/2013
+	*==============================================================================
+
+FUNCTION getDistList
+	LPARAMETERS tcList
+
+	DIMENSION lArr(1)
+	
+	LOCAL lcDistList,;
+		  lcList,;
+		  lcMember,;
+		  lnAdet,;
+		  lni		
+
+    lcList=tcList
+    lcDistList=''
+    lnAdet = ALINES(lArr, lcList, ",")
+
+	FOR lni = 1 TO lnAdet
+		lcMember = '*'+ALLTRIM(lArr(lni))+'*'  && yýldizlari ekle sonra çýkar
+		
+        IF ATC(lcMember,lcDistList)=0   
+    		lcDistList=lcDistList+IIF(NullOrEmpty(lcDistList),'',',')+lcMember
+        ENDIF 		
+	NEXT lni
+	
+	lcDistList=CHRTRAN(lcDistList,'*','')
+
+	RETURN lcDistList
+
+
