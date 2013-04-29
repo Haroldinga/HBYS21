@@ -1,0 +1,538 @@
+***************** Begin View Definition ADRESLISTVIEW ***************
+
+
+LOCAL LAOPENEDDBCS[1,1], lcSet_Exact
+PRIVATE lWriteDBCXProps
+
+lWriteDBCXProps=.T.
+
+lcSet_Exact=SET('EXACT')
+IF lcSet_Exact='OFF'
+	SET EXACT ON
+ENDIF
+
+
+***Make sure the current database is correct
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
+ELSE
+	SET DATABASE TO "HBYSDATA"
+ENDIF
+
+
+IF lcSet_Exact='OFF'
+	SET EXACT OFF
+ENDIF
+
+
+
+CREATE SQL VIEW "ADRESLISTVIEW" ; 
+ REMOTE CONNECT "HBYSDataConnect" ; 
+	AS SELECT Adres.Adres_Id,;
+		Adres.Adres_Fk,;
+		Adres.Adres_Tipi,;
+		Adres.Adres,;
+		Adres.Il_Adi,;
+		Adres.Ilce_Adi,;
+		Adres.Semt_Adi,;
+		Adres.Posta_Kodu,;
+		Adres.Ulke_Adi,;
+		Adres.Adres_Statusu;
+	FROM dbo.Adres Adres
+
+DBSetProp('ADRESLISTVIEW', 'View', 'UpdateType', 1)
+DBSetProp('ADRESLISTVIEW', 'View', 'WhereType', 3)
+DBSetProp('ADRESLISTVIEW', 'View', 'FetchMemo', .T.)
+DBSetProp('ADRESLISTVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('ADRESLISTVIEW', 'View', 'UseMemoSize', 255)
+DBSetProp('ADRESLISTVIEW', 'View', 'MaxRecords', -1)
+DBSetProp('ADRESLISTVIEW', 'View', 'Tables', 'dbo.Adres')
+DBSetProp('ADRESLISTVIEW', 'View', 'Prepared', .F.)
+DBSetProp('ADRESLISTVIEW', 'View', 'CompareMemo', .T.)
+DBSetProp('ADRESLISTVIEW', 'View', 'FetchAsNeeded', .F.)
+DBSetProp('ADRESLISTVIEW', 'View', 'FetchSize', -1)
+DBSetProp('ADRESLISTVIEW', 'View', 'ParameterList', "vp_Adres_Fk,'C'")
+DBSetProp('ADRESLISTVIEW', 'View', 'Comment', "")
+DBSetProp('ADRESLISTVIEW', 'View', 'BatchUpdateCount', 1)
+DBSetProp('ADRESLISTVIEW', 'View', 'ShareConnection', .T.)
+IF lWriteDBCXProps
+ 
+	*** DBCX View Properties for ADRESLISTVIEW
+	GoExplorer.odbcx.Validate("ADRESLISTVIEW","View")
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW","VIEW",;
+		"VFECDESCRIPT","Adreslistview Remote View") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW","VIEW",;
+		"VFECCLASS","iCursor") &&Default Cursor Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW","VIEW",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Default Cursor Class Library
+ 
+	*** DBCX View Parameter Properties for vp_Adres_Fk
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFECDESCRIPT","Vp Adres Fk View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFECFRMCAPTN","Adres Fk") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFECDLGCAPTN","Adres Fk") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFECVPTYPE","C") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFENVPSIZE",36) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFEMTOOLTIP","Adres Fk") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFEMSTATUSTXT","Adres Fk") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFECOPERATOR","Begins With") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.vp_Adres_Fk","PARAMETER",;
+		"VFEMOPERLIST","Equals, Contains, Begins With, Ends With") &&Available Operators
+ENDIF
+
+*!* Field Level Properties for ADRESLISTVIEW
+*** Props for the ADRESLISTVIEW.adres_id field.
+DBSetProp('ADRESLISTVIEW.adres_id', 'Field', 'KeyField', .T.)
+DBSetProp('ADRESLISTVIEW.adres_id', 'Field', 'Updatable', .T.)
+DBSetProp('ADRESLISTVIEW.adres_id', 'Field', 'UpdateName', 'dbo.Adres.Adres_Id')
+DBSetProp('ADRESLISTVIEW.adres_id', 'Field', 'DataType', "C(36)")
+DBSetProp('ADRESLISTVIEW.adres_id', 'Field', 'DefaultValue', "GUID(36)")
+*** DBCX Field Properties for ADRESLISTVIEW.adres_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFECDESCRIPT","Adres Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFECFRMCAPTN","Adres Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFECDLGCAPTN","Adres Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFECGRDCAPTN","Adres Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFECRPTCAPTN","Adres Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFEMTOOLTIP","Adres Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFEMSTATUSTXT","Adres Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFENDFLTTYPE",4) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_id","FIELD",;
+		"VFENDISPORDER",1) &&Display Order
+ENDIF
+ 
+*** Props for the ADRESLISTVIEW.adres_fk field.
+DBSetProp('ADRESLISTVIEW.adres_fk', 'Field', 'KeyField', .F.)
+DBSetProp('ADRESLISTVIEW.adres_fk', 'Field', 'Updatable', .T.)
+DBSetProp('ADRESLISTVIEW.adres_fk', 'Field', 'UpdateName', 'dbo.Adres.Adres_Fk')
+DBSetProp('ADRESLISTVIEW.adres_fk', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for ADRESLISTVIEW.adres_fk
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFECDESCRIPT","Adres Fk Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFECFRMCAPTN","Adres Fk") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFECDLGCAPTN","Adres Fk") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFECGRDCAPTN","Adres Fk") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFECRPTCAPTN","Adres Fk") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFEMTOOLTIP","Adres Fk") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFEMSTATUSTXT","Adres Fk") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_fk","FIELD",;
+		"VFENDISPORDER",2) &&Display Order
+ENDIF
+ 
+*** Props for the ADRESLISTVIEW.adres_tipi field.
+DBSetProp('ADRESLISTVIEW.adres_tipi', 'Field', 'KeyField', .F.)
+DBSetProp('ADRESLISTVIEW.adres_tipi', 'Field', 'Updatable', .T.)
+DBSetProp('ADRESLISTVIEW.adres_tipi', 'Field', 'UpdateName', 'dbo.Adres.Adres_Tipi')
+DBSetProp('ADRESLISTVIEW.adres_tipi', 'Field', 'DataType', "C(20)")
+*** DBCX Field Properties for ADRESLISTVIEW.adres_tipi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFECDESCRIPT","Adres Tipi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFECFRMCAPTN","Adres Tipi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFECDLGCAPTN","Adres Tipi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFECGRDCAPTN","Adres Tipi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFECRPTCAPTN","Adres Tipi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFEMTOOLTIP","Adres Tipi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFEMSTATUSTXT","Adres Tipi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_tipi","FIELD",;
+		"VFENDISPORDER",3) &&Display Order
+ENDIF
+ 
+*** Props for the ADRESLISTVIEW.adres field.
+DBSetProp('ADRESLISTVIEW.adres', 'Field', 'KeyField', .F.)
+DBSetProp('ADRESLISTVIEW.adres', 'Field', 'Updatable', .T.)
+DBSetProp('ADRESLISTVIEW.adres', 'Field', 'UpdateName', 'dbo.Adres.Adres')
+DBSetProp('ADRESLISTVIEW.adres', 'Field', 'DataType', "C(100)")
+*** DBCX Field Properties for ADRESLISTVIEW.adres
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFECDESCRIPT","Adres Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFECFRMCAPTN","Adres") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFECDLGCAPTN","Adres") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFECGRDCAPTN","Adres") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFECRPTCAPTN","Adres") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFEMTOOLTIP","Adres") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFEMSTATUSTXT","Adres") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres","FIELD",;
+		"VFENDISPORDER",4) &&Display Order
+ENDIF
+ 
+*** Props for the ADRESLISTVIEW.il_adi field.
+DBSetProp('ADRESLISTVIEW.il_adi', 'Field', 'KeyField', .F.)
+DBSetProp('ADRESLISTVIEW.il_adi', 'Field', 'Updatable', .T.)
+DBSetProp('ADRESLISTVIEW.il_adi', 'Field', 'UpdateName', 'dbo.Adres.Il_Adi')
+DBSetProp('ADRESLISTVIEW.il_adi', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for ADRESLISTVIEW.il_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFECDESCRIPT","Il Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFECFRMCAPTN","Il Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFECDLGCAPTN","Il Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFECGRDCAPTN","Il Adi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFECRPTCAPTN","Il Adi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFEMTOOLTIP","Il Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFEMSTATUSTXT","Il Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.il_adi","FIELD",;
+		"VFENDISPORDER",5) &&Display Order
+ENDIF
+ 
+*** Props for the ADRESLISTVIEW.ilce_adi field.
+DBSetProp('ADRESLISTVIEW.ilce_adi', 'Field', 'KeyField', .F.)
+DBSetProp('ADRESLISTVIEW.ilce_adi', 'Field', 'Updatable', .T.)
+DBSetProp('ADRESLISTVIEW.ilce_adi', 'Field', 'UpdateName', 'dbo.Adres.Ilce_Adi')
+DBSetProp('ADRESLISTVIEW.ilce_adi', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for ADRESLISTVIEW.ilce_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFECDESCRIPT","Ilce Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFECFRMCAPTN","Ilce Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFECDLGCAPTN","Ilce Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFECGRDCAPTN","Ilce Adi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFECRPTCAPTN","Ilce Adi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFEMTOOLTIP","Ilce Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFEMSTATUSTXT","Ilce Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ilce_adi","FIELD",;
+		"VFENDISPORDER",6) &&Display Order
+ENDIF
+ 
+*** Props for the ADRESLISTVIEW.semt_adi field.
+DBSetProp('ADRESLISTVIEW.semt_adi', 'Field', 'KeyField', .F.)
+DBSetProp('ADRESLISTVIEW.semt_adi', 'Field', 'Updatable', .T.)
+DBSetProp('ADRESLISTVIEW.semt_adi', 'Field', 'UpdateName', 'dbo.Adres.Semt_Adi')
+DBSetProp('ADRESLISTVIEW.semt_adi', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for ADRESLISTVIEW.semt_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFECDESCRIPT","Semt Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFECFRMCAPTN","Semt Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFECDLGCAPTN","Semt Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFECGRDCAPTN","Semt Adi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFECRPTCAPTN","Semt Adi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFEMTOOLTIP","Semt Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFEMSTATUSTXT","Semt Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.semt_adi","FIELD",;
+		"VFENDISPORDER",7) &&Display Order
+ENDIF
+ 
+*** Props for the ADRESLISTVIEW.posta_kodu field.
+DBSetProp('ADRESLISTVIEW.posta_kodu', 'Field', 'KeyField', .F.)
+DBSetProp('ADRESLISTVIEW.posta_kodu', 'Field', 'Updatable', .T.)
+DBSetProp('ADRESLISTVIEW.posta_kodu', 'Field', 'UpdateName', 'dbo.Adres.Posta_Kodu')
+DBSetProp('ADRESLISTVIEW.posta_kodu', 'Field', 'DataType', "C(10)")
+*** DBCX Field Properties for ADRESLISTVIEW.posta_kodu
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFECDESCRIPT","Posta Kodu Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFECFRMCAPTN","Posta Kodu") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFECDLGCAPTN","Posta Kodu") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFECGRDCAPTN","Posta Kodu") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFECRPTCAPTN","Posta Kodu") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFEMTOOLTIP","Posta Kodu") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFEMSTATUSTXT","Posta Kodu") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.posta_kodu","FIELD",;
+		"VFENDISPORDER",8) &&Display Order
+ENDIF
+ 
+*** Props for the ADRESLISTVIEW.ulke_adi field.
+DBSetProp('ADRESLISTVIEW.ulke_adi', 'Field', 'KeyField', .F.)
+DBSetProp('ADRESLISTVIEW.ulke_adi', 'Field', 'Updatable', .T.)
+DBSetProp('ADRESLISTVIEW.ulke_adi', 'Field', 'UpdateName', 'dbo.Adres.Ulke_Adi')
+DBSetProp('ADRESLISTVIEW.ulke_adi', 'Field', 'DataType', "C(15)")
+DBSetProp('ADRESLISTVIEW.ulke_adi', 'Field', 'DefaultValue', "'Türkiye'")
+*** DBCX Field Properties for ADRESLISTVIEW.ulke_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFECDESCRIPT","Ulke Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFECFRMCAPTN","Ulke Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFECDLGCAPTN","Ulke Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFECGRDCAPTN","Ulke Adi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFECRPTCAPTN","Ulke Adi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFEMTOOLTIP","Ulke Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFEMSTATUSTXT","Ulke Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFENDFLTTYPE",2) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.ulke_adi","FIELD",;
+		"VFENDISPORDER",9) &&Display Order
+ENDIF
+ 
+*** Props for the ADRESLISTVIEW.adres_statusu field.
+DBSetProp('ADRESLISTVIEW.adres_statusu', 'Field', 'KeyField', .F.)
+DBSetProp('ADRESLISTVIEW.adres_statusu', 'Field', 'Updatable', .T.)
+DBSetProp('ADRESLISTVIEW.adres_statusu', 'Field', 'UpdateName', 'dbo.Adres.Adres_Statusu')
+DBSetProp('ADRESLISTVIEW.adres_statusu', 'Field', 'DataType', "C(15)")
+*** DBCX Field Properties for ADRESLISTVIEW.adres_statusu
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFECDESCRIPT","Adres Statusu Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFECFRMCAPTN","Adres Statusu") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFECDLGCAPTN","Adres Statusu") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFECGRDCAPTN","Adres Statusu") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFECRPTCAPTN","Adres Statusu") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFEMTOOLTIP","Adres Statusu") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFEMSTATUSTXT","Adres Statusu") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!ADRESLISTVIEW.adres_statusu","FIELD",;
+		"VFENDISPORDER",10) &&Display Order
+ENDIF
+ 
