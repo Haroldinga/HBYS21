@@ -341,7 +341,7 @@ FUNCTION getDistList
     lnAdet = ALINES(lArr, lcList, ",")
 
 	FOR lni = 1 TO lnAdet
-		lcMember = '*'+ALLTRIM(lArr(lni))+'*'
+		lcMember = '*'+ALLTRIM(lArr(lni))+'*'  && yýldizlari ekle sonra çýkar
 		
         IF ATC(lcMember,lcDistList)=0   
     		lcDistList=lcDistList+IIF(NullOrEmpty(lcDistList),'',',')+lcMember
@@ -353,3 +353,65 @@ FUNCTION getDistList
 	RETURN lcDistList
 
 
+***********************************************************************
+*
+* Dec2RGB function: returns separate RGB values from object color value
+*
+* Usage:
+*         RGB = Dec2RGB(<Decimal Color>) && such as _SCREEN.BACKCOLOR
+*          ? RGB = "192, 192, 192"       && color is light gray if true
+***********************************************************************
+
+FUNCTION dec2rgb
+LPARAMETERS tnDec
+IF tnDec < 0
+     WAIT WINDOW 'Must be a positive value'
+     RETURN ""
+ENDIF
+lTalk=IIF(SET('TALK')='ON',.T.,.F.)
+SET TALK OFF
+
+* Determine the hexadecimal equivalent of the decimal parameter passed
+lcHex = ""
+lnFactor = 24          && set up factor value one exponent greater than used
+
+FOR lnPos = 6 TO 1 STEP -1
+     lnFactor = lnFactor - 4     && decrement factorial
+     lnExp = 2 ^ lnFactor        && extrapolate next least power of two
+     FOR lnOrd = 15 TO 1 STEP -1
+          IF tnDec < lnExp            && no value greater than current one,
+               lcHex = lcHex + "0"    && so store a zero in this position
+               EXIT                   && go back for the next value
+          ENDIF
+          IF tnDec >= lnExp * lnOrd  && is value greater than or equal to?
+               * find the matching hex value from its ordinal position
+               lcHex = lcHex + SUBSTR('123456789ABCDEF', lnOrd, 1)
+               EXIT
+          ENDIF
+     ENDFOR
+     tnDec = tnDec % lnExp     && leave remainder of exponential division
+ENDFOR
+
+* reverse the order of the individual color indicators
+lcHex = RIGHT(lcHex, 2) + SUBSTR(lcHex, 3, 2) + LEFT(lcHex, 2)
+
+* convert the pairs into decimal values
+lnPick = 2          && offset to determine which pair to convert
+lcRGB = '' &&["]     && start of string delineator
+
+* parse each color indicator and convert to decimal
+FOR lnColor = 1 TO 3
+     lcHue = SUBSTR(lcHex, (lnPick * lnColor) - 1, 2) && pull out color
+     lnMSB = ASC(LEFT(lcHue, 1))     && "Most Significant Bit"
+     lnLSB = ASC(RIGHT(lcHue, 1))     && "Least Significant Bit"
+
+     * subtract appropriate value from each to get decimal equivalent
+     lnMSB = lnMSB - IIF(lnMSB > 57, 55, 48)
+     lnLSB = lnLSB - IIF(lnLSB > 57, 55, 48)
+
+     * then add decimals together
+     lcRGB = lcRGB + TRANSFORM( lnMSB * 16 + lnLSB, '999') + ","
+ENDFOR
+lcRGB = LEFT(lcRGB, LEN(lcRGB) - 2) &&+ ["]  && replace last comma with quote
+RETURN lcRGB
+		
