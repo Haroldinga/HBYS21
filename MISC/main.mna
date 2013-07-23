@@ -1,1094 +1,0 @@
-SCCTEXT Version 4.0.0.2
-OBJTYPE N(2,0),OBJCODE N(2,0),NAME M(4,0),PROMPT M(4,0),COMMAND M(4,0),MESSAGE M(4,0),PROCTYPE N(1,0),PROCEDURE M(4,0),SETUPTYPE N(1,0),SETUP M(4,0),CLEANTYPE N(1,0),CLEANUP M(4,0),MARK C(1,0),KEYNAME M(4,0),KEYLABEL M(4,0),SKIPFOR M(4,0),NAMECHANGE L(1,0),NUMITEMS N(2,0),LEVELNAME C(10,0),ITEMNUM C(3,0),COMMENT M(4,0),LOCATION N(2,0),SCHEME N(2,0),SYSRES N(1,0),RESNAME M(4,0)
-1254
-[OBJTYPE] 1
-[OBJCODE] 22
-[PROCTYPE] 1
-[SETUPTYPE] 1
-[START SETUP]
-*:MNXDRV5 CBMENU.PRG[END SETUP]
-[CLEANTYPE] 1
-[BINSTART MARK]
-CHECKSUM=41332
-[BINEND MARK]
-[ITEMNUM]   0
-[OBJTYPE] 2
-[OBJCODE] 1
-[NAME] _msysmenu
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[NUMITEMS] 9
-[LEVELNAME] _msysmenu 
-[ITEMNUM]   0
-[SCHEME] 3
-[OBJTYPE] 3
-[OBJCODE] 77
-[NAME] FILE
-[PROMPT] \<File
-[MESSAGE] "Create, save, delete, and restore records, close forms, print reports, or quit application"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] ALT+F
-[KEYLABEL] Alt+F
-[START SKIPFOR]
-NOT This.Parent.lEnabled [END SKIPFOR]
-[LEVELNAME] _msysmenu 
-[ITEMNUM]   1
-[LOCATION] 1
-[OBJTYPE] 2
-[NAME] file
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[NUMITEMS] 17
-[LEVELNAME] file      
-[ITEMNUM]   0
-[SCHEME] 4
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<New...
-[MESSAGE] "Creates a new record in the active form"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+N
-[KEYLABEL] Ctrl+N
-[LEVELNAME] file      
-[ITEMNUM]   1
-[START COMMENT]
-*:VFE_BARCLASS iNewBar[END COMMENT]
-[SYSRES] 1
-[START RESNAME]
-_mfi_new[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Close
-[MESSAGE] "Closes the active form"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]   2
-[START COMMENT]
-*:VFE_BARCLASS iCloseBar[END COMMENT]
-[START RESNAME]
-..\..\..\documents and settings\vfeframe\graphics\close.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]   3
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Save
-[MESSAGE] "Saves the current information"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+W
-[KEYLABEL] Ctrl+W
-[LEVELNAME] file      
-[ITEMNUM]   4
-[START COMMENT]
-*:VFE_BARCLASS iSaveBar[END COMMENT]
-[SYSRES] 1
-[START RESNAME]
-_mfi_save[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Cancel
-[MESSAGE] "Cancels any changes made to the current information"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+E
-[KEYLABEL] Ctrl+E
-[LEVELNAME] file      
-[ITEMNUM]   5
-[START COMMENT]
-*:VFE_BARCLASS iCancelBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Delete
-[MESSAGE] "Deletes the current record in the active form"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]   6
-[START COMMENT]
-*:VFE_BARCLASS iDeleteBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\delete.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]   7
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Refresh
-[MESSAGE] "Refreshes the current view"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+R
-[KEYLABEL] Ctrl+R
-[LEVELNAME] file      
-[ITEMNUM]   8
-[START COMMENT]
-*:VFE_BARCLASS iRefreshBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\refresh2.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]   9
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Queries & Reports...
-[MESSAGE] "Runs the report and output selection form"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]  10
-[START COMMENT]
-*:VFE_BARCLASS iQueriesReportsBar[END COMMENT]
-[SYSRES] 1
-[START RESNAME]
-_mfi_sysprint[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Page Set\<up...
-[MESSAGE] "Changes the page layout and printer settings"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]  11
-[START COMMENT]
-*:VFE_BARCLASS iPageSetupBar[END COMMENT]
-[SYSRES] 1
-[START RESNAME]
-_mfi_pgset[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]  12
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Chan\<ge Password...
-[MESSAGE] "Change your application password"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]  13
-[START COMMENT]
-*:VFE_BARCLASS iChangePasswordBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Options...
-[MESSAGE] "Change user preferences"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]  14
-[START COMMENT]
-*:VFE_BARCLASS iOptionsBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Database Utilities...
-[MESSAGE] "Pack, pack memo, and reindex utilities"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]  15
-[START COMMENT]
-*:VFE_BARCLASS iDatabaseUtilitiesBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] file      
-[ITEMNUM]  16
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] E\<xit
-[MESSAGE] "Exit the application"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] ALT+F4
-[KEYLABEL] Alt+F4
-[LEVELNAME] file      
-[ITEMNUM]  17
-[START COMMENT]
-*:VFE_BARCLASS iExitBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 77
-[NAME] EDIT
-[PROMPT] \<Edit
-[MESSAGE] "Edits text or current selection"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] ALT+E
-[KEYLABEL] Alt+E
-[START SKIPFOR]
-NOT This.Parent.lEnabled OR EMPTY(WONTOP())[END SKIPFOR]
-[LEVELNAME] _msysmenu 
-[ITEMNUM]   2
-[OBJTYPE] 2
-[NAME] edit
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[NUMITEMS] 8
-[LEVELNAME] edit      
-[ITEMNUM]   0
-[SCHEME] 4
-[OBJTYPE] 3
-[OBJCODE] 78
-[NAME] _med_undo
-[PROMPT] \<Undo
-[MESSAGE] "Undoes the last command or action"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+Z
-[KEYLABEL] Ctrl+Z
-[LEVELNAME] edit      
-[ITEMNUM]   1
-[SYSRES] 1
-[START RESNAME]
-_med_undo[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 78
-[NAME] _med_redo
-[PROMPT] Re\<do
-[MESSAGE] "Repeats the last command or action"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+R
-[KEYLABEL] Ctrl+R
-[LEVELNAME] edit      
-[ITEMNUM]   2
-[SYSRES] 1
-[START RESNAME]
-_med_redo[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] edit      
-[ITEMNUM]   3
-[OBJTYPE] 3
-[OBJCODE] 78
-[NAME] _med_cut
-[PROMPT] Cu\<t
-[MESSAGE] "Removes the selection and places it onto the Clipboard"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+X
-[KEYLABEL] Ctrl+X
-[LEVELNAME] edit      
-[ITEMNUM]   4
-[SYSRES] 1
-[START RESNAME]
-_med_cut[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 78
-[NAME] _med_copy
-[PROMPT] \<Copy
-[MESSAGE] "Copies the selection onto the Clipboard"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+C
-[KEYLABEL] Ctrl+C
-[LEVELNAME] edit      
-[ITEMNUM]   5
-[SYSRES] 1
-[START RESNAME]
-_med_copy[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 78
-[NAME] _med_paste
-[PROMPT] \<Paste
-[MESSAGE] "Pastes the contents of the Clipboard"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+V
-[KEYLABEL] Ctrl+V
-[LEVELNAME] edit      
-[ITEMNUM]   6
-[SYSRES] 1
-[START RESNAME]
-_med_paste[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] edit      
-[ITEMNUM]   7
-[OBJTYPE] 3
-[OBJCODE] 78
-[NAME] _med_slcta
-[PROMPT] Se\<lect All
-[MESSAGE] "Selects all text or items in the current window"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+A
-[KEYLABEL] Ctrl+A
-[LEVELNAME] edit      
-[ITEMNUM]   8
-[OBJTYPE] 3
-[OBJCODE] 77
-[NAME] ADMINISTRATION
-[PROMPT] \<View
-[MESSAGE] "Access to all maintenance forms"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] ALT+V
-[KEYLABEL] Alt+V
-[START SKIPFOR]
-NOT This.Parent.lEnabled [END SKIPFOR]
-[LEVELNAME] _msysmenu 
-[ITEMNUM]   3
-[OBJTYPE] 2
-[NAME] View
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[NUMITEMS] 13
-[LEVELNAME] View      
-[ITEMNUM]   0
-[SCHEME] 4
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Muvekkil...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("MuvekkilviewForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]   1
-[START COMMENT]
-*:VFEFORM: MuvekkilviewForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Kurum...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("KurumviewForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]   2
-[START COMMENT]
-*:VFEFORM: KurumviewForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Borclu Bilgi Degisikligi...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("BorcluvieweditForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]   3
-[START COMMENT]
-*:VFEFORM: BorcluvieweditForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Icra Dosyalari...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("IcradosyaviewForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]   4
-[START COMMENT]
-*:VFEFORM: IcradosyaviewForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Icra Dosyasi Sorgulama...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("IcradosyalookupviewForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]   5
-[START COMMENT]
-*:VFEFORM: IcradosyalookupviewForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Borclu Bilgileri...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("BorcluviewForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]   6
-[START COMMENT]
-*:VFEFORM: BorcluviewForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Belge Bilgileri..
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("BelgevieweditForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]   7
-[START COMMENT]
-*:VFEFORM: BelgevieweditForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Belge...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("BelgeviewForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]   8
-[START COMMENT]
-*:VFEFORM: BelgeviewForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Kimlik...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("KimlikviewForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]   9
-[START COMMENT]
-*:VFEFORM: KimlikviewForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Iletisim...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("IletisimviewForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]  10
-[START COMMENT]
-*:VFEFORM: IletisimviewForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Adres...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("AdresviewForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]  11
-[START COMMENT]
-*:VFEFORM: AdresviewForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Muvekkil...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("MuvekkilvieweditForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]  12
-[START COMMENT]
-*:VFEFORM: MuvekkilvieweditForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Adres...
-[PROCTYPE] 1
-[START PROCEDURE]
-PROCEDURE Init	LPARAMETERS ;		tnBarNumber, ;		tcPopupName	This.cSecurityName = "Admin"	DODEFAULT(tnBarNumber, tcPopupName)ENDPROCPROCEDURE Click	This.oApplication.DoForm("AdresviewParentMuvekkilForm")ENDPROC[END PROCEDURE]
-[LEVELNAME] VIEW      
-[ITEMNUM]  13
-[START COMMENT]
-*:VFEFORM: AdresviewParentMuvekkilForm*:VFESECURITY Admin[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 77
-[NAME] NAVIGATION
-[PROMPT] \<Navigation
-[MESSAGE] "Commands to navigate through records on the active form"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] ALT+N
-[KEYLABEL] Alt+N
-[START SKIPFOR]
-NOT This.Parent.lEnabled  OR EMPTY(WONTOP())[END SKIPFOR]
-[LEVELNAME] _msysmenu 
-[ITEMNUM]   4
-[OBJTYPE] 2
-[NAME] Navigation
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[NUMITEMS] 4
-[LEVELNAME] Navigation
-[ITEMNUM]   0
-[SCHEME] 4
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] First
-[MESSAGE] "Moves the record pointer in the current form to the first record"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+HOME
-[KEYLABEL] Ctrl+Home
-[LEVELNAME] Navigation
-[ITEMNUM]   1
-[START COMMENT]
-*:VFE_BARCLASS iFirstBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\firstrec.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Prior
-[MESSAGE] "Moves the record pointer in the current form to the previous record"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+PGUP
-[KEYLABEL] Ctrl+PgUp
-[LEVELNAME] Navigation
-[ITEMNUM]   2
-[START COMMENT]
-*:VFE_BARCLASS iPriorBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\priorrec.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Next
-[MESSAGE] "Moves the record pointer in the current form to the next record"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+PGDN
-[KEYLABEL] Ctrl+PgDn
-[LEVELNAME] Navigation
-[ITEMNUM]   3
-[START COMMENT]
-*:VFE_BARCLASS iNextBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\nextrec.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Last
-[MESSAGE] "Moves the record pointer in the current form to the last record"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+END
-[KEYLABEL] Ctrl+End
-[LEVELNAME] Navigation
-[ITEMNUM]   4
-[START COMMENT]
-*:VFE_BARCLASS iLastBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\lastrec.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 77
-[NAME] OPTIONS
-[PROMPT] \<Tools
-[MESSAGE] "Access to miscellaneous form options"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] ALT+T
-[KEYLABEL] Alt+T
-[START SKIPFOR]
-NOT This.Parent.lEnabled OR EMPTY(WONTOP())[END SKIPFOR]
-[LEVELNAME] _msysmenu 
-[ITEMNUM]   5
-[OBJTYPE] 2
-[NAME] Tools
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[NUMITEMS] 4
-[LEVELNAME] Tools     
-[ITEMNUM]   0
-[SCHEME] 4
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<List...
-[MESSAGE] "List all available records in the current form"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+L
-[KEYLABEL] Ctrl+L
-[LEVELNAME] Tools     
-[ITEMNUM]   1
-[START COMMENT]
-*:VFE_BARCLASS iListBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\wzlocate.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Filter...
-[MESSAGE] "Display only records that match specified conditions"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Tools     
-[ITEMNUM]   2
-[START COMMENT]
-*:VFE_BARCLASS iFilterBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\filter.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Clear Filter
-[MESSAGE] "Clear the current filter condition"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Tools     
-[ITEMNUM]   3
-[START COMMENT]
-*:VFE_BARCLASS iClearFilterBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Search...
-[MESSAGE] "Specify criteria to locate information"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+F
-[KEYLABEL] Ctrl+F
-[LEVELNAME] Tools     
-[ITEMNUM]   4
-[START COMMENT]
-*:VFE_BARCLASS iSearchBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\search.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 77
-[NAME] SYSTEM
-[PROMPT] \<System
-[MESSAGE] "Access to system options"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] ALT+S
-[KEYLABEL] Alt+S
-[START SKIPFOR]
-NOT This.Parent.lEnabled [END SKIPFOR]
-[LEVELNAME] _msysmenu 
-[ITEMNUM]   6
-[OBJTYPE] 2
-[NAME] System
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[NUMITEMS] 2
-[LEVELNAME] System    
-[ITEMNUM]   0
-[SCHEME] 4
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Security...
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] System    
-[ITEMNUM]   1
-[START COMMENT]
-*:VFE_BARCLASS iSecurityBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\lock.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Error Log...
-[MESSAGE] "View the application error log"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] System    
-[ITEMNUM]   2
-[START COMMENT]
-*:VFE_BARCLASS iErrorLogBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 77
-[NAME] DEVELOPER
-[PROMPT] \<Developer
-[MESSAGE] "Access to developer options"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] ALT+D
-[KEYLABEL] ALT+D
-[START SKIPFOR]
-NOT This.Parent.lEnabled [END SKIPFOR]
-[LEVELNAME] _msysmenu 
-[ITEMNUM]   7
-[OBJTYPE] 2
-[NAME] Developer
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[NAMECHANGE] .T.
-[NUMITEMS] 15
-[LEVELNAME] Developer 
-[ITEMNUM]   0
-[SCHEME] 4
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] C\<ancel
-[MESSAGE] "Stops running the current program"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]   1
-[START COMMENT]
-*:VFE_BARCLASS iCancelAppBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 78
-[NAME] _mpr_resum
-[PROMPT] \<Resume
-[MESSAGE] "Resumes running the current suspended program"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+M
-[KEYLABEL] Ctrl+M
-[LEVELNAME] Developer 
-[ITEMNUM]   2
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Suspend
-[MESSAGE] "Suspends the currently running program"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]   3
-[START COMMENT]
-*:VFE_BARCLASS cSuspendBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]   4
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<User Error Handling
-[MESSAGE] "Enable or disable user error handling"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]   5
-[START COMMENT]
-*:VFE_BARCLASS iUserErrorHandlingBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Developer \<Error Handling
-[MESSAGE] "Enable or disable developer error handling"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]   6
-[START COMMENT]
-*:VFE_BARCLASS iDeveloperErrorHandlingBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]   7
-[OBJTYPE] 3
-[OBJCODE] 78
-[NAME] _mtl_debugger
-[PROMPT] De\<bugger
-[MESSAGE] "Displays the debugger"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]   8
-[OBJTYPE] 3
-[OBJCODE] 78
-[NAME] _mwi_cmd
-[PROMPT] \<Command Window
-[MESSAGE] "Displays the Command window"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] CTRL+F2
-[KEYLABEL] Ctrl+f2
-[LEVELNAME] Developer 
-[ITEMNUM]   9
-[OBJTYPE] 3
-[OBJCODE] 78
-[NAME] _mwi_view
-[PROMPT] \<Data Session
-[MESSAGE] "Displays the Data Session window"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]  10
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Debugging \<Notes...
-[MESSAGE] "Enter notes into the debugging file"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]  11
-[START COMMENT]
-*:VFE_BARCLASS iDebuggingNotesBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 78
-[NAME] _mtl_browser
-[PROMPT] C\<lass Browser
-[MESSAGE] "Runs the Class Browser"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]  12
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] DBCX E\<xplorer
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]  13
-[START COMMENT]
-*:VFE_BARCLASS iDBCXExplorerBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]  14
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Release Developer Menu
-[MESSAGE] "Removes the developer menu"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Developer 
-[ITEMNUM]  15
-[START COMMENT]
-*:VFE_BARCLASS iReleaseDeveloperMenuBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 77
-[NAME] WINDOW
-[PROMPT] \<Window
-[MESSAGE] "Manipulates windows"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] ALT+W
-[KEYLABEL] Alt+W
-[START SKIPFOR]
-NOT This.Parent.lEnabled  OR EMPTY(WONTOP())[END SKIPFOR]
-[LEVELNAME] _msysmenu 
-[ITEMNUM]   8
-[LOCATION] 3
-[OBJTYPE] 2
-[NAME] WINDOW
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[NUMITEMS] 3
-[LEVELNAME] WINDOW    
-[ITEMNUM]   0
-[SCHEME] 4
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Cascade
-[MESSAGE] "Cascades all open windows"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] WINDOW    
-[ITEMNUM]   1
-[START COMMENT]
-*:VFE_BARCLASS iCascadeBar[END COMMENT]
-[SYSRES] 1
-[START RESNAME]
-_mwi_cascade[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<New Window
-[MESSAGE] "Opens a new instance of a form"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] WINDOW    
-[ITEMNUM]   2
-[START COMMENT]
-*:VFE_BARCLASS iNewWindowBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] WINDOW    
-[ITEMNUM]   3
-[OBJTYPE] 3
-[OBJCODE] 77
-[NAME] HELP
-[PROMPT] \<Help
-[MESSAGE] "Displays help for the application"
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[KEYNAME] ALT+H
-[KEYLABEL] Alt+H
-[START SKIPFOR]
-NOT This.Parent.lEnabled [END SKIPFOR]
-[LEVELNAME] _msysmenu 
-[ITEMNUM]   9
-[OBJTYPE] 2
-[NAME] Help
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[NUMITEMS] 5
-[LEVELNAME] Help      
-[ITEMNUM]   0
-[SCHEME] 4
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<Contents
-[MESSAGE] "Displays Help table of contents"
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Help      
-[ITEMNUM]   1
-[START COMMENT]
-*:VFE_BARCLASS iHelpContentsBar[END COMMENT]
-[SYSRES] 1
-[START RESNAME]
-_mst_hpsch[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 67
-[PROMPT] \-
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Help      
-[ITEMNUM]   2
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] \<About
-[MESSAGE] "Displays information about this application."
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Help      
-[ITEMNUM]   3
-[START COMMENT]
-*:VFE_BARCLASS iAboutBar[END COMMENT]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Ca\<lculator
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Help      
-[ITEMNUM]   4
-[START COMMENT]
-*:VFE_BARCLASS iCalculatorBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\calculator.bmp[END RESNAME]
-[OBJTYPE] 3
-[OBJCODE] 80
-[PROMPT] Calendar/D\<iary
-[PROCTYPE] 1
-[BINSTART MARK]
-CHECKSUM=57840
-[BINEND MARK]
-[LEVELNAME] Help      
-[ITEMNUM]   5
-[START COMMENT]
-*:VFE_BARCLASS iCalendarBar[END COMMENT]
-[START RESNAME]
-..\..\..\vfeframe\graphics\calendar.bmp[END RESNAME]
-[EOF]
