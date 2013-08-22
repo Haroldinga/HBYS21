@@ -1,5 +1,5 @@
-#INCLUDE ..\INCLUDE\VFE.H
-*#INCLUDE VFE.H
+*#INCLUDE ..\INCLUDE\VFE.H
+#INCLUDE VFE.H
 
 LPARAMETERS ;
 	tuParameter, ;
@@ -178,6 +178,9 @@ FOR i = 1 TO 10
 	WITH loIcraDosyaHesabiRec
 	    IF tcHesap_Tipi="Özel Hesap"
 			m.&To_Alacak_Tutari	   = .&To_Alacak_Tutari
+			IF nullOrEmpty(m.&To_Alacak_Tutari)
+     		  m.&To_Alacak_Tutari=0  
+			ENDIF 
         ENDIF 
 
 		.&To_Alacak_Adi		   = m.&To_Alacak_Adi

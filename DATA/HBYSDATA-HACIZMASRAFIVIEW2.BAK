@@ -1,0 +1,551 @@
+***************** Begin View Definition HACIZMASRAFIVIEW ***************
+
+
+LOCAL LAOPENEDDBCS[1,1], lcSet_Exact
+PRIVATE lWriteDBCXProps
+
+lWriteDBCXProps=.T.
+
+lcSet_Exact=SET('EXACT')
+IF lcSet_Exact='OFF'
+	SET EXACT ON
+ENDIF
+
+
+***Make sure the current database is correct
+IF ADATABASES(LAOPENEDDBCS)=0 or ASCAN(LAOPENEDDBCS,"HBYSDATA")=0
+	OPEN DATABASE "C:\VFPPROJECTS\HBYS21\DATA\HBYSDATA"
+ELSE
+	SET DATABASE TO "HBYSDATA"
+ENDIF
+
+
+IF lcSet_Exact='OFF'
+	SET EXACT OFF
+ENDIF
+
+
+
+CREATE SQL VIEW "HACIZMASRAFIVIEW" ; 
+ REMOTE CONNECT "HBYSDataConnect" ; 
+	AS SELECT Masraf.Masraf_Id,;
+		Masraf.Masraf_fk,;
+		Masraf.Muamele_Id,;
+		Masraf.Masraf_Tipi,;
+		Masraf.Masraf_Tarihi,;
+		Masraf.Masraf_Miktari,;
+		Masraf.Uygulama_Asamasi,;
+		Masraf.Personel_Id,;
+		Masraf.Personel_Adi,;
+		Masraf.Aciklama;
+	FROM dbo.Masraf Masraf
+
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'UpdateType', 1)
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'WhereType', 1)
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'FetchMemo', .T.)
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'SendUpdates', .T.)
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'UseMemoSize', 255)
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'MaxRecords', -1)
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'Tables', 'dbo.Masraf')
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'Prepared', .F.)
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'CompareMemo', .T.)
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'FetchAsNeeded', .F.)
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'FetchSize', -1)
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'ParameterList', "vp_Masraf_Fk,'C'")
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'Comment', "")
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'BatchUpdateCount', 1)
+DBSetProp('HACIZMASRAFIVIEW', 'View', 'ShareConnection', .T.)
+IF lWriteDBCXProps
+ 
+	*** DBCX View Properties for HACIZMASRAFIVIEW
+	GoExplorer.odbcx.Validate("HACIZMASRAFIVIEW","View")
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW","VIEW",;
+		"VFECDESCRIPT","Hacizmasrafiview Remote View") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW","VIEW",;
+		"VFECCLASS","iCursor") &&Default Cursor Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW","VIEW",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Default Cursor Class Library
+ 
+	*** DBCX View Parameter Properties for vp_Masraf_Fk
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFECDESCRIPT","Vp Masraf Fk View Parameter") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFECFRMCAPTN","Masraf Fk") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFECDLGCAPTN","Masraf Fk") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFECVPTYPE","C") &&Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFENVPSIZE",36) &&Size
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFEMTOOLTIP","Masraf Fk") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFEMSTATUSTXT","Masraf Fk") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFECCLASS","iDynamicViewParameter") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFECOPERATOR","Begins With") &&SQL Comparison Operator
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFELSKIPEMPTY",.T.) &&Omit From SQL when empty
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFELSKIPNULL",.T.) &&Omit From SQL when Null
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFELPICKOPER",.T.) &&Allow Operator Selection
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.vp_Masraf_Fk","PARAMETER",;
+		"VFEMOPERLIST","Equals, Contains, Begins With, Ends With") &&Available Operators
+ 
+	*** DBCX Index Properties for hbysdata!hacizmasrafiview.masrftarh
+	GoExplorer.odbcx.AddViewIndex("hbysdata!hacizmasrafiview","masrftarh","MASRAF_TARIHI","")
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!hacizmasrafiview.masrftarh","INDEX",;
+		"VFECDESCRIPT","Masrftarh Index") &&Description
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!hacizmasrafiview.masrftarh","INDEX",;
+		"VFELDISPLAY",.T.) &&Display
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!hacizmasrafiview.masrftarh","INDEX",;
+		"VFECTAGCAPTN","Masrftarh") &&Tag Caption
+	GoExplorer.odbcx.DBCXSetProp("hbysdata!hacizmasrafiview.masrftarh","INDEX",;
+		"VFENDISPORDER",1) &&Display Order
+ENDIF
+
+*!* Field Level Properties for HACIZMASRAFIVIEW
+*** Props for the HACIZMASRAFIVIEW.masraf_id field.
+DBSetProp('HACIZMASRAFIVIEW.masraf_id', 'Field', 'KeyField', .T.)
+DBSetProp('HACIZMASRAFIVIEW.masraf_id', 'Field', 'Updatable', .T.)
+DBSetProp('HACIZMASRAFIVIEW.masraf_id', 'Field', 'UpdateName', 'dbo.Masraf.Masraf_Id')
+DBSetProp('HACIZMASRAFIVIEW.masraf_id', 'Field', 'DataType', "C(36)")
+DBSetProp('HACIZMASRAFIVIEW.masraf_id', 'Field', 'DefaultValue', "GUID(36)")
+*** DBCX Field Properties for HACIZMASRAFIVIEW.masraf_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFECDESCRIPT","Masraf Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFECFRMCAPTN","Masraf Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFECDLGCAPTN","Masraf Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFECGRDCAPTN","Masraf Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFECRPTCAPTN","Masraf Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFEMTOOLTIP","Masraf Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFEMSTATUSTXT","Masraf Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFENDFLTTYPE",4) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_id","FIELD",;
+		"VFENDISPORDER",1) &&Display Order
+ENDIF
+ 
+*** Props for the HACIZMASRAFIVIEW.masraf_fk field.
+DBSetProp('HACIZMASRAFIVIEW.masraf_fk', 'Field', 'KeyField', .F.)
+DBSetProp('HACIZMASRAFIVIEW.masraf_fk', 'Field', 'Updatable', .T.)
+DBSetProp('HACIZMASRAFIVIEW.masraf_fk', 'Field', 'UpdateName', 'dbo.Masraf.Masraf_fk')
+DBSetProp('HACIZMASRAFIVIEW.masraf_fk', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for HACIZMASRAFIVIEW.masraf_fk
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFECDESCRIPT","Masraf Fk Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFECFRMCAPTN","Masraf Fk") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFECDLGCAPTN","Masraf Fk") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFECGRDCAPTN","Masraf Fk") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFECRPTCAPTN","Masraf Fk") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFEMTOOLTIP","Masraf Fk") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFEMSTATUSTXT","Masraf Fk") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_fk","FIELD",;
+		"VFENDISPORDER",2) &&Display Order
+ENDIF
+ 
+*** Props for the HACIZMASRAFIVIEW.muamele_id field.
+DBSetProp('HACIZMASRAFIVIEW.muamele_id', 'Field', 'KeyField', .F.)
+DBSetProp('HACIZMASRAFIVIEW.muamele_id', 'Field', 'Updatable', .T.)
+DBSetProp('HACIZMASRAFIVIEW.muamele_id', 'Field', 'UpdateName', 'dbo.Masraf.Muamele_Id')
+DBSetProp('HACIZMASRAFIVIEW.muamele_id', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for HACIZMASRAFIVIEW.muamele_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFECDESCRIPT","Muamele Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFECFRMCAPTN","Muamele Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFECDLGCAPTN","Muamele Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFECGRDCAPTN","Muamele Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFECRPTCAPTN","Muamele Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFEMTOOLTIP","Muamele Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFEMSTATUSTXT","Muamele Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.muamele_id","FIELD",;
+		"VFENDISPORDER",3) &&Display Order
+ENDIF
+ 
+*** Props for the HACIZMASRAFIVIEW.masraf_tipi field.
+DBSetProp('HACIZMASRAFIVIEW.masraf_tipi', 'Field', 'KeyField', .F.)
+DBSetProp('HACIZMASRAFIVIEW.masraf_tipi', 'Field', 'Updatable', .T.)
+DBSetProp('HACIZMASRAFIVIEW.masraf_tipi', 'Field', 'UpdateName', 'dbo.Masraf.Masraf_Tipi')
+DBSetProp('HACIZMASRAFIVIEW.masraf_tipi', 'Field', 'DataType', "C(25)")
+*** DBCX Field Properties for HACIZMASRAFIVIEW.masraf_tipi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFECDESCRIPT","Masraf Tipi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFECFRMCAPTN","Masraf Tipi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFECDLGCAPTN","Masraf Tipi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFECGRDCAPTN","Masraf Tipi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFECRPTCAPTN","Masraf Tipi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFEMTOOLTIP","Masraf Tipi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFEMSTATUSTXT","Masraf Tipi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tipi","FIELD",;
+		"VFENDISPORDER",4) &&Display Order
+ENDIF
+ 
+*** Props for the HACIZMASRAFIVIEW.masraf_tarihi field.
+DBSetProp('HACIZMASRAFIVIEW.masraf_tarihi', 'Field', 'KeyField', .F.)
+DBSetProp('HACIZMASRAFIVIEW.masraf_tarihi', 'Field', 'Updatable', .T.)
+DBSetProp('HACIZMASRAFIVIEW.masraf_tarihi', 'Field', 'UpdateName', 'dbo.Masraf.Masraf_Tarihi')
+DBSetProp('HACIZMASRAFIVIEW.masraf_tarihi', 'Field', 'Caption', "Masraf Tarihi")
+DBSetProp('HACIZMASRAFIVIEW.masraf_tarihi', 'Field', 'DataType', "D")
+DBSetProp('HACIZMASRAFIVIEW.masraf_tarihi', 'Field', 'DefaultValue', "date()")
+*** DBCX Field Properties for HACIZMASRAFIVIEW.masraf_tarihi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFECDESCRIPT","Masraf Tarihi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFECFRMCAPTN","Masraf Tarihi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFECDLGCAPTN","Masraf Tarihi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFECGRDCAPTN","Masraf Tarihi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFECRPTCAPTN","Masraf Tarihi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFEMTOOLTIP","Masraf Tarihi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFEMSTATUSTXT","Masraf Tarihi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFENDFLTTYPE",2) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_tarihi","FIELD",;
+		"VFENDISPORDER",5) &&Display Order
+ENDIF
+ 
+*** Props for the HACIZMASRAFIVIEW.masraf_miktari field.
+DBSetProp('HACIZMASRAFIVIEW.masraf_miktari', 'Field', 'KeyField', .F.)
+DBSetProp('HACIZMASRAFIVIEW.masraf_miktari', 'Field', 'Updatable', .T.)
+DBSetProp('HACIZMASRAFIVIEW.masraf_miktari', 'Field', 'UpdateName', 'dbo.Masraf.Masraf_Miktari')
+DBSetProp('HACIZMASRAFIVIEW.masraf_miktari', 'Field', 'Caption', "Masraf Miktarý")
+DBSetProp('HACIZMASRAFIVIEW.masraf_miktari', 'Field', 'DataType', "Y")
+*** DBCX Field Properties for HACIZMASRAFIVIEW.masraf_miktari
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFECDESCRIPT","Masraf Miktari Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFECFRMCAPTN","Masraf Miktarý") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFECDLGCAPTN","Masraf Miktarý") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFECGRDCAPTN","Masraf Miktarý") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFECRPTCAPTN","Masraf Miktarý") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFEMTOOLTIP","Masraf Miktarý") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFEMSTATUSTXT","Masraf Miktarý") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.masraf_miktari","FIELD",;
+		"VFENDISPORDER",6) &&Display Order
+ENDIF
+ 
+*** Props for the HACIZMASRAFIVIEW.uygulama_asamasi field.
+DBSetProp('HACIZMASRAFIVIEW.uygulama_asamasi', 'Field', 'KeyField', .F.)
+DBSetProp('HACIZMASRAFIVIEW.uygulama_asamasi', 'Field', 'Updatable', .T.)
+DBSetProp('HACIZMASRAFIVIEW.uygulama_asamasi', 'Field', 'UpdateName', 'dbo.Masraf.Uygulama_Asamasi')
+DBSetProp('HACIZMASRAFIVIEW.uygulama_asamasi', 'Field', 'DataType', "C(25)")
+*** DBCX Field Properties for HACIZMASRAFIVIEW.uygulama_asamasi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFECDESCRIPT","Uygulama Asamasi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFECFRMCAPTN","Uygulama Asamasi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFECDLGCAPTN","Uygulama Asamasi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFECGRDCAPTN","Uygulama Asamasi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFECRPTCAPTN","Uygulama Asamasi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFEMTOOLTIP","Uygulama Asamasi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFEMSTATUSTXT","Uygulama Asamasi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.uygulama_asamasi","FIELD",;
+		"VFENDISPORDER",7) &&Display Order
+ENDIF
+ 
+*** Props for the HACIZMASRAFIVIEW.personel_id field.
+DBSetProp('HACIZMASRAFIVIEW.personel_id', 'Field', 'KeyField', .F.)
+DBSetProp('HACIZMASRAFIVIEW.personel_id', 'Field', 'Updatable', .T.)
+DBSetProp('HACIZMASRAFIVIEW.personel_id', 'Field', 'UpdateName', 'dbo.Masraf.Personel_Id')
+DBSetProp('HACIZMASRAFIVIEW.personel_id', 'Field', 'DataType', "C(36)")
+*** DBCX Field Properties for HACIZMASRAFIVIEW.personel_id
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFECDESCRIPT","Personel Id Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFECFRMCAPTN","Personel Id") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFECDLGCAPTN","Personel Id") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFECGRDCAPTN","Personel Id") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFECRPTCAPTN","Personel Id") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFEMTOOLTIP","Personel Id") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFEMSTATUSTXT","Personel Id") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_id","FIELD",;
+		"VFENDISPORDER",8) &&Display Order
+ENDIF
+ 
+*** Props for the HACIZMASRAFIVIEW.personel_adi field.
+DBSetProp('HACIZMASRAFIVIEW.personel_adi', 'Field', 'KeyField', .F.)
+DBSetProp('HACIZMASRAFIVIEW.personel_adi', 'Field', 'Updatable', .T.)
+DBSetProp('HACIZMASRAFIVIEW.personel_adi', 'Field', 'UpdateName', 'dbo.Masraf.Personel_Adi')
+DBSetProp('HACIZMASRAFIVIEW.personel_adi', 'Field', 'DataType', "C(50)")
+*** DBCX Field Properties for HACIZMASRAFIVIEW.personel_adi
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFECDESCRIPT","Personel Adi Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFECFRMCAPTN","Personel Adi") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFECDLGCAPTN","Personel Adi") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFECGRDCAPTN","Personel Adi") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFECRPTCAPTN","Personel Adi") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFEMTOOLTIP","Personel Adi") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFEMSTATUSTXT","Personel Adi") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.personel_adi","FIELD",;
+		"VFENDISPORDER",9) &&Display Order
+ENDIF
+ 
+*** Props for the HACIZMASRAFIVIEW.aciklama field.
+DBSetProp('HACIZMASRAFIVIEW.aciklama', 'Field', 'KeyField', .F.)
+DBSetProp('HACIZMASRAFIVIEW.aciklama', 'Field', 'Updatable', .T.)
+DBSetProp('HACIZMASRAFIVIEW.aciklama', 'Field', 'UpdateName', 'dbo.Masraf.Aciklama')
+DBSetProp('HACIZMASRAFIVIEW.aciklama', 'Field', 'DataType', "C(100)")
+*** DBCX Field Properties for HACIZMASRAFIVIEW.aciklama
+IF lWriteDBCXProps
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFECDESCRIPT","Aciklama Field") &&Description
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFECFRMCAPTN","Aciklama") &&Form Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFECDLGCAPTN","Aciklama") &&Dialog Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFECGRDCAPTN","Aciklama") &&Grid Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFECRPTCAPTN","Aciklama") &&Report Caption
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFEMTOOLTIP","Aciklama") &&Tooltip Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFEMSTATUSTXT","Aciklama") &&Status Bar Text
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFELSEARCH",.T.) &&Searchable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFELFILTER",.T.) &&Filterable
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFECLOOKUPFRM","[DEFAULT]") &&Look Up Display Form
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFECCLASS","iField") &&Behavior Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFEMCLASSLIB","ILIBS\IDATA.VCX") &&Behavior Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFECOBJTYPE","itextbox") &&User Interface Class
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFEMOBJINFO","ILIBS\ICONTRLS.VCX") &&User Interface Class Library
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFELQUICKFIND",.T.) &&Allow Quick Find
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFENDFLTTYPE",1) &&Default Type
+	GoExplorer.odbcx.DBCXSetProp("HBYSDATA!HACIZMASRAFIVIEW.aciklama","FIELD",;
+		"VFENDISPORDER",10) &&Display Order
+ENDIF
+ 
