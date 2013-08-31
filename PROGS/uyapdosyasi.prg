@@ -1,4 +1,5 @@
 #INCLUDE ..\INCLUDE\VFE.H
+*#INCLUDE VFE.H
 
 PROCEDURE UyapDosyasiOlustur
 	LPARAMETERS tcIcra_Dosya_No, tcBuro_Dosya_No

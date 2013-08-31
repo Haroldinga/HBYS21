@@ -130,7 +130,7 @@ LOCAL lnAdres_Id, ;
 								lnKisiKurumBilgileri_Id	= lnKisiKurumBilgileri_Id + 1
 								lnAdres_Id				= lnAdres_Id + 1
 
-								.SetField("Taraf_Id", "Taraf_" + ALLTRIM(STR(lnTaraf_Id, 2)))
+								.SetField("Taraf_Id", "taraf_" + ALLTRIM(STR(lnTaraf_Id, 2)))
 								.SetField("KisiKurumBilgileri_Id", "KisiKurumBilgileri_" + ALLTRIM(STR(lnKisiKurumBilgileri_Id, 2)))
 								.SetField("Adres_Id", "Adres_" + ALLTRIM(STR(lnAdres_Id, 2)))
 
@@ -182,7 +182,7 @@ LOCAL lnAdres_Id, ;
 								lnKisiTumBilgileri_Id	= lnKisiTumBilgileri_Id + 1
 								lnAdres_Id				= lnAdres_Id + 1
 
-								.SetField("Taraf_Id", "Taraf_" + ALLTRIM(STR(lnTaraf_Id, 2)))
+								.SetField("Taraf_Id", "taraf_" + ALLTRIM(STR(lnTaraf_Id, 2)))
 								.SetField("KisiKurumBilgileri_Id", "KisiKurumBilgileri_" + ALLTRIM(STR(lnKisiKurumBilgileri_Id, 2)))
 								.SetField("KisiTumBilgileri_Id", "KisiTumBilgileri_" + ALLTRIM(STR(lnKisiTumBilgileri_Id, 2)))
 								.SetField("Adres_Id", "Adres_" + ALLTRIM(STR(lnAdres_Id, 2)))

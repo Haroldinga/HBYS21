@@ -1,0 +1,2 @@
+DBSetProp('IZLEMEANALIZIVIEW', 'View', 'ParameterList', "vp_Muvekkil_Adi,'C';vp_Sube_Id,'C';vp_Dosya_Tipi,'C';vp_Takip_Tipi,'C';vp_Borc_Tipi,'C';vp_Dosya_Statusu,'C';vp_Gelis_Tarihi1,'D';vp_Gelis_Tarihi2,'D';vp_RiskY_Id,'V';vp_Izleme_Sonucu,'C';vp_OS_Tarihi1,'D';vp_OS_Tarihi2,'D';vp_Analiz_Tipi,'V';vp_IcaMudurlugu_Id,'C'")
+Error in line 82: Command contains unrecognized phrase/keyword.
