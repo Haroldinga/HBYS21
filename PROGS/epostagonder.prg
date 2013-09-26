@@ -1,3 +1,5 @@
+#INCLUDE ..\INCLUDE\VFE.H
+
 FUNCTION ePostaGonder
 
 	LPARAMETERS;
@@ -19,14 +21,18 @@ FUNCTION ePostaGonder
     ENDIF   
 
 	= MsgSvc("NOWAIT", ALLTRIM(tcKime) + " Gönderiliyor..")
-
+	
+	***** 24.09.2013 geçici olarak kondu. email göndermedeki sorun çözülene kadar
+	*RETURN .t. 
+	*******
+	
 	loApp	   = FindApplication()
 	loPersonel = loApp.oPersonel
 	loBuro	   = loApp.oBuro
 
 	DO wwSmtp
 	LOCAL loSmtp AS wwSmtp
-	loSmtp = CREATEOBJECT("wwSmtp",0)  && Default 2
+	loSmtp = CREATEOBJECT("wwSmtp",0)  && Classic:2, .Net :0
 
 	*loSmtp.cMailServer = "Localhost"
 	*loSmtp.cMailServer = "mail.bayri.org:26" && loBuro.gdnPosta_Sunucusu

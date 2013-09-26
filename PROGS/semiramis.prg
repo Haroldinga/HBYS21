@@ -1,4 +1,5 @@
 #INCLUDE ..\INCLUDE\VFE.H
+* 
 
 PROCEDURE Semiramis
 	IF FILE("HBYS.exe")

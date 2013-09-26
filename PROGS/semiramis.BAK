@@ -51,6 +51,7 @@ DEFINE CLASS MyHandler AS CUSTOM
 
 ENDDEFINE
 
+
 PROCEDURE SemiramisIsAta
 	LPARAMETERS ;
 		tcOlay_Adi, ;
@@ -75,6 +76,7 @@ PROCEDURE SemiramisIsAta
 	lnoldDS	  = SET("Datasession")
 	loSession = CREATEOBJECT("Session")
 	SET DATASESSION TO loSession.DATASESSIONID
+	loApp.GetUserPreferences(loSession.DATASESSIONID)
 
 	* Instantiate the Semiramis business object
 	loSemiramisBizObj = CREATEOBJECT('SemiramisListViewBizObj')
@@ -171,10 +173,13 @@ PROCEDURE SemiramisIsYap
 
 **!*	Worker.Sleep(2000)
 **!*	Worker.UpdateProgress(10, "Semiramis Ýþe Devam Ediyor... % 10")
-
+    
+    loApp     =FindApplication()
+    
 	lnoldDS	  = SET("Datasession")
 	loSession = CREATEOBJECT("Session")
 	SET DATASESSION TO loSession.DATASESSIONID
+	loApp.GetUserPreferences(loSession.DATASESSIONID)
 
 **!*	Worker.Sleep(2000)
 **!*	Worker.UpdateProgress(20, "Semiramis Ýþe Devam Ediyor... % 20")
