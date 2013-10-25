@@ -400,8 +400,8 @@ FUNCTION getVekaletUcreti
 		lnVekaletUcreti, ;
 		lnTakipAlacagi, ;
 		lnDilimFarki, ;
-		lcVekaletiUcretiDilimi2, ;
-		lcVekaletiUcretiDilimi1, ;
+		lcVekaletUcretiDilimi2, ;
+		lcVekaletUcretiDilimi1, ;
 		lnBorcluVekaletOrani, ;
 		lnResult
 
@@ -459,9 +459,9 @@ FUNCTION getVekaletUcreti
 				lnVekaletUcreti	= lnVekaletUcreti + lnDilimFarki * (.Vekalet_Ucreti_Orani_9 / 100.0)
 			ENDIF
 
-			FOR i = 8 TO 1
-				lcVekaletiUcretiDilimi2	= "Vekalet_Ucreti_Dilimi_" + ALLTRIM(STR(i))
-				lcVekaletiUcretiDilimi1	= "Vekalet_Ucreti_Dilimi_" + ALLTRIM(STR(i - 1))
+			FOR i = 8 TO 2 STEP -1 
+				lcVekaletUcretiDilimi2	= "Vekalet_Ucreti_Dilimi_" + ALLTRIM(STR(i))
+				lcVekaletUcretiDilimi1	= "Vekalet_Ucreti_Dilimi_" + ALLTRIM(STR(i - 1))
 				lnBorcluVekaletOrani	= "Vekalet_Ucreti_Orani_" + + ALLTRIM(STR(i))
 
 				IF lnTakipAlacagi > .&lcVekaletUcretiDilimi1

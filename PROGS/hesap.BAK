@@ -1,5 +1,5 @@
-*#INCLUDE ..\INCLUDE\VFE.H
-#INCLUDE VFE.H
+#INCLUDE ..\INCLUDE\VFE.H
+*#INCLUDE VFE.H
 
 
 *==============================================================================
@@ -459,7 +459,7 @@ FUNCTION getVekaletUcreti
 				lnVekaletUcreti	= lnVekaletUcreti + lnDilimFarki * (.Vekalet_Ucreti_Orani_9 / 100.0)
 			ENDIF
 
-			FOR i = 8 TO 1
+			FOR i = 8 TO 2 STEP -1 
 				lcVekaletiUcretiDilimi2	= "Vekalet_Ucreti_Dilimi_" + ALLTRIM(STR(i))
 				lcVekaletiUcretiDilimi1	= "Vekalet_Ucreti_Dilimi_" + ALLTRIM(STR(i - 1))
 				lnBorcluVekaletOrani	= "Vekalet_Ucreti_Orani_" + + ALLTRIM(STR(i))
